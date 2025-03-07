@@ -1,6 +1,10 @@
 
 import React, { useState } from 'react';
-import { Search, Plus, Star, Inbox, Send as SendIcon, FileText, Trash2, MoreVertical, Clock, Flag, Bookmark, Send, Paperclip } from 'lucide-react';
+import { 
+  Search, Plus, Star, Inbox, Send as SendIcon, FileText, 
+  Trash2, MoreVertical, Clock, Flag, Bookmark, Send, 
+  Paperclip, MessageCircle
+} from 'lucide-react';
 
 interface Email {
   id: string;
