@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Search, 
@@ -16,7 +15,13 @@ import {
   BookOpen,
   ChevronRight,
   Printer,
-  Eye
+  Eye,
+  File,
+  FileSpreadsheet,
+  FileImage,
+  FileVideo,
+  FileAudio,
+  FileCode
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
@@ -304,18 +309,57 @@ const Documents = () => {
     }
   };
 
+  // Updated function to get appropriate file icon based on file extension
   const getFileIcon = (type: string) => {
-    switch (type) {
+    switch (type.toLowerCase()) {
       case 'pdf':
         return <FileText size={18} className="text-red-500" />;
       case 'docx':
+      case 'doc':
+      case 'word':
         return <FileText size={18} className="text-blue-500" />;
-      case 'zip':
-        return <FileText size={18} className="text-purple-500" />;
-      case 'mp4':
+      case 'xlsx':
+      case 'xls':
+      case 'excel':
+        return <FileSpreadsheet size={18} className="text-green-500" />;
+      case 'pptx':
+      case 'ppt':
+      case 'powerpoint':
         return <FileText size={18} className="text-orange-500" />;
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+      case 'svg':
+      case 'webp':
+        return <FileImage size={18} className="text-purple-500" />;
+      case 'mp4':
+      case 'mov':
+      case 'avi':
+      case 'webm':
+      case 'mkv':
+        return <FileVideo size={18} className="text-pink-500" />;
+      case 'mp3':
+      case 'wav':
+      case 'ogg':
+      case 'flac':
+        return <FileAudio size={18} className="text-yellow-500" />;
+      case 'zip':
+      case 'rar':
+      case '7z':
+      case 'tar':
+      case 'gz':
+        return <File size={18} className="text-gray-500" />;
+      case 'html':
+      case 'css':
+      case 'js':
+      case 'ts':
+      case 'jsx':
+      case 'tsx':
+      case 'json':
+        return <FileCode size={18} className="text-cyan-500" />;
       default:
-        return <FileText size={18} className="text-gray-500" />;
+        return <File size={18} className="text-gray-500" />;
     }
   };
 
