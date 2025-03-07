@@ -12,10 +12,16 @@ import {
   LogOut,
   Briefcase,
   Award,
-  TrendingUp
+  TrendingUp,
+  Moon,
+  Sun,
+  Monitor
 } from 'lucide-react';
+import { useTheme } from '@/providers/ThemeProvider';
 
 const Profile = () => {
+  const { theme, setTheme } = useTheme();
+
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <div className="mb-6">
@@ -28,7 +34,7 @@ const Profile = () => {
         <div className="glass-card rounded-xl p-6 text-center lg:col-span-1">
           <div className="mb-4 flex justify-center">
             <div className="relative">
-              <div className="w-32 h-32 rounded-full bg-noovimo-100 border-4 border-white shadow-soft overflow-hidden">
+              <div className="w-32 h-32 rounded-full bg-noovimo-100 border-4 border-white shadow-soft overflow-hidden dark:border-gray-800">
                 <img 
                   src="https://randomuser.me/api/portraits/men/32.jpg" 
                   alt="Profile" 
@@ -106,7 +112,7 @@ const Profile = () => {
                 <input
                   type="text"
                   defaultValue="Jean"
-                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30 dark:bg-gray-800/50"
                 />
               </div>
               
@@ -115,7 +121,7 @@ const Profile = () => {
                 <input
                   type="text"
                   defaultValue="Dupont"
-                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30 dark:bg-gray-800/50"
                 />
               </div>
               
@@ -124,7 +130,7 @@ const Profile = () => {
                 <input
                   type="email"
                   defaultValue="agent@noovimo.fr"
-                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30 dark:bg-gray-800/50"
                 />
               </div>
               
@@ -133,7 +139,7 @@ const Profile = () => {
                 <input
                   type="tel"
                   defaultValue="+33 6 12 34 56 78"
-                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30 dark:bg-gray-800/50"
                 />
               </div>
               
@@ -142,7 +148,7 @@ const Profile = () => {
                 <input
                   type="text"
                   defaultValue="Nantes"
-                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30 dark:bg-gray-800/50"
                 />
               </div>
               
@@ -152,7 +158,7 @@ const Profile = () => {
                   type="text"
                   defaultValue="15/03/2022"
                   readOnly
-                  className="w-full rounded-lg border border-input px-3 py-2 bg-secondary/50 focus:outline-none cursor-not-allowed"
+                  className="w-full rounded-lg border border-input px-3 py-2 bg-secondary/50 focus:outline-none cursor-not-allowed dark:bg-gray-700/50"
                 />
               </div>
             </div>
@@ -176,7 +182,7 @@ const Profile = () => {
                 <input
                   type="text"
                   defaultValue="RS 123456789"
-                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30 dark:bg-gray-800/50"
                 />
               </div>
               
@@ -185,7 +191,7 @@ const Profile = () => {
                 <input
                   type="text"
                   defaultValue="Nantes et agglomération"
-                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="w-full rounded-lg border border-input px-3 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30 dark:bg-gray-800/50"
                 />
               </div>
               
@@ -193,7 +199,7 @@ const Profile = () => {
                 <div>
                   <label className="block text-sm text-muted-foreground mb-1">Commission actuelle</label>
                   <div className="flex items-center gap-2">
-                    <div className="relative w-full h-4 bg-secondary/70 rounded-full">
+                    <div className="relative w-full h-4 bg-secondary/70 rounded-full dark:bg-gray-700">
                       <div 
                         className="absolute top-0 left-0 h-4 bg-noovimo-500 rounded-full" 
                         style={{ width: '76%' }}
@@ -213,9 +219,9 @@ const Profile = () => {
               </div>
             </div>
             
-            <div className="mt-8 p-4 bg-secondary/50 rounded-lg">
+            <div className="mt-8 p-4 bg-secondary/50 rounded-lg dark:bg-gray-700/30">
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-full bg-noovimo-100">
+                <div className="p-2 rounded-full bg-noovimo-100 dark:bg-noovimo-900">
                   <Award size={18} className="text-noovimo-500" />
                 </div>
                 
@@ -226,13 +232,13 @@ const Profile = () => {
                   </p>
                   
                   <div className="flex gap-2 mt-2">
-                    <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center dark:bg-yellow-900">
                       <Star size={16} className="text-yellow-500" />
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center dark:bg-blue-900">
                       <Trophy size={16} className="text-blue-500" />
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center dark:bg-green-900">
                       <CheckCircle size={16} className="text-green-500" />
                     </div>
                   </div>
@@ -268,6 +274,44 @@ const Profile = () => {
                   </div>
                 </div>
                 <ChevronRight size={16} className="text-muted-foreground" />
+              </div>
+              
+              <div className="flex items-center justify-between p-3 hover:bg-secondary/50 rounded-lg">
+                <div className="flex items-center gap-3">
+                  {theme === 'light' ? (
+                    <Sun size={18} className="text-noovimo-500" />
+                  ) : theme === 'dark' ? (
+                    <Moon size={18} className="text-noovimo-500" />
+                  ) : (
+                    <Monitor size={18} className="text-noovimo-500" />
+                  )}
+                  <div>
+                    <h4 className="text-sm font-medium">Thème de l'interface</h4>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {theme === 'light' ? 'Mode clair' : theme === 'dark' ? 'Mode sombre' : 'Thème système'}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => setTheme('light')} 
+                    className={`p-2 rounded-full ${theme === 'light' ? 'bg-noovimo-100 text-noovimo-500 dark:bg-noovimo-900' : 'bg-secondary/50 text-muted-foreground'}`}
+                  >
+                    <Sun size={16} />
+                  </button>
+                  <button 
+                    onClick={() => setTheme('dark')} 
+                    className={`p-2 rounded-full ${theme === 'dark' ? 'bg-noovimo-100 text-noovimo-500 dark:bg-noovimo-900' : 'bg-secondary/50 text-muted-foreground'}`}
+                  >
+                    <Moon size={16} />
+                  </button>
+                  <button 
+                    onClick={() => setTheme('system')} 
+                    className={`p-2 rounded-full ${theme === 'system' ? 'bg-noovimo-100 text-noovimo-500 dark:bg-noovimo-900' : 'bg-secondary/50 text-muted-foreground'}`}
+                  >
+                    <Monitor size={16} />
+                  </button>
+                </div>
               </div>
               
               <div className="flex items-center justify-between p-3 hover:bg-secondary/50 rounded-lg cursor-pointer">

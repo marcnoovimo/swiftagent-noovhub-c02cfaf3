@@ -16,7 +16,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 210 85% 42%;
+    --primary: 348 74% 49%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -48,7 +48,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 85% 52%;
+    --primary: 348 74% 49%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -88,11 +88,7 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white/70 backdrop-blur-sm border border-white/20 shadow-soft;
-  }
-  
-  .glass-card-dark {
-    @apply bg-black/20 backdrop-blur-sm border border-white/10 shadow-soft;
+    @apply bg-white/70 backdrop-blur-sm border border-white/20 shadow-soft dark:bg-black/40 dark:border-white/10;
   }
   
   .nav-item {
@@ -116,7 +112,7 @@
   }
   
   .search-bar {
-    @apply bg-secondary/50 border border-border/30 px-4 py-2 rounded-xl transition-all duration-200 focus-within:border-primary/30 focus-within:bg-white focus-within:shadow-soft;
+    @apply bg-secondary/50 border border-border/30 px-4 py-2 rounded-xl transition-all duration-200 focus-within:border-primary/30 focus-within:bg-white focus-within:shadow-soft dark:focus-within:bg-black/60;
   }
 }
 
@@ -135,8 +131,16 @@
   border-radius: 20px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Smooth transitions between pages */
