@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -14,11 +15,24 @@ const Login: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate login
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate('/');
-    }, 1500);
+    // Vérifier si l'email se termine par @noovimo.fr
+    if (email.toLowerCase().endsWith('@noovimo.fr') && password.length >= 4) {
+      // Simuler le délai d'authentification
+      setTimeout(() => {
+        // Stocker le token d'authentification
+        localStorage.setItem('auth_token', 'simulated_jwt_token');
+        
+        toast.success('Connexion réussie! Bienvenue sur l\'intranet Noovimo.');
+        setIsLoading(false);
+        navigate('/');
+      }, 1000);
+    } else {
+      // Afficher un message d'erreur
+      setTimeout(() => {
+        setIsLoading(false);
+        toast.error('Identifiants incorrects. Veuillez utiliser une adresse email @noovimo.fr.');
+      }, 1000);
+    }
   };
 
   return (
