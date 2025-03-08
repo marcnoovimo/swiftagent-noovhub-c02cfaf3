@@ -16,6 +16,7 @@ import ResetPassword from "./components/auth/ResetPassword";
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { SyncProvider } from "./context/SyncContext";
 import ChatbotButton from "./components/chatbot/ChatbotButton";
 
 const queryClient = new QueryClient();
@@ -101,16 +102,18 @@ const App = () => {
   return (
     <ThemeProvider defaultTheme="light">
       <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <AppRoutes />
-              <ChatbotButton />
-            </BrowserRouter>
-          </TooltipProvider>
-        </QueryClientProvider>
+        <SyncProvider>
+          <QueryClientProvider client={queryClient}>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <AppRoutes />
+                <ChatbotButton />
+              </BrowserRouter>
+            </TooltipProvider>
+          </QueryClientProvider>
+        </SyncProvider>
       </AuthProvider>
     </ThemeProvider>
   );

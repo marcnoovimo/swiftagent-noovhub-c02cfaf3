@@ -10,23 +10,26 @@ const Messages = () => {
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold">Messages</h1>
-        <p className="text-muted-foreground mt-1">Gérez vos communications</p>
+        <h1 className="text-3xl font-bold">Messagerie</h1>
+        <p className="text-muted-foreground mt-1">Gérez vos communications en temps réel sur tous vos appareils</p>
       </div>
       
       <Tabs defaultValue="instant" className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-6">
           <TabsTrigger value="instant" className="flex items-center gap-1 text-xs sm:text-sm md:text-base">
             <MessageCircle size={16} className="flex-shrink-0" />
-            <span className="truncate">Messages</span>
+            <span className="hidden xs:inline truncate">Messages instantanés</span>
+            <span className="xs:hidden truncate">Messages</span>
           </TabsTrigger>
           <TabsTrigger value="groups" className="flex items-center gap-1 text-xs sm:text-sm md:text-base">
             <Users size={16} className="flex-shrink-0" />
-            <span className="truncate">Groupes</span>
+            <span className="hidden xs:inline truncate">Discussions de groupe</span>
+            <span className="xs:hidden truncate">Groupes</span>
           </TabsTrigger>
           <TabsTrigger value="email" className="flex items-center gap-1 text-xs sm:text-sm md:text-base">
             <Mail size={16} className="flex-shrink-0" />
-            <span className="truncate">Emails</span>
+            <span className="hidden xs:inline truncate">Boîte de réception</span>
+            <span className="xs:hidden truncate">Emails</span>
           </TabsTrigger>
         </TabsList>
         
