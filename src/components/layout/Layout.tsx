@@ -25,10 +25,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar isOpen={sidebarOpen} closeSidebar={closeSidebar} />
+      <Sidebar />
       
       <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-        <Header toggleSidebar={toggleSidebar} />
+        <Header toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         
         <main className="flex-1 p-4 md:p-6">
           <Outlet />

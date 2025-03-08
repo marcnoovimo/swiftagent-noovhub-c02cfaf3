@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -24,13 +25,13 @@ interface SidebarProps {
 }
 
 const Sidebar = () => {
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const iconSize = 20;
 
   const handleLogout = async () => {
-    await logout();
+    await signOut();
     navigate('/login');
   };
 
@@ -83,11 +84,11 @@ const Sidebar = () => {
             <div className="mt-auto p-4 border-t">
               <div className="flex items-center gap-2 mb-2">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user?.photoURL || ""} alt={user?.displayName || "Agent"} />
-                  <AvatarFallback>{user?.displayName?.charAt(0) || "A"}</AvatarFallback>
+                  <AvatarImage src={user?.user_metadata?.avatar_url || ""} alt={user?.user_metadata?.full_name || "Agent"} />
+                  <AvatarFallback>{user?.user_metadata?.full_name?.charAt(0) || "A"}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium">{user?.displayName}</span>
+                  <span className="text-sm font-medium">{user?.user_metadata?.full_name || "Agent"}</span>
                   <span className="text-xs text-muted-foreground">{user?.email}</span>
                 </div>
               </div>
@@ -128,11 +129,11 @@ const Sidebar = () => {
         <div className="mt-auto p-4 border-t">
           <div className="flex items-center gap-2 mb-2">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.photoURL || ""} alt={user?.displayName || "Agent"} />
-              <AvatarFallback>{user?.displayName?.charAt(0) || "A"}</AvatarFallback>
+              <AvatarImage src={user?.user_metadata?.avatar_url || ""} alt={user?.user_metadata?.full_name || "Agent"} />
+              <AvatarFallback>{user?.user_metadata?.full_name?.charAt(0) || "A"}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <span className="text-sm font-medium">{user?.displayName}</span>
+              <span className="text-sm font-medium">{user?.user_metadata?.full_name || "Agent"}</span>
               <span className="text-xs text-muted-foreground">{user?.email}</span>
             </div>
           </div>
