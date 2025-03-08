@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, Plus, FileText, FileUp, BookOpen, Scanner } from 'lucide-react';
+import { Upload, Plus, FileText, FileUp, BookOpen, FileScan } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import DocumentSearch from '@/components/documents/DocumentSearch';
@@ -328,7 +328,7 @@ const Documents = () => {
                 className="ml-2 flex items-center gap-2"
                 onClick={() => setScanDialogOpen(true)}
               >
-                <Scanner size={18} />
+                <FileScan size={18} />
                 <span className="hidden sm:inline">Scanner</span>
               </Button>
             </div>
