@@ -1,157 +1,49 @@
 
 import React, { useState } from 'react';
-import { Search, Plus, MoreVertical, Send, Paperclip, Mic, MessageCircle } from 'lucide-react';
-
-interface GroupMessage {
-  id: string;
-  sender: {
-    name: string;
-    avatar: string;
-  };
-  content: string;
-  time: string;
-  isOwn: boolean;
-}
-
-interface Group {
-  id: string;
-  name: string;
-  avatar: string;
-  members: number;
-  lastMessage: {
-    sender: string;
-    content: string;
-    time: string;
-  };
-  unreadCount: number;
-}
+import { Search, MoreVertical, Send, Paperclip, Mic, Users } from 'lucide-react';
+import { useGroups } from '@/hooks/useGroups';
+import { useAuth } from '@/context/AuthContext';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import CreateGroupDialog from './CreateGroupDialog';
+import GroupInfo from './GroupInfo';
+import { toast } from 'sonner';
 
 const GroupDiscussions = () => {
-  const [groups] = useState<Group[]>([
-    {
-      id: '1',
-      name: 'Équipe Nantes',
-      avatar: 'https://randomuser.me/api/portraits/men/68.jpg',
-      members: 8,
-      lastMessage: {
-        sender: 'Marie',
-        content: 'La réunion est confirmée pour vendredi',
-        time: '11:30',
-      },
-      unreadCount: 3,
-    },
-    {
-      id: '2',
-      name: 'Mandataires Bretagne',
-      avatar: 'https://randomuser.me/api/portraits/women/45.jpg',
-      members: 12,
-      lastMessage: {
-        sender: 'Thomas',
-        content: 'Nouveau bien à Rennes, photos dans le dossier partagé',
-        time: 'Hier',
-      },
-      unreadCount: 0,
-    },
-    {
-      id: '3',
-      name: 'Formation Janvier',
-      avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-      members: 25,
-      lastMessage: {
-        sender: 'Sophie',
-        content: 'Tous les supports sont maintenant disponibles',
-        time: 'Mer',
-      },
-      unreadCount: 5,
-    },
-    {
-      id: '4',
-      name: 'Nouvelles réglementations',
-      avatar: 'https://randomuser.me/api/portraits/women/29.jpg',
-      members: 42,
-      lastMessage: {
-        sender: 'Pierre',
-        content: 'Webinaire explicatif le 20 mars à 14h',
-        time: 'Lun',
-      },
-      unreadCount: 0,
-    },
-  ]);
-
-  const [groupMessages] = useState<GroupMessage[]>([
-    {
-      id: '1',
-      sender: {
-        name: 'Marie',
-        avatar: 'https://randomuser.me/api/portraits/women/43.jpg',
-      },
-      content: 'Bonjour à tous, j\'espère que vous allez bien!',
-      time: '09:30',
-      isOwn: false,
-    },
-    {
-      id: '2',
-      sender: {
-        name: 'Thomas',
-        avatar: 'https://randomuser.me/api/portraits/men/52.jpg',
-      },
-      content: 'Bonjour Marie, tout va bien ici. On confirme la réunion de vendredi?',
-      time: '09:45',
-      isOwn: false,
-    },
-    {
-      id: '3',
-      sender: {
-        name: 'Vous',
-        avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-      },
-      content: 'Oui, je serai présent. Pouvons-nous ajouter un point sur les nouveaux mandats?',
-      time: '10:15',
-      isOwn: true,
-    },
-    {
-      id: '4',
-      sender: {
-        name: 'Sophie',
-        avatar: 'https://randomuser.me/api/portraits/women/22.jpg',
-      },
-      content: 'Bien sûr, c\'est noté. Je mets à jour l\'ordre du jour.',
-      time: '10:30',
-      isOwn: false,
-    },
-    {
-      id: '5',
-      sender: {
-        name: 'Marie',
-        avatar: 'https://randomuser.me/api/portraits/women/43.jpg',
-      },
-      content: 'Parfait! Je vous envoie l\'invitation mise à jour d\'ici ce soir.',
-      time: '11:00',
-      isOwn: false,
-    },
-    {
-      id: '6',
-      sender: {
-        name: 'Marie',
-        avatar: 'https://randomuser.me/api/portraits/women/43.jpg',
-      },
-      content: 'La réunion est confirmée pour vendredi',
-      time: '11:30',
-      isOwn: false,
-    },
-  ]);
-
+  const { user } = useAuth();
+  const { 
+    groups, 
+    activeGroup, 
+    setActiveGroup, 
+    groupMessages, 
+    loading, 
+    sendMessage, 
+    createGroup,
+    joinGroup 
+  } = useGroups();
+  
   const [newMessage, setNewMessage] = useState('');
-  const [activeGroup, setActiveGroup] = useState(groups[0]);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() === '') return;
+  const filteredGroups = groups.filter(group => 
+    group.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleSendMessage = async () => {
+    if (newMessage.trim() === '' || !activeGroup) return;
     
-    // In a real app, you would send the message to the server
-    console.log('Sending group message:', newMessage);
-    
-    setNewMessage('');
+    const success = await sendMessage(activeGroup.id, newMessage);
+    if (success) {
+      setNewMessage('');
+    }
   };
+
+  const handleCreateGroup = async (name: string, description: string) => {
+    return await createGroup(name, description);
+  };
+
+  // Check if user is admin (for demo purposes, check if email ends with @admin.noovimo.fr)
+  const isAdmin = user?.email?.endsWith('@admin.noovimo.fr') || user?.email?.endsWith('@noovimo.fr');
 
   return (
     <div className="glass-card rounded-xl overflow-hidden min-h-[600px] grid grid-cols-1 md:grid-cols-3">
@@ -164,20 +56,25 @@ const GroupDiscussions = () => {
               type="text"
               placeholder="Rechercher un groupe..."
               className="bg-transparent border-none outline-none w-full placeholder:text-muted-foreground/70"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <button className="ml-2 p-2 bg-[#d72345] text-white rounded-full">
-            <Plus size={18} />
-          </button>
+          
+          {isAdmin && (
+            <div className="ml-2">
+              <CreateGroupDialog onCreateGroup={handleCreateGroup} />
+            </div>
+          )}
         </div>
         
         <div className="space-y-2">
-          {groups.map((group) => (
+          {filteredGroups.map((group) => (
             <div
               key={group.id}
               onClick={() => setActiveGroup(group)}
               className={`p-3 rounded-lg cursor-pointer transition-all ${
-                activeGroup.id === group.id
+                activeGroup?.id === group.id
                   ? 'bg-noovimo-50 border-l-2 border-[#d72345]'
                   : 'hover:bg-secondary/50'
               }`}
@@ -208,114 +105,201 @@ const GroupDiscussions = () => {
                       </span>
                     )}
                   </div>
+
+                  <div className="flex items-center mt-1">
+                    <Users size={12} className="text-muted-foreground mr-1" />
+                    <span className="text-xs text-muted-foreground">{group.members} membres</span>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
+
+          {filteredGroups.length === 0 && (
+            <div className="text-center p-4 text-muted-foreground">
+              Aucun groupe trouvé
+            </div>
+          )}
         </div>
       </div>
       
       {/* Group chat area */}
-      <div className="md:col-span-2 flex flex-col h-[600px]">
-        {/* Group header */}
-        <div className="p-4 border-b border-border/50 flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="relative mr-3">
-              <img
-                src={activeGroup.avatar}
-                alt={activeGroup.name}
-                className="w-10 h-10 rounded-full object-cover"
-              />
-            </div>
-            
-            <div>
-              <h3 className="font-medium">{activeGroup.name}</h3>
-              <p className="text-xs text-muted-foreground">
-                {activeGroup.members} membres
-              </p>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <button className="icon-button">
-              <Search size={18} className="text-muted-foreground" />
-            </button>
-            <button className="icon-button">
-              <MoreVertical size={18} className="text-muted-foreground" />
-            </button>
-          </div>
-        </div>
-        
-        {/* Group messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {groupMessages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex ${message.isOwn ? 'justify-end' : 'justify-start'}`}
-            >
-              <div className={`max-w-[75%] ${message.isOwn ? 'order-2' : 'order-1'}`}>
-                {!message.isOwn && (
-                  <div className="flex items-center mb-1">
-                    <img
-                      src={message.sender.avatar}
-                      alt={message.sender.name}
-                      className="w-6 h-6 rounded-full object-cover mr-2"
-                    />
-                    <span className="text-xs font-medium">{message.sender.name}</span>
-                  </div>
-                )}
-                
-                <div className={`
-                  p-3 rounded-lg 
-                  ${message.isOwn 
-                    ? 'bg-[#d72345] text-white rounded-tr-none' 
-                    : 'bg-secondary/70 rounded-tl-none'
-                  }
-                `}>
-                  <p className="text-sm">{message.content}</p>
-                </div>
-                
-                <p className="text-xs text-muted-foreground mt-1">
-                  {message.time}
+      {activeGroup ? (
+        <div className="md:col-span-2 flex flex-col h-[600px]">
+          {/* Group header */}
+          <div className="p-4 border-b border-border/50 flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="relative mr-3">
+                <img
+                  src={activeGroup.avatar}
+                  alt={activeGroup.name}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              </div>
+              
+              <div>
+                <h3 className="font-medium">{activeGroup.name}</h3>
+                <p className="text-xs text-muted-foreground">
+                  {activeGroup.members} membres
                 </p>
               </div>
             </div>
-          ))}
-        </div>
-        
-        {/* Message input */}
-        <div className="p-4 border-t border-border/50">
-          <div className="flex items-center">
-            <button className="icon-button mr-2">
-              <Paperclip size={18} className="text-muted-foreground" />
-            </button>
             
-            <div className="flex-1 search-bar">
-              <input
-                type="text"
-                placeholder="Message au groupe..."
-                className="bg-transparent border-none outline-none w-full placeholder:text-muted-foreground/70"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') handleSendMessage();
-                }}
-              />
+            <div className="flex items-center space-x-3">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full h-8 w-8"
+                      onClick={() => {
+                        joinGroup(activeGroup.id);
+                        toast("Vous avez rejoint le groupe");
+                      }}
+                    >
+                      <Users size={16} className="text-muted-foreground" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Rejoindre le groupe</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full h-8 w-8"
+                    >
+                      <Search size={16} className="text-muted-foreground" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Rechercher dans les messages</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              <GroupInfo group={activeGroup} />
             </div>
-            
-            <button className="icon-button mx-2">
-              <Mic size={18} className="text-muted-foreground" />
-            </button>
-            
-            <button
-              className="p-2 bg-[#d72345] text-white rounded-full"
-              onClick={handleSendMessage}
-            >
-              <Send size={18} />
-            </button>
+          </div>
+          
+          {/* Group messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {groupMessages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.isOwn ? 'justify-end' : 'justify-start'}`}
+              >
+                <div className={`max-w-[75%] ${message.isOwn ? 'order-2' : 'order-1'}`}>
+                  {!message.isOwn && (
+                    <div className="flex items-center mb-1">
+                      <img
+                        src={message.sender.avatar}
+                        alt={message.sender.name}
+                        className="w-6 h-6 rounded-full object-cover mr-2"
+                      />
+                      <span className="text-xs font-medium">{message.sender.name}</span>
+                    </div>
+                  )}
+                  
+                  <div className={`
+                    p-3 rounded-lg 
+                    ${message.isOwn 
+                      ? 'bg-[#d72345] text-white rounded-tr-none' 
+                      : 'bg-secondary/70 rounded-tl-none'
+                    }
+                  `}>
+                    <p className="text-sm">{message.content}</p>
+                  </div>
+                  
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {message.timestamp}
+                  </p>
+                </div>
+              </div>
+            ))}
+
+            {groupMessages.length === 0 && (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <Users size={40} className="mx-auto text-muted-foreground mb-2" />
+                  <h3 className="text-lg font-medium">Bienvenue dans {activeGroup.name}</h3>
+                  <p className="text-muted-foreground mt-1">{activeGroup.description}</p>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          {/* Message input */}
+          <div className="p-4 border-t border-border/50">
+            <div className="flex items-center">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full h-8 w-8">
+                      <Paperclip size={18} className="text-muted-foreground" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Ajouter une pièce jointe</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              <div className="flex-1 search-bar mx-2">
+                <input
+                  type="text"
+                  placeholder="Message au groupe..."
+                  className="bg-transparent border-none outline-none w-full placeholder:text-muted-foreground/70"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') handleSendMessage();
+                  }}
+                />
+              </div>
+              
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 mr-2">
+                      <Mic size={18} className="text-muted-foreground" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Enregistrer un message vocal</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              <Button
+                variant="default"
+                size="icon"
+                className="rounded-full h-10 w-10 bg-[#d72345] hover:bg-[#b61d39]"
+                onClick={handleSendMessage}
+                disabled={!newMessage.trim()}
+              >
+                <Send size={18} className="text-white" />
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="md:col-span-2 flex items-center justify-center">
+          <div className="text-center p-6">
+            <Users size={48} className="mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-xl font-medium mb-2">Aucun groupe sélectionné</h3>
+            <p className="text-muted-foreground">
+              Sélectionnez un groupe pour commencer à discuter
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
