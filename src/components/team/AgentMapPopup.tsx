@@ -3,14 +3,14 @@ import React from 'react';
 import { Agent } from '@/types/agent';
 import { Phone, Mail, Calendar, ExternalLink, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 interface AgentMapPopupProps {
   agent: Agent;
   onClose: () => void;
+  onViewProfile: () => void;
 }
 
-const AgentMapPopup: React.FC<AgentMapPopupProps> = ({ agent, onClose }) => {
+const AgentMapPopup: React.FC<AgentMapPopupProps> = ({ agent, onClose, onViewProfile }) => {
   return (
     <div className="agent-popup p-1 min-w-[220px]">
       <div className="flex justify-between items-start mb-2">
@@ -38,11 +38,9 @@ const AgentMapPopup: React.FC<AgentMapPopupProps> = ({ agent, onClose }) => {
         </div>
       </div>
       
-      <Button variant="outline" size="sm" className="w-full text-xs h-7" asChild>
-        <Link to={`/agent/${agent.id}`} className="inline-flex items-center justify-center">
-          Voir profil
-          <ExternalLink className="ml-1 h-3 w-3" />
-        </Link>
+      <Button variant="outline" size="sm" className="w-full text-xs h-7" onClick={onViewProfile}>
+        Voir profil
+        <ExternalLink className="ml-1 h-3 w-3" />
       </Button>
     </div>
   );

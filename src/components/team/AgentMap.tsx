@@ -5,6 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { Agent } from '@/types/agent';
 import AgentMapPopup from './AgentMapPopup';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface AgentMapProps {
   agents: Agent[];
@@ -14,34 +15,17 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const popupRef = useRef<mapboxgl.Popup | null>(null);
-  const [mapboxToken, setMapboxToken] = useState<string>('');
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupCoordinates, setPopupCoordinates] = useState<[number, number]>([0, 0]);
-
-  // Demande à l'utilisateur son token Mapbox si non configuré
-  useEffect(() => {
-    const token = localStorage.getItem('mapbox_token');
-    if (token) {
-      setMapboxToken(token);
-    }
-  }, []);
-
-  const handleTokenSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const token = formData.get('token') as string;
-    if (token) {
-      localStorage.setItem('mapbox_token', token);
-      setMapboxToken(token);
-    }
-  };
+  const navigate = useNavigate();
 
   // Initialiser la carte
   useEffect(() => {
-    if (!mapContainer.current || !mapboxToken || map.current) return;
+    if (!mapContainer.current || map.current) return;
 
-    mapboxgl.accessToken = mapboxToken;
+    // Utiliser le token fourni
+    mapboxgl.accessToken = "pk.eyJ1IjoibWFyY2dhbGxvbm5vb3ZpbW8iLCJhIjoiY204MGVxZGp2MHQwaDJpc2E4N3hqb2lscCJ9.0xzWL6xP3sdy__klOQWCdg";
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -67,7 +51,12 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
     return () => {
       map.current?.remove();
     };
-  }, [mapboxToken]);
+  }, []);
+
+  // Naviguer vers le profil de l'agent
+  const handleAgentClick = (agent: Agent) => {
+    navigate(`/agent/${agent.id}`);
+  };
 
   // Ajouter les marqueurs des agents
   useEffect(() => {
@@ -105,7 +94,15 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
           .addTo(map.current);
         
         // Ajouter l'événement de clic
-        markerElement.addEventListener('click', () => {
+        markerElement.addEventListener('click', (e) => {
+          e.stopPropagation(); // Empêcher la propagation pour éviter les conflits
+
+          // Si on fait un double-clic sur le marqueur, naviguer vers le profil
+          if (e.detail === 2) {
+            handleAgentClick(agent);
+            return;
+          }
+          
           setSelectedAgent(agent);
           setPopupCoordinates([agent.longitude, agent.latitude]);
           setPopupOpen(true);
@@ -129,7 +126,7 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
         });
       });
       
-      // Ajuster la vue pour voir tous les agents en France
+      // Définir les limites de la France
       const franceBounds = new mapboxgl.LngLatBounds([
         [-5.5591, 41.3233], // Sud-ouest de la France
         [9.5595, 51.1485]   // Nord-est de la France
@@ -165,7 +162,7 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
     } else {
       map.current.on('load', onMapLoad);
     }
-  }, [agents, map.current]);
+  }, [agents, navigate]);
 
   // Gestion de la fermeture du popup
   const handleClosePopup = () => {
@@ -174,41 +171,17 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
     popupRef.current = null;
   };
 
-  if (!mapboxToken) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[500px] p-6">
-        <h3 className="text-lg font-medium mb-4">Mapbox Configuration</h3>
-        <p className="text-muted-foreground mb-4 text-center">
-          Pour afficher la carte, vous devez fournir un token Mapbox public.<br />
-          Vous pouvez l'obtenir en créant un compte sur <a href="https://mapbox.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Mapbox.com</a>
-        </p>
-        <form onSubmit={handleTokenSubmit} className="w-full max-w-md">
-          <div className="flex flex-col gap-2">
-            <input 
-              type="text" 
-              name="token"
-              placeholder="Entrez votre Mapbox public token"
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            />
-            <button 
-              type="submit"
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
-            >
-              Configurer
-            </button>
-          </div>
-        </form>
-      </div>
-    );
-  }
-
   return (
     <div className="relative h-[500px] w-full">
       <div ref={mapContainer} className="absolute inset-0" />
       
       {popupOpen && selectedAgent && popupRef.current && document.querySelector('.mapboxgl-popup-content') && (
         createPortal(
-          <AgentMapPopup agent={selectedAgent} onClose={handleClosePopup} />,
+          <AgentMapPopup 
+            agent={selectedAgent} 
+            onClose={handleClosePopup} 
+            onViewProfile={() => handleAgentClick(selectedAgent)} 
+          />,
           document.querySelector('.mapboxgl-popup-content') as HTMLElement
         )
       )}
