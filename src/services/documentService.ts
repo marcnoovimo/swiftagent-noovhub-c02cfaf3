@@ -1,7 +1,9 @@
+
 import { supabase, STORAGE_BUCKETS, isSupabaseConfigured } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
+import { detectDocumentType } from '@/lib/utils';
 
 // Types for document metadata
 export interface DocumentMetadata {
@@ -15,6 +17,9 @@ export interface DocumentMetadata {
   path: string;
   accessLevel: 'admin' | 'agent' | 'shared';
   starred: boolean;
+  isScanned?: boolean;
+  scanDate?: string;
+  metadata?: Record<string, any>;
 }
 
 // Mock documents for demo mode (used when Supabase is not configured)
@@ -87,7 +92,8 @@ export const uploadDocument = async (
   file: File,
   category: string,
   accessLevel: 'admin' | 'agent' | 'shared',
-  currentUser: User | null
+  currentUser: User | null,
+  additionalMetadata?: Record<string, any>
 ): Promise<{ data: DocumentMetadata | null; error: string | null }> => {
   if (!currentUser) {
     return { data: null, error: 'Utilisateur non authentifié' };
@@ -111,12 +117,25 @@ export const uploadDocument = async (
         category,
         path: `${accessLevel}/${category}/${file.name}`,
         accessLevel,
-        starred: false
+        starred: false,
+        ...additionalMetadata
       };
+      
+      // Try to auto-classify if category is not specified
+      if (category === 'Autres') {
+        mockDocument.category = detectDocumentType(file.name);
+      }
       
       // Add to mock documents array (in real app this would be in Supabase)
       mockDocuments.push(mockDocument);
-      toast.success('Document ajouté avec succès (mode démo)');
+      
+      // Show different message based on whether it's a scanned document
+      if (additionalMetadata?.isScanned) {
+        toast.success('Document scanné et classifié avec succès (mode démo)');
+      } else {
+        toast.success('Document ajouté avec succès (mode démo)');
+      }
+      
       return { data: mockDocument, error: null };
     }
     
@@ -134,6 +153,12 @@ export const uploadDocument = async (
       return { data: null, error: error.message };
     }
     
+    // Try to auto-classify if category is not specified
+    let documentCategory = category;
+    if (category === 'Autres') {
+      documentCategory = detectDocumentType(file.name);
+    }
+    
     // Create metadata record in the documents table
     const documentMetadata: Omit<DocumentMetadata, 'id'> = {
       name: file.name,
@@ -141,10 +166,11 @@ export const uploadDocument = async (
       size: file.size,
       ownerId: currentUser.id,
       createdAt: new Date().toISOString(),
-      category,
+      category: documentCategory,
       path: data.path,
       accessLevel,
-      starred: false
+      starred: false,
+      ...additionalMetadata
     };
     
     const { data: metadataData, error: metadataError } = await supabase
@@ -160,7 +186,13 @@ export const uploadDocument = async (
       return { data: null, error: metadataError.message };
     }
     
-    toast.success('Document ajouté avec succès');
+    // Show different message based on whether it's a scanned document
+    if (additionalMetadata?.isScanned) {
+      toast.success('Document scanné et classifié avec succès');
+    } else {
+      toast.success('Document ajouté avec succès');
+    }
+    
     return { data: metadataData as DocumentMetadata, error: null };
     
   } catch (error) {

@@ -1,3 +1,4 @@
+
 export interface Document {
   id: string;
   name: string;
@@ -11,7 +12,9 @@ export interface Document {
   path?: string;
   accessLevel?: 'admin' | 'agent' | 'shared';
   url?: string;
-  unread?: boolean; // Nouvelle propriété pour identifier les documents non lus
+  unread?: boolean;
+  isScanned?: boolean; // Flag to indicate if document was scanned
+  scanDate?: string; // Date when document was scanned
 }
 
 export interface Folder {
@@ -39,4 +42,11 @@ export type AccessLevel = 'admin' | 'agent' | 'shared';
 export interface UploadOptions {
   category: string;
   accessLevel: AccessLevel;
+}
+
+export interface ScanOptions {
+  category: string;
+  accessLevel: AccessLevel;
+  documentName: string;
+  autoClassify: boolean;
 }

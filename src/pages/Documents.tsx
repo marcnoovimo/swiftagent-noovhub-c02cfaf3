@@ -1,13 +1,14 @@
-
 import React, { useState } from 'react';
-import { Upload, Plus, FileText, FileUp, BookOpen } from 'lucide-react';
+import { Upload, Plus, FileText, FileUp, BookOpen, Scanner } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import DocumentSearch from '@/components/documents/DocumentSearch';
 import DocumentSidebar from '@/components/documents/DocumentSidebar';
 import DocumentList from '@/components/documents/DocumentList';
 import DocumentBreadcrumbs from '@/components/documents/DocumentBreadcrumbs';
 import DocumentPreview from '@/components/documents/DocumentPreview';
 import { Document, Folder, BreadcrumbItem } from '@/components/documents/types';
+import DocumentScanDialog from '@/components/documents/DocumentScanDialog';
 
 const Documents = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -17,6 +18,7 @@ const Documents = () => {
     { id: 'root', name: 'Base Documentaire' }
   ]);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [scanDialogOpen, setScanDialogOpen] = useState(false);
   
   // Agent documents structure
   const [agentDocuments] = useState<Document[]>([
@@ -312,12 +314,24 @@ const Documents = () => {
         
         <TabsContent value="agent">
           <div className="glass-card rounded-xl p-6">
-            <DocumentSearch 
-              searchQuery={searchQuery} 
-              setSearchQuery={setSearchQuery} 
-              showUploadButton={true}
-              placeholder="Rechercher un document..."
-            />
+            <div className="flex items-center justify-between mb-6">
+              <DocumentSearch 
+                searchQuery={searchQuery} 
+                setSearchQuery={setSearchQuery} 
+                showUploadButton={true}
+                placeholder="Rechercher un document..."
+              />
+              
+              {/* Document Scanner Button */}
+              <Button 
+                variant="outline" 
+                className="ml-2 flex items-center gap-2"
+                onClick={() => setScanDialogOpen(true)}
+              >
+                <Scanner size={18} />
+                <span className="hidden sm:inline">Scanner</span>
+              </Button>
+            </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               {/* Categories sidebar */}
@@ -393,6 +407,16 @@ const Documents = () => {
           onClose={() => setSelectedDocument(null)} 
         />
       )}
+      
+      {/* Document Scanner Dialog */}
+      <DocumentScanDialog 
+        open={scanDialogOpen}
+        onOpenChange={setScanDialogOpen}
+        onSuccess={() => {
+          // Refresh document list if necessary
+          // In a real implementation, you would fetch updated document list
+        }}
+      />
     </div>
   );
 };
