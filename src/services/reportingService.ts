@@ -46,6 +46,7 @@ const analyzeDocument = (doc: DocumentMetadata): Document => {
   }
   
   // Check if document has extracted content (from OCR)
+  // Using optional chaining to safely access potentially undefined properties
   if (doc.extractedContent) {
     // Try to extract property value from content using regex
     const valueMatch = doc.extractedContent.match(/(\d+[\s\d]*[\d.,]+)[\s€]*euros?/i);

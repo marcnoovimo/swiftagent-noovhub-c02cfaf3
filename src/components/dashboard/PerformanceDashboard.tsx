@@ -1,5 +1,5 @@
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { 
   BarChart, 
@@ -149,19 +149,19 @@ const PerformanceDashboard: React.FC = () => {
         <h2 className="text-2xl font-semibold mb-4">Évolution annuelle</h2>
         <div className="glass-card rounded-xl p-4">
           <Tabs defaultValue="combined">
-            <TabsList className="mb-4">
-              <TabsTrigger value="combined">Combiné</TabsTrigger>
-              <TabsTrigger value="transactions">Transactions</TabsTrigger>
-              <TabsTrigger value="commissions">Commissions</TabsTrigger>
+            <TabsList className="mb-4 flex flex-wrap w-full sm:w-auto">
+              <TabsTrigger value="combined" className="flex-1 sm:flex-none">Combiné</TabsTrigger>
+              <TabsTrigger value="transactions" className="flex-1 sm:flex-none">Transactions</TabsTrigger>
+              <TabsTrigger value="commissions" className="flex-1 sm:flex-none">Commissions</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="combined" className="h-[300px]">
+            <TabsContent value="combined" className="h-[300px] min-h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={monthlyData}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis yAxisId="left" />
-                  <YAxis yAxisId="right" orientation="right" tickFormatter={(value) => `${(value / 1000)}k€`} />
+                  <XAxis dataKey="month" tick={{fontSize: 12}} />
+                  <YAxis yAxisId="left" tick={{fontSize: 12}} />
+                  <YAxis yAxisId="right" orientation="right" tickFormatter={(value) => `${(value / 1000)}k€`} tick={{fontSize: 12}} />
                   <Tooltip 
                     formatter={(value, name) => {
                       if (name === 'commissions') return formatCurrency(Number(value));
@@ -195,12 +195,12 @@ const PerformanceDashboard: React.FC = () => {
               </ResponsiveContainer>
             </TabsContent>
             
-            <TabsContent value="transactions" className="h-[300px]">
+            <TabsContent value="transactions" className="h-[300px] min-h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={monthlyData}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
+                  <XAxis dataKey="month" tick={{fontSize: 12}} />
+                  <YAxis tick={{fontSize: 12}} />
                   <Tooltip />
                   <Legend />
                   <Bar dataKey="ventes" name="Ventes" fill="#8884d8" />
@@ -209,12 +209,12 @@ const PerformanceDashboard: React.FC = () => {
               </ResponsiveContainer>
             </TabsContent>
             
-            <TabsContent value="commissions" className="h-[300px]">
+            <TabsContent value="commissions" className="h-[300px] min-h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={monthlyData}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis tickFormatter={(value) => `${(value / 1000)}k€`} />
+                  <XAxis dataKey="month" tick={{fontSize: 12}} />
+                  <YAxis tickFormatter={(value) => `${(value / 1000)}k€`} tick={{fontSize: 12}} />
                   <Tooltip formatter={(value) => formatCurrency(Number(value))} />
                   <Legend />
                   <Bar dataKey="commissions" name="Commissions" fill="#ff7300" />
