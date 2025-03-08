@@ -6,24 +6,31 @@ import { format, parseISO, startOfMonth, endOfMonth, addMonths, subMonths } from
 import { fr } from 'date-fns/locale';
 
 // Helper function to extract transaction details from document name and content
-const analyzeDocument = (doc: Document): Document => {
-  if (doc.analyzed) return doc; // Skip if already analyzed
+const analyzeDocument = (doc: DocumentMetadata): Document => {
+  // Convert DocumentMetadata to Document by adding required fields
+  const document: Document = {
+    ...doc,
+    documentType: 'agent', // Default value for documentType
+    analyzed: false
+  };
   
-  const updatedDoc = { ...doc, analyzed: true };
+  if (document.analyzed) return document; // Skip if already analyzed
+  
+  const updatedDoc = { ...document, analyzed: true };
   
   // Document categories that might contain transaction information
   const transactionCategories = ['Compromis', 'Ventes', 'Mandats', 'Contrats'];
   
-  if (!transactionCategories.includes(doc.category)) {
+  if (!transactionCategories.includes(updatedDoc.category)) {
     return updatedDoc;
   }
   
   // Determine transaction type based on category or document name
-  if (doc.category === 'Compromis' || doc.name.toLowerCase().includes('compromis')) {
+  if (updatedDoc.category === 'Compromis' || updatedDoc.name.toLowerCase().includes('compromis')) {
     updatedDoc.transactionType = 'compromis';
-  } else if (doc.category === 'Ventes' || doc.name.toLowerCase().includes('vente')) {
+  } else if (updatedDoc.category === 'Ventes' || updatedDoc.name.toLowerCase().includes('vente')) {
     updatedDoc.transactionType = 'vente';
-  } else if (doc.category === 'Mandats' || doc.name.toLowerCase().includes('mandat')) {
+  } else if (updatedDoc.category === 'Mandats' || updatedDoc.name.toLowerCase().includes('mandat')) {
     updatedDoc.transactionType = 'mandat';
   } else {
     updatedDoc.transactionType = 'autre';

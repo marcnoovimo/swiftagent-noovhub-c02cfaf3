@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { 
@@ -23,6 +22,7 @@ import StatsService from '@/services/statsService';
 import TimeFilterSelector from '@/components/stats/TimeFilterSelector';
 import StatCard from '@/components/stats/StatCard';
 import TransactionTable from '@/components/stats/TransactionTable';
+import PerformanceDashboard from '@/components/dashboard/PerformanceDashboard';
 
 const COLORS = ['#8B5CF6', '#EC4899', '#10B981', '#F59E0B', '#3B82F6'];
 
@@ -76,6 +76,9 @@ const Stats = () => {
         </div>
         <TimeFilterSelector activeFilter={timeFilter} onChange={setTimeFilter} />
       </div>
+      
+      {/* Performance Dashboard Component */}
+      <PerformanceDashboard />
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard

@@ -4,7 +4,7 @@ export interface Document {
   type: string;
   category: string;
   starred: boolean;
-  documentType: 'agent' | 'noovimo';
+  documentType?: 'agent' | 'noovimo'; // Made optional to fix type compatibility issues
   size?: number;
   ownerId?: string;
   createdAt?: string;
