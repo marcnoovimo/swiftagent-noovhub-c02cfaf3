@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   User, 
@@ -18,6 +17,7 @@ import {
   Monitor
 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeProvider';
+import { CommissionPackSelector } from '@/components/agent/CommissionPackSelector';
 
 const Profile = () => {
   const { theme, setTheme } = useTheme();
@@ -216,6 +216,8 @@ const Profile = () => {
                     <span className="text-sm">80% (4% restants)</span>
                   </div>
                 </div>
+                
+                <CommissionPackSelector agent={{ id: '1', name: user?.user_metadata?.full_name || "Agent" }} isAdmin={false} />
               </div>
             </div>
             

@@ -19,9 +19,9 @@ import Profile from './pages/Profile';
 import AgentProfile from './pages/AgentProfile';
 import NotFound from './pages/NotFound';
 import Calendar from './pages/Calendar';
+import Settings from './pages/Settings';
 
 function App() {
-      
   return (
     <Router>
       <ThemeProvider defaultTheme="light" storageKey="noovimo-theme">
@@ -42,6 +42,7 @@ function App() {
               <Route path="/team/:id" element={<AgentDetail />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/agent-profile" element={<AgentProfile />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

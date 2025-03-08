@@ -1,10 +1,17 @@
 
-import React, { useState } from 'react';
-import { BarChart3, FileText, MessageCircle, TrendingUp, Wallet } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { BarChart3, FileText, MessageCircle, TrendingUp, Wallet, Home, Key, Building } from 'lucide-react';
 import PerformanceCard from '../components/dashboard/PerformanceCard';
 import ActivityFeed from '../components/dashboard/ActivityFeed';
+import { CommissionService } from '@/services/commissionService';
+import { useAuth } from '@/context/AuthContext';
+import { RevenueTable } from '@/components/stats/RevenueTable';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
+  const { user } = useAuth();
   const [activities] = useState([
     {
       id: '1',
@@ -36,64 +43,145 @@ const Index = () => {
     },
   ]);
 
+  // Récupérer la commission de l'agent
+  const { data: agentCommission } = useQuery({
+    queryKey: ['agentCommission', user?.id],
+    queryFn: () => CommissionService.getAgentCommission(user?.id || '1'),
+  });
+  
+  // Récupérer les revenus de l'agent
+  const { data: agentRevenues } = useQuery({
+    queryKey: ['agentRevenues', user?.id],
+    queryFn: () => CommissionService.getAgentRevenues(user?.id || '1'),
+  });
+  
+  // Récupérer les informations sur le prochain palier
+  const { data: nextLevelInfo } = useQuery({
+    queryKey: ['nextLevelInfo', user?.id],
+    queryFn: () => CommissionService.getNextLevelProgress(user?.id || '1'),
+  });
+
+  // Fonction pour formater la devise
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('fr-FR', { 
+      style: 'currency', 
+      currency: 'EUR',
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">Bonjour, Agent</h1>
+        <h1 className="text-3xl font-bold">Bonjour, {user?.user_metadata?.full_name || "Agent"}</h1>
         <p className="text-muted-foreground mt-1">Voici votre activité et vos performances du jour</p>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <PerformanceCard
           title="Chiffre d'affaires"
-          value="76 500 €"
-          change="+12% ce mois"
+          value={formatCurrency(agentCommission?.totalAmount || 0)}
+          change={nextLevelInfo ? `${nextLevelInfo.currentPercentage}% de commission` : null}
           icon={<Wallet size={24} className="text-noovimo-500" />}
         />
         <PerformanceCard
-          title="Commission actuelle"
-          value="76%"
-          change="Prochain palier: 80%"
-          icon={<TrendingUp size={24} className="text-noovimo-500" />}
+          title="Ventes"
+          value={formatCurrency(agentCommission?.salesAmount || 0)}
+          change={`${agentRevenues?.filter(r => r.source === 'sale').length || 0} transactions`}
+          icon={<Home size={24} className="text-noovimo-500" />}
         />
         <PerformanceCard
-          title="Mandats en cours"
-          value="12"
-          change="+3 ce mois"
-          icon={<FileText size={24} className="text-noovimo-500" />}
+          title="Locations"
+          value={formatCurrency(agentCommission?.rentalAmount || 0)}
+          change={`${agentRevenues?.filter(r => r.source === 'rental').length || 0} transactions`}
+          icon={<Key size={24} className="text-noovimo-500" />}
         />
         <PerformanceCard
-          title="Messages non lus"
-          value="8"
-          change="4 urgents"
-          positive={false}
-          icon={<MessageCircle size={24} className="text-noovimo-500" />}
+          title="Gestion locative"
+          value={formatCurrency(agentCommission?.propertyManagementAmount || 0)}
+          icon={<Building size={24} className="text-noovimo-500" />}
         />
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div className="lg:col-span-2">
           <div className="glass-card rounded-xl p-4 h-full">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Performance mensuelle</h3>
-              <select className="text-sm bg-transparent border border-input rounded-md px-2 py-1">
-                <option>Ce mois</option>
-                <option>Dernier mois</option>
-                <option>3 derniers mois</option>
-              </select>
+              <h3 className="text-lg font-semibold">Progression de commission</h3>
             </div>
             
-            <div className="flex items-center justify-center h-64">
-              <div className="w-full h-full flex items-center justify-center">
-                <BarChart3 size={120} className="text-muted-foreground/30" />
-                <span className="ml-4 text-muted-foreground">Graphique de performance</span>
+            {nextLevelInfo && (
+              <div className="space-y-6">
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+                  <div>
+                    <h4 className="text-base font-medium">Taux actuel: {nextLevelInfo.currentPercentage}%</h4>
+                    {nextLevelInfo.nextPercentage > nextLevelInfo.currentPercentage && (
+                      <p className="text-sm text-muted-foreground">
+                        Prochain palier: {nextLevelInfo.nextPercentage}%
+                      </p>
+                    )}
+                  </div>
+                  
+                  <div className="p-2 px-4 bg-primary-foreground rounded-lg text-sm font-medium">
+                    {formatCurrency(agentCommission?.totalAmount || 0)} / {nextLevelInfo.nextPercentage > nextLevelInfo.currentPercentage 
+                      ? formatCurrency((agentCommission?.totalAmount || 0) + nextLevelInfo.amountNeeded) 
+                      : "Palier max"}
+                  </div>
+                </div>
+                
+                <div className="w-full h-4 bg-secondary/70 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-noovimo-500 rounded-full transition-all duration-500"
+                    style={{ width: `${nextLevelInfo.progress}%` }}
+                  />
+                </div>
+                
+                {nextLevelInfo.nextPercentage > nextLevelInfo.currentPercentage ? (
+                  <p className="text-sm">
+                    Il vous reste <span className="font-medium">{formatCurrency(nextLevelInfo.amountNeeded)}</span> d'honoraires pour atteindre le prochain palier de commission.
+                  </p>
+                ) : (
+                  <p className="text-sm">Félicitations ! Vous avez atteint le taux de commission maximal de votre pack.</p>
+                )}
               </div>
-            </div>
+            )}
           </div>
         </div>
         
         <div>
           <ActivityFeed activities={activities} />
+        </div>
+      </div>
+      
+      <div className="glass-card rounded-xl p-6 mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+          <h3 className="text-lg font-semibold">Revenus récents</h3>
+          
+          <Tabs defaultValue="all" className="w-full sm:w-auto mt-2 sm:mt-0">
+            <TabsList className="grid grid-cols-3 w-full sm:w-auto">
+              <TabsTrigger value="all">Tous</TabsTrigger>
+              <TabsTrigger value="sales">Ventes</TabsTrigger>
+              <TabsTrigger value="rentals">Locations</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+        
+        <TabsContent value="all" className="mt-0">
+          {agentRevenues && <RevenueTable revenues={agentRevenues.slice(0, 5)} />}
+        </TabsContent>
+        
+        <TabsContent value="sales" className="mt-0">
+          {agentRevenues && <RevenueTable revenues={agentRevenues.filter(r => r.source === 'sale').slice(0, 5)} />}
+        </TabsContent>
+        
+        <TabsContent value="rentals" className="mt-0">
+          {agentRevenues && <RevenueTable revenues={agentRevenues.filter(r => r.source === 'rental' || r.source === 'propertyManagement').slice(0, 5)} />}
+        </TabsContent>
+        
+        <div className="mt-4 text-center">
+          <Button variant="outline" size="sm">
+            Voir tous les revenus
+          </Button>
         </div>
       </div>
       

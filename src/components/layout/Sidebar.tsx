@@ -17,7 +17,8 @@ import {
   Menu, 
   MessageSquare, 
   PanelLeft, 
-  Users
+  Users,
+  Settings
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -44,6 +45,7 @@ const Sidebar = () => {
     { name: 'Statistiques', path: '/stats', icon: <BarChart3 size={iconSize} /> },
     { name: 'Mes mandats', path: '/listings', icon: <Building2 size={iconSize} /> },
     { name: 'Support', path: '/support', icon: <Headphones size={iconSize} /> },
+    { name: 'Paramètres', path: '/settings', icon: <Settings size={iconSize} /> },
   ];
   
   return (
