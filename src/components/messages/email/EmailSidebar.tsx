@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Inbox, Send, FileText, Trash, PenSquare, Users, Archive, Star, Alert, Home, Clock } from 'lucide-react';
+import { Inbox, Send, FileText, Trash, PenSquare, Users, Archive, Star, AlertCircle, Home, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { EmailFolder } from '../types/email';
@@ -36,7 +36,7 @@ const EmailSidebar = ({ activeFolder, setActiveFolder, className = '', onCreateE
       case 'fileText': return <FileText {...iconProps} />;
       case 'users': return <Users {...iconProps} />;
       case 'home': return <Home {...iconProps} />;
-      case 'alert': return <Alert {...iconProps} />;
+      case 'alert': return <AlertCircle {...iconProps} />;
       case 'archive': return <Archive {...iconProps} />;
       case 'trash': return <Trash {...iconProps} />;
       case 'star': return <Star {...iconProps} />;

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search, Star, FilledStar, Paperclip, Tag, Clock } from 'lucide-react';
+import { Search, Star, Paperclip, Tag, Clock } from 'lucide-react';
 import { Email } from '../types/email';
 import { Badge } from '@/components/ui/badge';
 
@@ -84,7 +84,7 @@ const EmailList = ({ emails, selectedEmail, setSelectedEmail, activeFolder }: Em
                   )}
                   <button onClick={(e) => toggleStar(e, email)} className="flex items-center justify-center">
                     {email.isStarred ? (
-                      <FilledStar size={14} className="text-yellow-400 fill-yellow-400" />
+                      <Star size={14} className="text-yellow-400 fill-yellow-400" />
                     ) : (
                       <Star size={14} className="text-muted-foreground" />
                     )}

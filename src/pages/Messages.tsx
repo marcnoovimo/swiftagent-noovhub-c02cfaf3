@@ -5,8 +5,11 @@ import { Mail, MessageCircle, Users } from 'lucide-react';
 import InstantMessages from '@/components/messages/InstantMessages';
 import GroupDiscussions from '@/components/messages/GroupDiscussions';
 import EmailClient from '@/components/messages/EmailClient';
+import { useAuth } from '@/context/AuthContext';
 
 const Messages = () => {
+  const { user } = useAuth();
+
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <div className="mb-6">

@@ -22,6 +22,10 @@ interface AuthContextProps {
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
+// Create a key for storing demo user in localStorage
+const DEMO_USER_KEY = 'noovimo_demo_user';
+const DEMO_ADMIN_KEY = 'noovimo_demo_admin';
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -34,6 +38,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const fetchSession = async () => {
       if (!isSupabaseConfigured) {
         console.log("Mode démo activé: Supabase non configuré");
+        
+        // Check if we have a stored demo user
+        try {
+          const storedUser = localStorage.getItem(DEMO_USER_KEY);
+          const storedIsAdmin = localStorage.getItem(DEMO_ADMIN_KEY);
+          
+          if (storedUser) {
+            const parsedUser = JSON.parse(storedUser) as User;
+            setUser(parsedUser);
+            setIsAdmin(storedIsAdmin === 'true');
+            console.log("Session démo restaurée depuis localStorage");
+          }
+        } catch (error) {
+          console.error("Erreur lors de la récupération de la session démo:", error);
+        }
+        
         setLoading(false);
         return;
       }
@@ -42,7 +62,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const { data: { session } } = await supabase.auth.getSession();
         setSession(session);
         setUser(session?.user ?? null);
-        setIsAdmin(session?.user ? checkIsAdmin(session.user) : false);
+        
+        if (session?.user) {
+          const userIsAdmin = checkIsAdmin(session.user);
+          setIsAdmin(userIsAdmin);
+        }
       } catch (error) {
         console.error("Erreur lors de la récupération de la session:", error);
       } finally {
@@ -102,12 +126,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } as User;
         
         setUser(demoUser);
-        // On ne définit pas de session car c'est un objet plus complexe
-        toast.success("Mode démo activé. Bienvenue sur l'intranet Noovimo.");
         
         // Définir si l'utilisateur est admin en fonction de son email
         const userIsAdmin = email.endsWith('@admin.noovimo.fr');
         setIsAdmin(userIsAdmin);
+        
+        // Store in localStorage for persistence
+        localStorage.setItem(DEMO_USER_KEY, JSON.stringify(demoUser));
+        localStorage.setItem(DEMO_ADMIN_KEY, userIsAdmin.toString());
+        
+        toast.success("Mode démo activé. Bienvenue sur l'intranet Noovimo.");
         
         return { error: null };
       }
@@ -125,6 +153,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signOut = async () => {
     if (demoMode) {
+      // Clear localStorage for demo mode
+      localStorage.removeItem(DEMO_USER_KEY);
+      localStorage.removeItem(DEMO_ADMIN_KEY);
       setUser(null);
       setSession(null);
       setIsAdmin(false);
