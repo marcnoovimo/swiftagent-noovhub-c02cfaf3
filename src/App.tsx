@@ -10,6 +10,7 @@ import Documents from "./pages/Documents";
 import Profile from "./pages/Profile";
 import Stats from "./pages/Stats";
 import Team from "./pages/Team";
+import Contacts from "./pages/Contacts";
 import AgentDetail from "./pages/AgentDetail";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/layout/Layout";
@@ -100,6 +101,16 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <Team />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/contacts"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Contacts />
             </Layout>
           </ProtectedRoute>
         }
