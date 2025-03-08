@@ -9,6 +9,7 @@ import { ScanLine, Camera, Upload, Loader2 } from 'lucide-react';
 import { Contact } from '@/types/contact';
 import { extractBusinessCardInfo } from '@/services/contactService';
 import { toast } from 'sonner';
+import DocumentScanner from '@/components/documents/DocumentScanner';
 
 interface ContactScanModalProps {
   open: boolean;
@@ -20,12 +21,12 @@ const ContactScanModal: React.FC<ContactScanModalProps> = ({ open, onOpenChange 
   const [scanComplete, setScanComplete] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [contactData, setContactData] = useState<Partial<Contact>>({});
+  const [showCamera, setShowCamera] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleCapture = () => {
-    // In a real app, this would access the device camera
-    // For demo purposes, we'll just trigger the file input
-    fileInputRef.current?.click();
+    // Open the camera scanner
+    setShowCamera(true);
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,23 +38,26 @@ const ContactScanModal: React.FC<ContactScanModalProps> = ({ open, onOpenChange 
     reader.onload = async (event) => {
       if (event.target?.result) {
         setPreviewImage(event.target.result as string);
-        setIsScanning(true);
-
-        try {
-          // Extract information from the business card
-          const extractedData = await extractBusinessCardInfo(event.target.result as string);
-          setContactData(extractedData);
-          setScanComplete(true);
-          setIsScanning(false);
-          toast.success("Carte de visite analysée avec succès");
-        } catch (error) {
-          setIsScanning(false);
-          toast.error("Erreur lors de l'analyse de la carte");
-          console.error("Error extracting business card info:", error);
-        }
+        processBusinessCard(event.target.result as string);
       }
     };
     reader.readAsDataURL(file);
+  };
+
+  const processBusinessCard = async (imageData: string) => {
+    setIsScanning(true);
+    try {
+      // Extract information from the business card
+      const extractedData = await extractBusinessCardInfo(imageData);
+      setContactData(extractedData);
+      setScanComplete(true);
+      setIsScanning(false);
+      toast.success("Carte de visite analysée avec succès");
+    } catch (error) {
+      setIsScanning(false);
+      toast.error("Erreur lors de l'analyse de la carte");
+      console.error("Error extracting business card info:", error);
+    }
   };
 
   const handleSave = () => {
@@ -68,6 +72,13 @@ const ContactScanModal: React.FC<ContactScanModalProps> = ({ open, onOpenChange 
     setScanComplete(false);
     setContactData({});
     setIsScanning(false);
+    setShowCamera(false);
+  };
+
+  const handleCameraCapture = async (imageData: string) => {
+    setShowCamera(false);
+    setPreviewImage(imageData);
+    processBusinessCard(imageData);
   };
 
   return (
@@ -83,7 +94,23 @@ const ContactScanModal: React.FC<ContactScanModalProps> = ({ open, onOpenChange 
           </DialogDescription>
         </DialogHeader>
 
-        {!scanComplete ? (
+        {showCamera ? (
+          <DocumentScanner 
+            onCapture={(imageData) => handleCameraCapture(imageData, {
+              documentName: "Carte de visite",
+              category: "Contacts",
+              autoClassify: false,
+              accessLevel: "agent"
+            })}
+            options={{
+              documentName: "Carte de visite",
+              category: "Contacts",
+              autoClassify: false,
+              accessLevel: "agent"
+            }}
+            onClose={() => setShowCamera(false)}
+          />
+        ) : !scanComplete ? (
           <div className="space-y-4">
             <div className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 h-64">
               {previewImage ? (
