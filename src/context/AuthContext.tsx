@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { toast } from 'sonner';
+import { isAdmin as checkIsAdmin } from '@/services/documentService';
 
 interface AuthContextProps {
   session: Session | null;
@@ -16,6 +17,7 @@ interface AuthContextProps {
   }>;
   loading: boolean;
   demoMode: boolean;
+  isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -25,6 +27,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [demoMode, setDemoMode] = useState(!isSupabaseConfigured);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     // Récupérer la session au chargement
@@ -39,6 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const { data: { session } } = await supabase.auth.getSession();
         setSession(session);
         setUser(session?.user ?? null);
+        setIsAdmin(session?.user ? checkIsAdmin(session.user) : false);
       } catch (error) {
         console.error("Erreur lors de la récupération de la session:", error);
       } finally {
@@ -57,6 +61,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           (_event, session) => {
             setSession(session);
             setUser(session?.user ?? null);
+            setIsAdmin(session?.user ? checkIsAdmin(session.user) : false);
             setLoading(false);
           }
         );
@@ -99,6 +104,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(demoUser);
         // On ne définit pas de session car c'est un objet plus complexe
         toast.success("Mode démo activé. Bienvenue sur l'intranet Noovimo.");
+        
+        // Définir si l'utilisateur est admin en fonction de son email
+        const userIsAdmin = email.endsWith('@admin.noovimo.fr');
+        setIsAdmin(userIsAdmin);
+        
         return { error: null };
       }
 
@@ -117,6 +127,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (demoMode) {
       setUser(null);
       setSession(null);
+      setIsAdmin(false);
       return;
     }
     await supabase.auth.signOut();
@@ -148,7 +159,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         signOut,
         resetPassword,
         loading,
-        demoMode
+        demoMode,
+        isAdmin
       }}
     >
       {children}

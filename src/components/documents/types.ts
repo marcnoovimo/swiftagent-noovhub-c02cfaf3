@@ -6,6 +6,12 @@ export interface Document {
   category: string;
   starred: boolean;
   documentType: 'agent' | 'noovimo';
+  size?: number;
+  ownerId?: string;
+  createdAt?: string;
+  path?: string;
+  accessLevel?: 'admin' | 'agent' | 'shared';
+  url?: string;
 }
 
 export interface Folder {
@@ -26,3 +32,10 @@ export type BreadcrumbItem = {
   id: string;
   name: string;
 };
+
+export type AccessLevel = 'admin' | 'agent' | 'shared';
+
+export interface UploadOptions {
+  category: string;
+  accessLevel: AccessLevel;
+}
