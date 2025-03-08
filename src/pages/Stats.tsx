@@ -67,11 +67,11 @@ const Stats = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-4 sm:py-8 animate-fade-in">
-      <div className="flex flex-col md:flex-row justify-between items-start mb-6 gap-4">
+    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 animate-fade-in overflow-x-hidden">
+      <div className="flex flex-col md:flex-row justify-between items-start mb-4 sm:mb-6 gap-2 sm:gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold">Statistiques de performance</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Statistiques de performance</h1>
+          <p className="text-muted-foreground text-xs sm:text-sm mt-1">
             Suivez vos performances commerciales et vos commissions
           </p>
         </div>
@@ -79,9 +79,13 @@ const Stats = () => {
       </div>
       
       {/* Performance Dashboard Component */}
-      <PerformanceDashboard />
+      <div className="w-full overflow-x-auto">
+        <div className="min-w-[300px]">
+          <PerformanceDashboard />
+        </div>
+      </div>
       
-      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-4 sm:mb-8">
         <StatCard
           title="Ventes réalisées"
           value={stats.totalSales}
@@ -104,62 +108,62 @@ const Stats = () => {
         />
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div className="lg:col-span-2 glass-card rounded-xl p-4">
-          <h3 className="text-lg font-semibold mb-4">Évolution des transactions</h3>
-          <Tabs defaultValue="bar">
-            <TabsList className="mb-4 flex flex-wrap w-full xs:w-auto">
-              <TabsTrigger value="bar" className="flex-1 xs:flex-none">Barres</TabsTrigger>
-              <TabsTrigger value="line" className="flex-1 xs:flex-none">Courbe</TabsTrigger>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-6 mb-4 sm:mb-8">
+        <div className="lg:col-span-2 glass-card rounded-xl p-2 sm:p-4 overflow-hidden">
+          <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Évolution des transactions</h3>
+          <Tabs defaultValue="bar" className="w-full">
+            <TabsList className="mb-2 sm:mb-4 flex flex-wrap w-full xs:w-auto">
+              <TabsTrigger value="bar" className="flex-1 xs:flex-none text-xs sm:text-sm">Barres</TabsTrigger>
+              <TabsTrigger value="line" className="flex-1 xs:flex-none text-xs sm:text-sm">Courbe</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="bar" className="h-[300px]">
+            <TabsContent value="bar" className="h-[250px] sm:h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart 
                   data={stats.monthlySales}
-                  margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                  margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month" 
-                    tick={{fontSize: 12}}
+                    tick={{fontSize: 10}}
                     tickFormatter={(value) => value.substring(0, 3)} 
                   />
-                  <YAxis tick={{fontSize: 10}} width={30} />
+                  <YAxis tick={{fontSize: 10}} width={25} />
                   <Tooltip 
                     formatter={formatTooltipValue}
                     contentStyle={{ fontSize: '12px' }}
                   />
-                  <Legend wrapperStyle={{ fontSize: '12px' }} />
+                  <Legend wrapperStyle={{ fontSize: '10px' }} />
                   <Bar name="Ventes" dataKey="value" fill="#8B5CF6" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
             
-            <TabsContent value="line" className="h-[300px]">
+            <TabsContent value="line" className="h-[250px] sm:h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart 
                   data={stats.monthlySales}
-                  margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                  margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month" 
-                    tick={{fontSize: 12}}
+                    tick={{fontSize: 10}}
                     tickFormatter={(value) => value.substring(0, 3)} 
                   />
-                  <YAxis tick={{fontSize: 10}} width={30} />
+                  <YAxis tick={{fontSize: 10}} width={25} />
                   <Tooltip 
                     formatter={formatTooltipValue}
                     contentStyle={{ fontSize: '12px' }}
                   />
-                  <Legend wrapperStyle={{ fontSize: '12px' }} />
+                  <Legend wrapperStyle={{ fontSize: '10px' }} />
                   <Line 
                     type="monotone" 
                     name="Ventes" 
                     dataKey="value" 
                     stroke="#8B5CF6" 
-                    activeDot={{ r: 8 }}
+                    activeDot={{ r: 6 }}
                     strokeWidth={2} 
                   />
                 </LineChart>
@@ -168,9 +172,9 @@ const Stats = () => {
           </Tabs>
         </div>
         
-        <div className="glass-card rounded-xl p-4">
-          <h3 className="text-lg font-semibold mb-4">Répartition des commissions</h3>
-          <div className="h-[300px] flex items-center justify-center">
+        <div className="glass-card rounded-xl p-2 sm:p-4 overflow-hidden">
+          <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Répartition des commissions</h3>
+          <div className="h-[250px] sm:h-[300px] flex items-center justify-center w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
                 <Pie
@@ -178,11 +182,12 @@ const Stats = () => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  outerRadius={80}
+                  outerRadius={70}
                   fill="#8884d8"
                   dataKey="value"
                   nameKey="name"
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  labelStyle={{fontSize: '10px'}}
                 >
                   {stats.commissionsByType.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -190,7 +195,7 @@ const Stats = () => {
                 </Pie>
                 <Tooltip 
                   formatter={(value) => formatCurrency(value as number)}
-                  contentStyle={{ fontSize: '12px' }}
+                  contentStyle={{ fontSize: '10px' }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -198,42 +203,44 @@ const Stats = () => {
         </div>
       </div>
       
-      <div className="glass-card rounded-xl p-4 mb-8">
-        <h3 className="text-lg font-semibold mb-4">Évolution des commissions</h3>
-        <div className="h-[300px]">
+      <div className="glass-card rounded-xl p-2 sm:p-4 mb-4 sm:mb-8 overflow-hidden">
+        <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Évolution des commissions</h3>
+        <div className="h-[250px] sm:h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart 
               data={stats.monthlyCommissions}
-              margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+              margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
                 dataKey="month" 
-                tick={{fontSize: 12}}
+                tick={{fontSize: 10}}
                 tickFormatter={(value) => value.substring(0, 3)} 
               />
               <YAxis 
                 tickFormatter={(value) => `${(value / 1000).toFixed(0)}k€`} 
                 tick={{fontSize: 10}}
-                width={40}
+                width={35}
               />
               <Tooltip 
                 formatter={(value) => formatCurrency(value as number)}
-                contentStyle={{ fontSize: '12px' }}
+                contentStyle={{ fontSize: '10px' }}
               />
-              <Legend wrapperStyle={{ fontSize: '12px' }} />
+              <Legend wrapperStyle={{ fontSize: '10px' }} />
               <Bar name="Commissions" dataKey="value" fill="#EC4899" />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
       
-      <div className="glass-card rounded-xl p-4 sm:p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Transactions récentes</h3>
+      <div className="glass-card rounded-xl p-2 sm:p-4 sm:p-6 overflow-x-auto">
+        <div className="flex items-center justify-between mb-2 sm:mb-4">
+          <h3 className="text-base sm:text-lg font-semibold">Transactions récentes</h3>
         </div>
-        <div className="overflow-x-auto">
-          <TransactionTable transactions={stats.transactions.slice(0, 5)} />
+        <div className="overflow-x-auto w-full">
+          <div className="min-w-[600px]">
+            <TransactionTable transactions={stats.transactions.slice(0, 5)} />
+          </div>
         </div>
       </div>
     </div>

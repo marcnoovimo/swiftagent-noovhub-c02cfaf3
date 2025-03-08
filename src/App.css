@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 @media (min-width: 1280px) {
@@ -80,4 +81,26 @@
 h1, h2, h3, h4, h5, h6, p, span, a, button {
   max-width: 100%;
   overflow-wrap: break-word;
+}
+
+/* Tables responsive behavior */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Fix for charts on small screens */
+.recharts-wrapper {
+  max-width: 100%;
+}
+
+.recharts-surface {
+  overflow: visible;
+}
+
+/* Ensure no horizontal overflow for all containers */
+.container {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
