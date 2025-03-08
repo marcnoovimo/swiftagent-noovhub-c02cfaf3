@@ -8,8 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 import { 
-  BarChart3, 
-  Building2, 
+  BarChart3,
   Calendar, 
   FileText, 
   Headphones, 
@@ -43,7 +42,6 @@ const Sidebar = () => {
     { name: 'Agenda', path: '/calendar', icon: <Calendar size={iconSize} /> },
     { name: 'Messages', path: '/messages', icon: <MessageSquare size={iconSize} /> },
     { name: 'Statistiques', path: '/stats', icon: <BarChart3 size={iconSize} /> },
-    { name: 'Mes mandats', path: '/listings', icon: <Building2 size={iconSize} /> },
     { name: 'Support', path: '/support', icon: <Headphones size={iconSize} /> },
     { name: 'Paramètres', path: '/settings', icon: <Settings size={iconSize} /> },
   ];
