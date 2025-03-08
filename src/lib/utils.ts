@@ -15,6 +15,17 @@ export function formatDate(date: Date): string {
   });
 }
 
+/**
+ * Formats a currency value according to French locale
+ */
+export const formatCurrency = (value: number): string => {
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0
+  }).format(value);
+};
+
 // Convert data URL to File object (for handling scanned images)
 export function dataURLtoFile(dataurl: string, filename: string): File {
   const arr = dataurl.split(',');
