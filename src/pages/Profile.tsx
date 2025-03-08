@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { 
@@ -22,7 +23,7 @@ import {
   Award,
   FileText,
   Briefcase,
-  Download
+  DownloadIcon
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Agent } from '@/types/agent';

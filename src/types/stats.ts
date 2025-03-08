@@ -4,11 +4,12 @@ export type TimeFilter = 'month' | 'quarter' | 'year';
 export interface Transaction {
   id: string;
   date: string;
-  type: 'vente' | 'compromis';
+  type: 'vente' | 'compromis' | 'location';
   property: string;
   amount: number;
   commission: number;
-  address: string;
+  address?: string;
+  status?: string;
 }
 
 export interface StatsData {

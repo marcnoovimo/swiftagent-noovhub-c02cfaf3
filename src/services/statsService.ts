@@ -93,7 +93,7 @@ const demoCompleteStats: CompleteStats = {
     {
       id: '1',
       date: '2023-06-15',
-      type: 'Vente',
+      type: 'vente',
       property: 'Appartement 3 pièces',
       amount: 210000,
       commission: 7350,
@@ -102,7 +102,7 @@ const demoCompleteStats: CompleteStats = {
     {
       id: '2',
       date: '2023-06-02',
-      type: 'Vente',
+      type: 'vente',
       property: 'Maison 5 pièces',
       amount: 320000,
       commission: 11200,
@@ -111,7 +111,7 @@ const demoCompleteStats: CompleteStats = {
     {
       id: '3',
       date: '2023-05-18',
-      type: 'Location',
+      type: 'location',
       property: 'Studio meublé',
       amount: 650,
       commission: 650,
@@ -120,7 +120,7 @@ const demoCompleteStats: CompleteStats = {
     {
       id: '4',
       date: '2023-04-30',
-      type: 'Vente',
+      type: 'vente',
       property: 'Appartement 2 pièces',
       amount: 175000,
       commission: 6125,
@@ -129,7 +129,7 @@ const demoCompleteStats: CompleteStats = {
     {
       id: '5',
       date: '2023-04-15',
-      type: 'Vente',
+      type: 'vente',
       property: 'Maison 4 pièces',
       amount: 295000,
       commission: 10325,

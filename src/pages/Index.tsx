@@ -4,13 +4,23 @@ import { useAuth } from '@/context/AuthContext';
 import { Helmet } from 'react-helmet';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChartContainer } from '@/components/ui/chart';
 import PerformanceCard from '@/components/dashboard/PerformanceCard';
 import ActivityFeed, { Activity } from '@/components/dashboard/ActivityFeed';
 import MonthlyRevenueChart from '@/components/commission/MonthlyRevenueChart';
 import { useQuery } from '@tanstack/react-query';
 import { statsService } from '@/services/statsService';
 import { Euro, Users, TrendingUp, BarChart } from 'lucide-react';
+
+// Configuration de base pour tous les graphiques
+const chartConfig = {
+  colors: ['#8B5CF6', '#EC4899', '#10B981', '#F59E0B'],
+  fontFamily: '"Inter", sans-serif',
+  tooltip: {
+    style: {
+      fontSize: '12px',
+    },
+  },
+};
 
 const Index = () => {
   const { user, isAdmin } = useAuth();
@@ -111,9 +121,9 @@ const Index = () => {
             <CardTitle className="text-base">Évolution du CA</CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartContainer>
-              <MonthlyRevenueChart height={300} />
-            </ChartContainer>
+            <div className="h-[300px] w-full">
+              <MonthlyRevenueChart />
+            </div>
           </CardContent>
         </Card>
 
