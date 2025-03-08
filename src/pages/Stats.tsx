@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { 
@@ -17,7 +18,7 @@ import {
 } from 'recharts';
 import { Building2, CreditCard, TrendingUp, Home, BarChart3 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { StatsData, TimeFilter } from '@/types/stats';
+import { TimeFilter } from '@/types/stats';
 import StatsService from '@/services/statsService';
 import TimeFilterSelector from '@/components/stats/TimeFilterSelector';
 import StatCard from '@/components/stats/StatCard';
@@ -66,10 +67,10 @@ const Stats = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 animate-fade-in">
-      <div className="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
+    <div className="container mx-auto px-4 py-4 sm:py-8 animate-fade-in">
+      <div className="flex flex-col md:flex-row justify-between items-start mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Statistiques de performance</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">Statistiques de performance</h1>
           <p className="text-muted-foreground mt-1">
             Suivez vos performances commerciales et vos commissions
           </p>
@@ -80,7 +81,7 @@ const Stats = () => {
       {/* Performance Dashboard Component */}
       <PerformanceDashboard />
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
           title="Ventes réalisées"
           value={stats.totalSales}
@@ -107,19 +108,29 @@ const Stats = () => {
         <div className="lg:col-span-2 glass-card rounded-xl p-4">
           <h3 className="text-lg font-semibold mb-4">Évolution des transactions</h3>
           <Tabs defaultValue="bar">
-            <TabsList className="mb-4">
-              <TabsTrigger value="bar">Barres</TabsTrigger>
-              <TabsTrigger value="line">Courbe</TabsTrigger>
+            <TabsList className="mb-4 flex flex-wrap w-full xs:w-auto">
+              <TabsTrigger value="bar" className="flex-1 xs:flex-none">Barres</TabsTrigger>
+              <TabsTrigger value="line" className="flex-1 xs:flex-none">Courbe</TabsTrigger>
             </TabsList>
             
             <TabsContent value="bar" className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={stats.monthlySales}>
+                <BarChart 
+                  data={stats.monthlySales}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip formatter={formatTooltipValue} />
-                  <Legend />
+                  <XAxis 
+                    dataKey="month" 
+                    tick={{fontSize: 12}}
+                    tickFormatter={(value) => value.substring(0, 3)} 
+                  />
+                  <YAxis tick={{fontSize: 10}} width={30} />
+                  <Tooltip 
+                    formatter={formatTooltipValue}
+                    contentStyle={{ fontSize: '12px' }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                   <Bar name="Ventes" dataKey="value" fill="#8B5CF6" />
                 </BarChart>
               </ResponsiveContainer>
@@ -127,12 +138,22 @@ const Stats = () => {
             
             <TabsContent value="line" className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={stats.monthlySales}>
+                <LineChart 
+                  data={stats.monthlySales}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip formatter={formatTooltipValue} />
-                  <Legend />
+                  <XAxis 
+                    dataKey="month" 
+                    tick={{fontSize: 12}}
+                    tickFormatter={(value) => value.substring(0, 3)} 
+                  />
+                  <YAxis tick={{fontSize: 10}} width={30} />
+                  <Tooltip 
+                    formatter={formatTooltipValue}
+                    contentStyle={{ fontSize: '12px' }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                   <Line 
                     type="monotone" 
                     name="Ventes" 
@@ -151,7 +172,7 @@ const Stats = () => {
           <h3 className="text-lg font-semibold mb-4">Répartition des commissions</h3>
           <div className="h-[300px] flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
                 <Pie
                   data={stats.commissionsByType}
                   cx="50%"
@@ -167,7 +188,10 @@ const Stats = () => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => formatCurrency(value as number)} />
+                <Tooltip 
+                  formatter={(value) => formatCurrency(value as number)}
+                  contentStyle={{ fontSize: '12px' }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -178,23 +202,39 @@ const Stats = () => {
         <h3 className="text-lg font-semibold mb-4">Évolution des commissions</h3>
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={stats.monthlyCommissions}>
+            <BarChart 
+              data={stats.monthlyCommissions}
+              margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+            >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis tickFormatter={(value) => `${(value / 1000).toFixed(0)}k€`} />
-              <Tooltip formatter={(value) => formatCurrency(value as number)} />
-              <Legend />
+              <XAxis 
+                dataKey="month" 
+                tick={{fontSize: 12}}
+                tickFormatter={(value) => value.substring(0, 3)} 
+              />
+              <YAxis 
+                tickFormatter={(value) => `${(value / 1000).toFixed(0)}k€`} 
+                tick={{fontSize: 10}}
+                width={40}
+              />
+              <Tooltip 
+                formatter={(value) => formatCurrency(value as number)}
+                contentStyle={{ fontSize: '12px' }}
+              />
+              <Legend wrapperStyle={{ fontSize: '12px' }} />
               <Bar name="Commissions" dataKey="value" fill="#EC4899" />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
       
-      <div className="glass-card rounded-xl p-6">
+      <div className="glass-card rounded-xl p-4 sm:p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Transactions récentes</h3>
         </div>
-        <TransactionTable transactions={stats.transactions.slice(0, 5)} />
+        <div className="overflow-x-auto">
+          <TransactionTable transactions={stats.transactions.slice(0, 5)} />
+        </div>
       </div>
     </div>
   );

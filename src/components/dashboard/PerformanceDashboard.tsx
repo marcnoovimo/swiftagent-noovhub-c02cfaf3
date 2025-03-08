@@ -93,7 +93,7 @@ const PerformanceDashboard: React.FC = () => {
     <div className="w-full animate-fade-in">
       <div className="mb-6">
         <h2 className="text-2xl font-semibold mb-2">Activité du mois</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4">
           <PerformanceCard
             title="Ventes"
             value={currentMonth.sales.toString()}
@@ -121,7 +121,7 @@ const PerformanceDashboard: React.FC = () => {
 
       <div className="mb-6">
         <h2 className="text-2xl font-semibold mb-2">Cumul annuel</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4">
           <PerformanceCard
             title="Ventes réalisées"
             value={cumulativeData.sales.toString()}
@@ -148,27 +148,45 @@ const PerformanceDashboard: React.FC = () => {
       <div className="mb-6">
         <h2 className="text-2xl font-semibold mb-4">Évolution annuelle</h2>
         <div className="glass-card rounded-xl p-4">
-          <Tabs defaultValue="combined">
-            <TabsList className="mb-4 flex flex-wrap w-full sm:w-auto">
-              <TabsTrigger value="combined" className="flex-1 sm:flex-none">Combiné</TabsTrigger>
-              <TabsTrigger value="transactions" className="flex-1 sm:flex-none">Transactions</TabsTrigger>
-              <TabsTrigger value="commissions" className="flex-1 sm:flex-none">Commissions</TabsTrigger>
+          <Tabs defaultValue="combined" className="w-full">
+            <TabsList className="mb-4 w-full flex flex-wrap justify-center md:justify-start">
+              <TabsTrigger value="combined" className="flex-1 md:flex-none">Combiné</TabsTrigger>
+              <TabsTrigger value="transactions" className="flex-1 md:flex-none">Transactions</TabsTrigger>
+              <TabsTrigger value="commissions" className="flex-1 md:flex-none">Commissions</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="combined" className="h-[300px] min-h-[250px]">
+            <TabsContent value="combined" className="h-[300px] min-h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthlyData}>
+                <LineChart 
+                  data={monthlyData}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" tick={{fontSize: 12}} />
-                  <YAxis yAxisId="left" tick={{fontSize: 12}} />
-                  <YAxis yAxisId="right" orientation="right" tickFormatter={(value) => `${(value / 1000)}k€`} tick={{fontSize: 12}} />
+                  <XAxis 
+                    dataKey="month" 
+                    tick={{fontSize: 12}}
+                    tickFormatter={(value) => value.substring(0, 3)} // Show only first 3 chars on small screens
+                  />
+                  <YAxis 
+                    yAxisId="left" 
+                    tick={{fontSize: 10}} 
+                    width={30}
+                  />
+                  <YAxis 
+                    yAxisId="right" 
+                    orientation="right" 
+                    tickFormatter={(value) => `${(value / 1000)}k€`} 
+                    tick={{fontSize: 10}}
+                    width={40}
+                  />
                   <Tooltip 
                     formatter={(value, name) => {
                       if (name === 'commissions') return formatCurrency(Number(value));
                       return value;
-                    }} 
+                    }}
+                    contentStyle={{ fontSize: '12px' }}
                   />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                   <Line 
                     yAxisId="left"
                     type="monotone" 
@@ -176,6 +194,7 @@ const PerformanceDashboard: React.FC = () => {
                     name="Ventes" 
                     stroke="#8884d8" 
                     activeDot={{ r: 8 }} 
+                    strokeWidth={2}
                   />
                   <Line 
                     yAxisId="left"
@@ -183,6 +202,7 @@ const PerformanceDashboard: React.FC = () => {
                     dataKey="compromis" 
                     name="Compromis" 
                     stroke="#82ca9d" 
+                    strokeWidth={2}
                   />
                   <Line 
                     yAxisId="right"
@@ -190,6 +210,7 @@ const PerformanceDashboard: React.FC = () => {
                     dataKey="commissions" 
                     name="Commissions" 
                     stroke="#ff7300" 
+                    strokeWidth={2}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -197,12 +218,21 @@ const PerformanceDashboard: React.FC = () => {
             
             <TabsContent value="transactions" className="h-[300px] min-h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyData}>
+                <BarChart 
+                  data={monthlyData}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" tick={{fontSize: 12}} />
-                  <YAxis tick={{fontSize: 12}} />
-                  <Tooltip />
-                  <Legend />
+                  <XAxis 
+                    dataKey="month" 
+                    tick={{fontSize: 12}}
+                    tickFormatter={(value) => value.substring(0, 3)} // Show only first 3 chars on small screens
+                  />
+                  <YAxis tick={{fontSize: 10}} width={30} />
+                  <Tooltip
+                    contentStyle={{ fontSize: '12px' }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                   <Bar dataKey="ventes" name="Ventes" fill="#8884d8" />
                   <Bar dataKey="compromis" name="Compromis" fill="#82ca9d" />
                 </BarChart>
@@ -211,12 +241,26 @@ const PerformanceDashboard: React.FC = () => {
             
             <TabsContent value="commissions" className="h-[300px] min-h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyData}>
+                <BarChart 
+                  data={monthlyData}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" tick={{fontSize: 12}} />
-                  <YAxis tickFormatter={(value) => `${(value / 1000)}k€`} tick={{fontSize: 12}} />
-                  <Tooltip formatter={(value) => formatCurrency(Number(value))} />
-                  <Legend />
+                  <XAxis 
+                    dataKey="month" 
+                    tick={{fontSize: 12}}
+                    tickFormatter={(value) => value.substring(0, 3)} // Show only first 3 chars on small screens
+                  />
+                  <YAxis 
+                    tickFormatter={(value) => `${(value / 1000)}k€`} 
+                    tick={{fontSize: 10}}
+                    width={40}
+                  />
+                  <Tooltip 
+                    formatter={(value) => formatCurrency(Number(value))}
+                    contentStyle={{ fontSize: '12px' }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                   <Bar dataKey="commissions" name="Commissions" fill="#ff7300" />
                 </BarChart>
               </ResponsiveContainer>
