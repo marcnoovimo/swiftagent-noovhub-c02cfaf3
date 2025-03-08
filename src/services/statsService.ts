@@ -1,5 +1,5 @@
-
 import { StatsData, TimeFilter, Transaction } from '@/types/stats';
+import { getCurrentMonthStats } from '@/services/reportingService';
 
 // Données fictives pour les transactions
 const mockTransactions: Transaction[] = [
@@ -121,6 +121,37 @@ const StatsService = {
       }, 600);
     });
   },
+  
+  // New method to get current agent stats based on documents
+  getAgentStats: async (userId: string): Promise<{
+    sales: number;
+    compromis: number;
+    volume: number;
+    commission: number;
+    conversionRate: number;
+  }> => {
+    try {
+      // Get stats from reporting service
+      const stats = await getCurrentMonthStats(userId);
+      
+      return {
+        sales: stats.sales,
+        compromis: stats.contracts,
+        volume: stats.totalVolume,
+        commission: stats.totalCommission,
+        conversionRate: stats.conversionRate
+      };
+    } catch (error) {
+      console.error('Error fetching agent stats:', error);
+      return {
+        sales: 0,
+        compromis: 0,
+        volume: 0,
+        commission: 0,
+        conversionRate: 0
+      };
+    }
+  }
 };
 
 export default StatsService;
