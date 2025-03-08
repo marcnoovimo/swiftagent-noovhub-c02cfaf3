@@ -47,7 +47,14 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/light-v11',
       center: [2.213749, 46.227638], // Centre de la France
-      zoom: 5,
+      zoom: 5.5, // Zoom légèrement augmenté pour mieux voir la France
+      bounds: [
+        [-5.5591, 41.3233], // Sud-ouest de la France
+        [9.5595, 51.1485]   // Nord-est de la France
+      ],
+      fitBoundsOptions: {
+        padding: 50,
+      }
     });
 
     // Ajouter les contrôles de navigation
@@ -79,8 +86,18 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
         if (!map.current) return;
         
         const markerElement = document.createElement('div');
-        markerElement.className = 'agent-marker flex items-center justify-center rounded-full bg-noovimo-500 text-white border-2 border-white shadow-md w-10 h-10 cursor-pointer';
-        markerElement.innerHTML = `<span>${agent.name.charAt(0)}${agent.name.split(' ')[1]?.charAt(0) || ''}</span>`;
+        markerElement.className = 'agent-marker flex items-center justify-center rounded-full bg-noovimo-500 text-white border-2 border-white shadow-md w-10 h-10 cursor-pointer overflow-hidden';
+        
+        // Utiliser la photo de l'agent si disponible, sinon afficher ses initiales
+        if (agent.photo) {
+          const img = document.createElement('img');
+          img.src = agent.photo;
+          img.className = 'w-full h-full object-cover';
+          img.alt = agent.name;
+          markerElement.appendChild(img);
+        } else {
+          markerElement.innerHTML = `<span>${agent.name.charAt(0)}${agent.name.split(' ')[1]?.charAt(0) || ''}</span>`;
+        }
         
         // Créer le marqueur
         const marker = new mapboxgl.Marker(markerElement)
@@ -112,17 +129,33 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
         });
       });
       
-      // Ajuster la vue pour voir tous les agents si possible
-      if (agents.length > 1) {
-        const bounds = new mapboxgl.LngLatBounds();
-        
-        agents.forEach(agent => {
-          bounds.extend([agent.longitude, agent.latitude]);
-        });
-        
-        map.current.fitBounds(bounds, {
+      // Ajuster la vue pour voir tous les agents en France
+      const franceBounds = new mapboxgl.LngLatBounds([
+        [-5.5591, 41.3233], // Sud-ouest de la France
+        [9.5595, 51.1485]   // Nord-est de la France
+      ]);
+      
+      // Vérifier si les agents sont en France
+      let hasAgentsInFrance = false;
+      agents.forEach(agent => {
+        if (agent.longitude >= -5.5591 && agent.longitude <= 9.5595 && 
+            agent.latitude >= 41.3233 && agent.latitude <= 51.1485) {
+          hasAgentsInFrance = true;
+          franceBounds.extend([agent.longitude, agent.latitude]);
+        }
+      });
+      
+      // Si des agents sont en France, ajuster la vue
+      if (hasAgentsInFrance) {
+        map.current.fitBounds(franceBounds, {
           padding: 50,
           maxZoom: 12
+        });
+      } else {
+        // Sinon, centrer sur la France
+        map.current.flyTo({
+          center: [2.213749, 46.227638],
+          zoom: 5
         });
       }
     };
