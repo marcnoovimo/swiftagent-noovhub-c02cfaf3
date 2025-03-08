@@ -108,13 +108,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!isSupabaseConfigured) {
         console.log("Mode démo: connexion simulée pour", email);
         // Simuler un utilisateur connecté en mode démo
-        // Conversion explicite en User pour satisfaire TypeScript
         const demoUser = {
           id: '1',
           email: email,
           app_metadata: {},
           user_metadata: {
-            full_name: 'Utilisateur Démo'
+            full_name: 'Utilisateur Démo',
+            avatar_url: '',
           },
           aud: 'authenticated',
           created_at: new Date().toISOString(),
@@ -122,7 +122,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           confirmed_at: new Date().toISOString(),
           last_sign_in_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          identities: []
+          identities: [],
+          phone: '',
+          phone_confirmed_at: null,
+          confirmation_sent_at: null,
+          recovery_sent_at: null,
+          email_change_sent_at: null,
+          new_email: null,
+          new_phone: null,
+          email_confirmed_at: new Date().toISOString(),
+          banned_until: null,
+          reauthentication_sent_at: null,
+          is_anonymous: false,
+          toJSON: () => ({}),
+          factors: [],
+          mfa_factors: []
         } as User;
         
         setUser(demoUser);

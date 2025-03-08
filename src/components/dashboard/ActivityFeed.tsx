@@ -1,68 +1,101 @@
 
 import React from 'react';
-import { Clock } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
-interface ActivityItem {
+export interface Activity {
   id: string;
+  type: 'vente' | 'location' | 'mandat' | 'facture' | 'commission' | 'message';
   title: string;
   description: string;
-  time: string;
-  type: 'document' | 'message' | 'notification' | 'alert';
+  date: string;
+  user: {
+    name: string;
+    avatar?: string;
+  };
+  status?: 'pending' | 'completed' | 'rejected';
 }
 
-interface ActivityFeedProps {
-  activities: ActivityItem[];
+export interface ActivityFeedProps {
+  activities: Activity[];
 }
 
 const ActivityFeed: React.FC<ActivityFeedProps> = ({ activities }) => {
-  const getActivityIcon = (type: ActivityItem['type']) => {
-    switch (type) {
-      case 'document':
-        return <div className="w-2 h-2 rounded-full bg-blue-500" />;
-      case 'message':
-        return <div className="w-2 h-2 rounded-full bg-green-500" />;
-      case 'notification':
-        return <div className="w-2 h-2 rounded-full bg-yellow-500" />;
-      case 'alert':
-        return <div className="w-2 h-2 rounded-full bg-red-500" />;
-      default:
-        return <div className="w-2 h-2 rounded-full bg-gray-500" />;
+  // S'assurer que activities est un tableau (protection contre undefined)
+  const safeActivities = activities || [];
+  
+  // Filtrer les activités par type
+  const salesActivities = safeActivities.filter(a => a.type === 'vente' || a.type === 'mandat');
+  const invoiceActivities = safeActivities.filter(a => a.type === 'facture' || a.type === 'commission');
+  const messageActivities = safeActivities.filter(a => a.type === 'message' || a.type === 'location');
+
+  const renderActivities = (items: Activity[]) => {
+    if (items.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center py-6 text-center">
+          <p className="text-sm text-muted-foreground">Aucune activité récente</p>
+        </div>
+      );
     }
+
+    return items.map((activity) => (
+      <div key={activity.id} className="mb-4 last:mb-0">
+        <div className="flex items-start gap-3">
+          <Avatar className="h-8 w-8 border border-border">
+            <AvatarImage src={activity.user.avatar} alt={activity.user.name} />
+            <AvatarFallback>{activity.user.name.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <div className="flex-1 space-y-1.5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium leading-none">{activity.title}</p>
+              <p className="text-xs text-muted-foreground">
+                {format(new Date(activity.date), 'PP', { locale: fr })}
+              </p>
+            </div>
+            <p className="text-xs text-muted-foreground">{activity.description}</p>
+          </div>
+        </div>
+      </div>
+    ));
   };
 
   return (
-    <div className="glass-card rounded-xl p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold">Activité récente</h3>
-      </div>
-      
-      <div className="space-y-3">
-        {activities.map((activity) => (
-          <div 
-            key={activity.id} 
-            className="flex items-start p-3 rounded-lg transition-all duration-200 hover:bg-secondary/50"
-          >
-            <div className="mr-3 mt-1">
-              {getActivityIcon(activity.type)}
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base">Activité récente</CardTitle>
+        <CardDescription>Suivez les dernières activités</CardDescription>
+      </CardHeader>
+      <CardContent className="p-0">
+        <Tabs defaultValue="all">
+          <TabsList className="w-full justify-start px-6 pt-2">
+            <TabsTrigger value="all" className="text-xs">Tout</TabsTrigger>
+            <TabsTrigger value="sales" className="text-xs">Ventes</TabsTrigger>
+            <TabsTrigger value="invoices" className="text-xs">Factures</TabsTrigger>
+            <TabsTrigger value="messages" className="text-xs">Messages</TabsTrigger>
+          </TabsList>
+          <ScrollArea className="h-[300px]">
+            <div className="px-6 py-4">
+              <TabsContent value="all" className="m-0">
+                {renderActivities(safeActivities)}
+              </TabsContent>
+              <TabsContent value="sales" className="m-0">
+                {renderActivities(salesActivities)}
+              </TabsContent>
+              <TabsContent value="invoices" className="m-0">
+                {renderActivities(invoiceActivities)}
+              </TabsContent>
+              <TabsContent value="messages" className="m-0">
+                {renderActivities(messageActivities)}
+              </TabsContent>
             </div>
-            
-            <div className="flex-1">
-              <p className="font-medium text-sm">{activity.title}</p>
-              <p className="text-muted-foreground text-xs mt-1">{activity.description}</p>
-            </div>
-            
-            <div className="flex items-center text-xs text-muted-foreground ml-2">
-              <Clock size={12} className="mr-1" />
-              {activity.time}
-            </div>
-          </div>
-        ))}
-      </div>
-      
-      <button className="w-full text-center text-sm text-noovimo-500 hover:text-noovimo-600 mt-4 py-2">
-        Voir toutes les activités
-      </button>
-    </div>
+          </ScrollArea>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 };
 

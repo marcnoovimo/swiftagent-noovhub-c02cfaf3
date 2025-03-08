@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Select,
@@ -34,12 +34,14 @@ const CommissionPackSelector: React.FC<CommissionPackSelectorProps> = ({ agent, 
   const { data: agentCommission, isLoading: isLoadingCommission } = useQuery({
     queryKey: ['agentCommission', agent.id],
     queryFn: () => CommissionService.getAgentCommission(agent.id),
-    onSuccess: (data) => {
-      if (data) {
-        setSelectedPackId(data.packId);
-      }
-    }
   });
+  
+  // Mettre à jour le selectedPackId quand les données sont chargées
+  useEffect(() => {
+    if (agentCommission) {
+      setSelectedPackId(agentCommission.packId);
+    }
+  }, [agentCommission]);
   
   // Mutation pour mettre à jour le pack de l'agent
   const updatePackMutation = useMutation({
