@@ -140,23 +140,33 @@ export const extractBusinessCardInfo = async (imageData: string): Promise<Partia
   // Dans une vraie application, on enverrait l'image à une API d'OCR/IA
   console.log("Extracting business card info from image");
   
+  // Dans une implémentation réelle, nous utiliserions une API d'IA comme:
+  // - Google Cloud Vision API
+  // - Microsoft Azure Computer Vision
+  // - Amazon Textract
+  // pour extraire le texte de l'image et analyser les entités
+
   return new Promise((resolve) => {
     setTimeout(() => {
-      // Simuler une extraction réussie - données plus complètes pour démonstration
+      // Simuler une extraction réussie par IA - données plus complètes pour démonstration
       const extractedData: Partial<Contact> = {
         firstName: "Arthur",
         lastName: "Bernard",
         email: "a.bernard@entreprise.fr",
+        emailPro: "arthur.bernard@example.com", // Ajout d'un email pro
         phone: "06 78 90 12 34",
+        mobile: "07 12 34 56 78", // Ajout d'un mobile
         company: "Entreprise Exemple",
         position: "Responsable Commercial",
         address: "25 rue des Exemples",
         city: "Paris",
         category: "prospect",
-        source: "scan"
+        tags: ["immobilier", "commercial"], // Ajout de tags extraits du contexte
+        source: "scan",
+        notes: "Rencontré au salon de l'immobilier" // Ajout de notes contextuelles
       };
       
-      console.log("Extracted data:", extractedData);
+      console.log("Extracted data from IA:", extractedData);
       resolve(extractedData);
     }, 1500);
   });
