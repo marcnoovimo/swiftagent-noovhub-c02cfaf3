@@ -1,89 +1,144 @@
+import React, { useState } from 'react';
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuth } from '@/context/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { 
-  Home, 
-  MessageCircle, 
-  FileText, 
   BarChart3, 
-  Users, 
-  Settings, 
-  HelpCircle, 
-  LogOut,
-  ContactIcon,
-  Phone
+  Building2, 
+  Calendar, 
+  FileText, 
+  Headphones, 
+  Home, 
+  Menu, 
+  MessageSquare, 
+  PanelLeft, 
+  Users
 } from 'lucide-react';
 
 interface SidebarProps {
-  isOpen: boolean;
-  closeSidebar: () => void;
+  className?: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
-  const location = useLocation();
-  
-  const navigationItems = [
-    { name: 'Tableau de bord', icon: Home, path: '/' },
-    { name: 'Messages', icon: MessageCircle, path: '/messages' },
-    { name: 'Documents', icon: FileText, path: '/documents' },
-    { name: 'Performance', icon: BarChart3, path: '/stats' },
-    { name: 'Équipe', icon: Users, path: '/team' },
-    { name: 'Contacts', icon: Phone, path: '/contacts' },
-    { name: 'Paramètres', icon: Settings, path: '/settings' },
-  ];
+const Sidebar = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const iconSize = 20;
 
-  const isActive = (path: string) => {
-    return location.pathname === path;
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
   };
 
+  const menuItems = [
+    { name: 'Tableau de bord', path: '/', icon: <Home size={iconSize} /> },
+    { name: 'Documents', path: '/documents', icon: <FileText size={iconSize} /> },
+    { name: 'Contacts', path: '/contacts', icon: <Users size={iconSize} /> },
+    { name: 'Agenda', path: '/calendar', icon: <Calendar size={iconSize} /> },
+    { name: 'Messages', path: '/messages', icon: <MessageSquare size={iconSize} /> },
+    { name: 'Statistiques', path: '/stats', icon: <BarChart3 size={iconSize} /> },
+    { name: 'Mes mandats', path: '/listings', icon: <Building2 size={iconSize} /> },
+    { name: 'Support', path: '/support', icon: <Headphones size={iconSize} /> },
+  ];
+  
   return (
     <>
-      {/* Overlay for mobile */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
-          onClick={closeSidebar}
-          aria-hidden="true"
-        />
-      )}
-      
-      <aside 
-        className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-border/50 z-50 transition-transform duration-300 lg:translate-x-0 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        <div className="flex flex-col h-full p-4">
-          <div className="h-16 flex items-center justify-center mb-6">
-            <Link to="/" className="flex items-center gap-2">
-              <span className="font-bold text-xl text-primary">Noovimo</span>
-              <span className="text-sm font-medium text-muted-foreground">Intranet</span>
-            </Link>
-          </div>
-          
-          <nav className="flex-1 space-y-1">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                onClick={closeSidebar}
-                className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
-              >
-                <item.icon size={20} />
-                <span>{item.name}</span>
+      <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+        <SheetTrigger asChild>
+          <Button variant="ghost" size="icon" className="md:hidden">
+            <Menu />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-64 p-0">
+          <div className="flex flex-col h-full">
+            <div className="px-4 py-6 text-center border-b">
+              <Link to="/" className="flex items-center justify-center gap-2 font-bold">
+                <PanelLeft className="h-6 w-6" />
+                <span className="text-xl">SwiftAgent</span>
               </Link>
-            ))}
-          </nav>
-          
-          <div className="pt-6 space-y-1 border-t border-border/50">
-            <Link to="/help" className="nav-item" onClick={closeSidebar}>
-              <HelpCircle size={20} />
-              <span>Aide & Support</span>
-            </Link>
-            <button className="nav-item w-full text-left text-muted-foreground hover:text-destructive">
-              <LogOut size={20} />
-              <span>Déconnexion</span>
-            </button>
+            </div>
+            
+            <div className="flex flex-col gap-2 py-4 px-3">
+              {menuItems.map((item) => (
+                <Button
+                  key={item.name}
+                  variant="ghost"
+                  asChild
+                  className="justify-start font-normal"
+                >
+                  <Link to={item.path} onClick={() => setIsMenuOpen(false)} className="w-full">
+                    <div className="flex items-center gap-2">
+                      {item.icon}
+                      <span>{item.name}</span>
+                    </div>
+                  </Link>
+                </Button>
+              ))}
+            </div>
+            
+            <div className="mt-auto p-4 border-t">
+              <div className="flex items-center gap-2 mb-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user?.photoURL || ""} alt={user?.displayName || "Agent"} />
+                  <AvatarFallback>{user?.displayName?.charAt(0) || "A"}</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium">{user?.displayName}</span>
+                  <span className="text-xs text-muted-foreground">{user?.email}</span>
+                </div>
+              </div>
+              <Button variant="outline" className="w-full" onClick={handleLogout}>
+                Déconnexion
+              </Button>
+            </div>
           </div>
+        </SheetContent>
+      </Sheet>
+
+      <aside className="hidden md:flex flex-col w-64 border-r h-screen sticky top-0 overflow-y-auto animate-in fade-in-0 duration-75">
+        <div className="px-4 py-6 text-center border-b">
+          <Link to="/" className="flex items-center justify-center gap-2 font-bold">
+            <PanelLeft className="h-6 w-6" />
+            <span className="text-xl">SwiftAgent</span>
+          </Link>
+        </div>
+        
+        <div className="flex flex-col gap-2 py-4 px-3">
+          {menuItems.map((item) => (
+            <Button
+              key={item.name}
+              variant="ghost"
+              asChild
+              className="justify-start font-normal"
+            >
+              <Link to={item.path} className="w-full">
+                <div className="flex items-center gap-2">
+                  {item.icon}
+                  <span>{item.name}</span>
+                </div>
+              </Link>
+            </Button>
+          ))}
+        </div>
+        
+        <div className="mt-auto p-4 border-t">
+          <div className="flex items-center gap-2 mb-2">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={user?.photoURL || ""} alt={user?.displayName || "Agent"} />
+              <AvatarFallback>{user?.displayName?.charAt(0) || "A"}</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">{user?.displayName}</span>
+              <span className="text-xs text-muted-foreground">{user?.email}</span>
+            </div>
+          </div>
+          <Button variant="outline" className="w-full" onClick={handleLogout}>
+            Déconnexion
+          </Button>
         </div>
       </aside>
     </>
