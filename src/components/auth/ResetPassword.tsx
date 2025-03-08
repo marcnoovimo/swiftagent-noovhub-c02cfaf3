@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { Eye, EyeOff, KeyRound, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, KeyRound, ArrowLeft, AlertCircle } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -16,6 +17,11 @@ const ResetPassword: React.FC = () => {
   // Récupérer le hash de l'URL
   useEffect(() => {
     const handleHashChange = async () => {
+      // En mode démo, on ne vérifie pas le hash
+      if (!isSupabaseConfigured) {
+        return;
+      }
+      
       const hash = window.location.hash;
       if (hash && hash.includes('type=recovery')) {
         // Le hash est valide
@@ -44,6 +50,15 @@ const ResetPassword: React.FC = () => {
     setIsLoading(true);
     
     try {
+      if (!isSupabaseConfigured) {
+        // En mode démo, on simule la réinitialisation
+        setTimeout(() => {
+          toast.success("Mot de passe réinitialisé avec succès (mode démo)");
+          navigate('/login');
+        }, 1000);
+        return;
+      }
+      
       const { error } = await supabase.auth.updateUser({ 
         password: password 
       });
@@ -77,6 +92,15 @@ const ResetPassword: React.FC = () => {
               Créez un nouveau mot de passe sécurisé
             </p>
           </div>
+          
+          {!isSupabaseConfigured && (
+            <Alert className="mb-6 bg-amber-50 border-amber-200">
+              <AlertCircle className="h-4 w-4 text-amber-600" />
+              <AlertDescription className="text-sm text-amber-800">
+                Mode démo activé. La réinitialisation est simulée et ne fonctionnera pas réellement.
+              </AlertDescription>
+            </Alert>
+          )}
           
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">

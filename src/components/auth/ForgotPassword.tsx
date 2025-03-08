@@ -1,15 +1,17 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, SendHorizontal } from 'lucide-react';
+import { ArrowLeft, SendHorizontal, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { isSupabaseConfigured } from '@/lib/supabase';
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { resetPassword } = useAuth();
+  const { resetPassword, demoMode } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +27,7 @@ const ForgotPassword: React.FC = () => {
 
       const { error } = await resetPassword(email);
       
-      if (error) {
+      if (error && !demoMode) {
         toast.error("Une erreur est survenue. Veuillez réessayer.");
       } else {
         setIsSubmitted(true);
@@ -77,6 +79,15 @@ const ForgotPassword: React.FC = () => {
               Entrez votre adresse email pour recevoir un lien de réinitialisation
             </p>
           </div>
+          
+          {!isSupabaseConfigured && (
+            <Alert className="mb-6 bg-amber-50 border-amber-200">
+              <AlertCircle className="h-4 w-4 text-amber-600" />
+              <AlertDescription className="text-sm text-amber-800">
+                Mode démo activé. La réinitialisation est simulée et ne fonctionnera pas réellement.
+              </AlertDescription>
+            </Alert>
+          )}
           
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">

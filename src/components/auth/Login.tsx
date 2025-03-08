@@ -1,9 +1,11 @@
 
-import React, { useState } from 'react';
-import { Eye, EyeOff, LogIn } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Eye, EyeOff, LogIn, AlertCircle } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { isSupabaseConfigured } from '@/lib/supabase';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -11,10 +13,10 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { signIn, user } = useAuth();
+  const { signIn, user, demoMode } = useAuth();
 
   // Rediriger si déjà connecté
-  React.useEffect(() => {
+  useEffect(() => {
     if (user) {
       navigate('/');
     }
@@ -34,7 +36,7 @@ const Login: React.FC = () => {
       
       const { error } = await signIn(email, password);
       
-      if (error) {
+      if (error && !demoMode) {
         toast.error('Identifiants incorrects. Veuillez réessayer.');
       } else {
         toast.success('Connexion réussie! Bienvenue sur l\'intranet Noovimo.');
@@ -55,6 +57,15 @@ const Login: React.FC = () => {
             <h1 className="text-2xl font-bold text-gray-900">Intranet Noovimo</h1>
             <p className="text-sm text-muted-foreground mt-2">Connectez-vous pour accéder à votre espace</p>
           </div>
+          
+          {!isSupabaseConfigured && (
+            <Alert className="mb-6 bg-amber-50 border-amber-200">
+              <AlertCircle className="h-4 w-4 text-amber-600" />
+              <AlertDescription className="text-sm text-amber-800">
+                Mode démo activé. Vous pouvez vous connecter avec n'importe quels identifiants @noovimo.fr.
+              </AlertDescription>
+            </Alert>
+          )}
           
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">

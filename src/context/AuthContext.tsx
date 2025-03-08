@@ -1,7 +1,8 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { toast } from 'sonner';
 
 interface AuthContextProps {
   session: Session | null;
@@ -14,6 +15,7 @@ interface AuthContextProps {
     error: Error | null;
   }>;
   loading: boolean;
+  demoMode: boolean;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -22,55 +24,108 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [demoMode, setDemoMode] = useState(!isSupabaseConfigured);
 
   useEffect(() => {
     // Récupérer la session au chargement
     const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
+      if (!isSupabaseConfigured) {
+        console.log("Mode démo activé: Supabase non configuré");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setSession(session);
+        setUser(session?.user ?? null);
+      } catch (error) {
+        console.error("Erreur lors de la récupération de la session:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchSession();
 
     // Écouter les changements d'authentification
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
+    let subscription: { unsubscribe: () => void } | null = null;
+    
+    if (isSupabaseConfigured) {
+      try {
+        const { data } = supabase.auth.onAuthStateChange(
+          (_event, session) => {
+            setSession(session);
+            setUser(session?.user ?? null);
+            setLoading(false);
+          }
+        );
+        subscription = data.subscription;
+      } catch (error) {
+        console.error("Erreur lors de l'écoute des changements d'auth:", error);
         setLoading(false);
       }
-    );
+    }
 
     return () => {
-      subscription.unsubscribe();
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
   }, []);
 
   const signIn = async (email: string, password: string) => {
     try {
+      if (!isSupabaseConfigured) {
+        console.log("Mode démo: connexion simulée pour", email);
+        // Simuler un utilisateur connecté en mode démo
+        const demoUser = {
+          id: '1',
+          email: email,
+          user_metadata: {
+            full_name: 'Utilisateur Démo'
+          }
+        } as User;
+        
+        setUser(demoUser);
+        // On ne définit pas de session car c'est un objet plus complexe
+        toast.success("Mode démo activé. Bienvenue sur l'intranet Noovimo.");
+        return { error: null };
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       return { error };
     } catch (error) {
+      console.error("Erreur de connexion:", error);
       return { error: error as Error };
     }
   };
 
   const signOut = async () => {
+    if (demoMode) {
+      setUser(null);
+      setSession(null);
+      return;
+    }
     await supabase.auth.signOut();
   };
 
   const resetPassword = async (email: string) => {
     try {
+      if (!isSupabaseConfigured) {
+        console.log("Mode démo: réinitialisation simulée pour", email);
+        return { error: null };
+      }
+
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
       return { error };
     } catch (error) {
+      console.error("Erreur de réinitialisation:", error);
       return { error: error as Error };
     }
   };
@@ -84,6 +139,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         signOut,
         resetPassword,
         loading,
+        demoMode
       }}
     >
       {children}
