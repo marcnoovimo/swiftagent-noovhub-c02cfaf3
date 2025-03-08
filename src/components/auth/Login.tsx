@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useAuth } from '@/context/AuthContext';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -10,28 +11,39 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { signIn, user } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Rediriger si déjà connecté
+  React.useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Vérifier si l'email se termine par @noovimo.fr
-    if (email.toLowerCase().endsWith('@noovimo.fr') && password.length >= 4) {
-      // Simuler le délai d'authentification
-      setTimeout(() => {
-        // Stocker le token d'authentification
-        localStorage.setItem('auth_token', 'simulated_jwt_token');
-        
+    try {
+      // Vérifier le domaine de l'email
+      if (!email.toLowerCase().endsWith('@noovimo.fr')) {
+        toast.error('Veuillez utiliser une adresse email @noovimo.fr.');
+        setIsLoading(false);
+        return;
+      }
+      
+      const { error } = await signIn(email, password);
+      
+      if (error) {
+        toast.error('Identifiants incorrects. Veuillez réessayer.');
+      } else {
         toast.success('Connexion réussie! Bienvenue sur l\'intranet Noovimo.');
-        setIsLoading(false);
         navigate('/');
-      }, 1000);
-    } else {
-      // Afficher un message d'erreur
-      setTimeout(() => {
-        setIsLoading(false);
-        toast.error('Identifiants incorrects. Veuillez utiliser une adresse email @noovimo.fr.');
-      }, 1000);
+      }
+    } catch (error) {
+      toast.error('Une erreur est survenue lors de la connexion.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -97,9 +109,9 @@ const Login: React.FC = () => {
                 </label>
               </div>
               
-              <a href="#" className="text-sm font-medium text-noovimo-600 hover:text-noovimo-700">
+              <Link to="/forgot-password" className="text-sm font-medium text-noovimo-600 hover:text-noovimo-700">
                 Mot de passe oublié?
-              </a>
+              </Link>
             </div>
             
             <button

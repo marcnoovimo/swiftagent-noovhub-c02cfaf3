@@ -1,8 +1,10 @@
 
 import React, { useState } from 'react';
-import { Bell, Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Bell, Menu, X, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from '../ui/SearchBar';
+import { useAuth } from '@/context/AuthContext';
+import { toast } from 'sonner';
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -11,6 +13,18 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {
   const [notifications, setNotifications] = useState(3);
+  const { signOut, user } = useAuth();
+  const navigate = useNavigate();
+  
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success("Déconnexion réussie");
+      navigate('/login');
+    } catch (error) {
+      toast.error("Erreur lors de la déconnexion");
+    }
+  };
 
   return (
     <header className="w-full bg-white/80 backdrop-blur-sm border-b border-border/50 sticky top-0 z-30">
@@ -52,8 +66,18 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <span className="text-sm font-medium hidden md:inline-block">Agent Noovimo</span>
+            <span className="text-sm font-medium hidden md:inline-block">
+              {user?.email?.split('@')[0] || 'Agent Noovimo'}
+            </span>
           </Link>
+          
+          <button 
+            onClick={handleSignOut}
+            className="icon-button text-muted-foreground hover:text-red-500"
+            aria-label="Déconnexion"
+          >
+            <LogOut size={20} />
+          </button>
         </div>
       </div>
       

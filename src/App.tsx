@@ -11,29 +11,19 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/layout/Layout";
 import Login from "./components/auth/Login";
-import { useState, useEffect } from "react";
+import ForgotPassword from "./components/auth/ForgotPassword";
+import ResetPassword from "./components/auth/ResetPassword";
+import { useEffect, useState } from "react";
 import { ThemeProvider } from "./providers/ThemeProvider";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+// Composant qui vérifie l'authentification
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useAuth();
 
-  // Check if user is logged in
-  useEffect(() => {
-    // In a real app, you would check if the user has a valid session
-    const checkAuth = () => {
-      const token = localStorage.getItem("auth_token");
-      setIsAuthenticated(!!token);
-      setIsLoading(false);
-    };
-
-    // Simulate auth check
-    setTimeout(checkAuth, 1000);
-  }, []);
-
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-noovimo-50 to-white dark:from-noovimo-950 dark:to-gray-900">
         <div className="animate-pulse-subtle text-noovimo-500 font-bold text-xl">
@@ -43,73 +33,83 @@ const App = () => {
     );
   }
 
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  return <>{children}</>;
+};
+
+const AppRoutes = () => {
+  return (
+    <Routes>
+      {/* Public routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      
+      {/* Protected routes */}
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Index />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/messages"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Messages />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/documents"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Documents />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Profile />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      
+      {/* Catch-all route */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
+const App = () => {
   return (
     <ThemeProvider defaultTheme="light">
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              {/* Public routes */}
-              <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
-              
-              {/* Protected routes */}
-              <Route
-                path="/"
-                element={
-                  isAuthenticated ? (
-                    <Layout>
-                      <Index />
-                    </Layout>
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              />
-              <Route
-                path="/messages"
-                element={
-                  isAuthenticated ? (
-                    <Layout>
-                      <Messages />
-                    </Layout>
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              />
-              <Route
-                path="/documents"
-                element={
-                  isAuthenticated ? (
-                    <Layout>
-                      <Documents />
-                    </Layout>
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  isAuthenticated ? (
-                    <Layout>
-                      <Profile />
-                    </Layout>
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              />
-              
-              {/* Catch-all route */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 };
