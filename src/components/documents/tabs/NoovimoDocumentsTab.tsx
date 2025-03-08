@@ -30,7 +30,7 @@ const NoovimoDocumentsTab: React.FC<NoovimoDocumentsTabProps> = ({
   onFolderClick
 }) => {
   return (
-    <div className="glass-card rounded-xl p-6">
+    <div className="glass-card rounded-xl p-4 sm:p-6">
       <DocumentSearch 
         searchQuery={searchQuery} 
         setSearchQuery={setSearchQuery}
@@ -45,9 +45,9 @@ const NoovimoDocumentsTab: React.FC<NoovimoDocumentsTabProps> = ({
         />
       )}
       
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Categories sidebar */}
-        <div className="lg:col-span-1">
+        <div className="hidden lg:block lg:col-span-1">
           <DocumentSidebar 
             title="Base Documentaire"
             currentFolder={currentFolder}

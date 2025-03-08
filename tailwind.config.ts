@@ -12,6 +12,9 @@ const config = {
   prefix: "",
   theme: {
     extend: {
+      screens: {
+        'xs': '480px', // Adding extra small breakpoint
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

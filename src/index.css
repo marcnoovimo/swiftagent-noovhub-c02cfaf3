@@ -226,3 +226,10 @@
     font-size: 16px !important; /* Prevents iOS zoom on focus */
   }
 }
+
+/* Extra small screens */
+@screen xs {
+  .xs\:inline {
+    display: inline;
+  }
+}

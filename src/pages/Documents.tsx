@@ -34,24 +34,24 @@ const Documents = () => {
   const filteredContents = getFilteredContents();
 
   return (
-    <div className="container mx-auto px-4 py-8 animate-fade-in">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold">Documents</h1>
-        <p className="text-muted-foreground mt-1">Gérez et organisez tous vos documents</p>
+    <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 animate-fade-in">
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold">Documents</h1>
+        <p className="text-muted-foreground mt-1 text-sm sm:text-base">Gérez et organisez tous vos documents</p>
       </div>
       
       <Tabs defaultValue={activeDocType} onValueChange={(value) => {
         setActiveDocType(value as 'agent' | 'noovimo');
         navigateToFolder('root', value === 'agent' ? 'Mes Documents' : 'Base Documentaire');
-      }}>
-        <TabsList className="mb-6">
-          <TabsTrigger value="agent" className="flex items-center gap-2 px-6 py-3 text-sm font-medium">
-            <FileUp size={18} />
+      }} className="w-full">
+        <TabsList className="mb-4 sm:mb-6 w-full flex">
+          <TabsTrigger value="agent" className="flex-1 flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium">
+            <FileUp size={16} className="hidden xs:inline" />
             <span>Mes Documents</span>
           </TabsTrigger>
-          <TabsTrigger value="noovimo" className="flex items-center gap-2 px-6 py-3 text-sm font-medium">
-            <BookOpen size={18} />
-            <span>Base Documentaire Noovimo</span>
+          <TabsTrigger value="noovimo" className="flex-1 flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium">
+            <BookOpen size={16} className="hidden xs:inline" />
+            <span>Base Documentaire</span>
           </TabsTrigger>
         </TabsList>
         

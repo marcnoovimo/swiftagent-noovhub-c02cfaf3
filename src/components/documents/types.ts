@@ -32,7 +32,7 @@ export interface Folder {
 
 export interface Category {
   name: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: any; // Using 'any' to solve the Lucide icon component typing issue
   count: number;
 }
 

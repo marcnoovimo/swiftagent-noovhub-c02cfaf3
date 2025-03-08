@@ -59,7 +59,7 @@ const AgentDocumentsTab: React.FC<AgentDocumentsTabProps> = ({
           <div className="flex gap-2 w-full sm:w-auto">
             <Button 
               variant="outline" 
-              className="flex items-center gap-2 w-full sm:w-auto"
+              className="flex items-center gap-2 w-1/2 sm:w-auto"
               onClick={onScanClick}
             >
               <PlusCircle size={16} />
@@ -68,7 +68,7 @@ const AgentDocumentsTab: React.FC<AgentDocumentsTabProps> = ({
             
             <Button 
               variant="default" 
-              className="flex items-center gap-2 w-full sm:w-auto bg-noovimo-500 hover:bg-noovimo-600"
+              className="flex items-center gap-2 w-1/2 sm:w-auto bg-noovimo-500 hover:bg-noovimo-600"
             >
               <Upload size={16} />
               <span>Importer</span>
