@@ -1,64 +1,37 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import { useAuth } from '@/context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useMediaQuery } from '@/hooks/use-mobile';
 
 interface LayoutProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { user, loading } = useAuth();
-  const navigate = useNavigate();
-  
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+    setSidebarOpen(!sidebarOpen);
   };
-  
+
   const closeSidebar = () => {
-    setIsSidebarOpen(false);
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
   };
 
-  // Check if user is authenticated
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate('/login');
-    }
-  }, [user, loading, navigate]);
-  
-  // Close sidebar when clicking outside on mobile
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setIsSidebarOpen(false);
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-noovimo-50 to-white dark:from-noovimo-950 dark:to-gray-900">
-        <div className="animate-pulse-subtle text-noovimo-500 font-bold text-xl">
-          Chargement...
-        </div>
-      </div>
-    );
-  }
-  
   return (
-    <div className="min-h-screen bg-gradient-to-tl from-background to-secondary/20">
-      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+    <div className="flex h-screen overflow-hidden bg-background">
+      <Sidebar isOpen={sidebarOpen} closeSidebar={closeSidebar} />
       
-      <div className="flex">
-        <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
+      <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+        <Header toggleSidebar={toggleSidebar} />
         
-        <main className="flex-1 lg:pl-64 transition-all">
+        <main className="flex-1 p-4 md:p-6">
+          <Outlet />
           {children}
         </main>
       </div>

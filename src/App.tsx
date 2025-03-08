@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ThemeProvider } from "@/components/ui/theme-provider"
+import { ThemeProvider } from "@/components/ui/theme-provider";
 import { AuthProvider } from './context/AuthContext';
 import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword';
