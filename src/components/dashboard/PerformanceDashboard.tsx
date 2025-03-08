@@ -91,71 +91,71 @@ const PerformanceDashboard: React.FC = () => {
 
   return (
     <div className="w-full animate-fade-in">
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">Activité du mois</h2>
-        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="mb-4 sm:mb-6">
+        <h2 className="text-lg sm:text-xl font-semibold mb-2">Activité du mois</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
           <PerformanceCard
             title="Ventes"
             value={currentMonth.sales.toString()}
             change={getPercentChange(currentMonth.sales, previousMonthSales)}
             positive={currentMonth.sales >= previousMonthSales}
-            icon={<Building2 size={20} className="text-noovimo-500" />}
+            icon={<Building2 size={18} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Compromis"
             value={currentMonth.compromis.toString()}
-            icon={<Calendar size={20} className="text-noovimo-500" />}
+            icon={<Calendar size={18} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Honoraires"
             value={formatCurrency(currentMonth.commission)}
-            icon={<Euro size={20} className="text-noovimo-500" />}
+            icon={<Euro size={18} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Taux de transformation"
             value={`${(currentMonth.conversionRate * 100).toFixed(0)}%`}
-            icon={<TrendingUp size={20} className="text-noovimo-500" />}
+            icon={<TrendingUp size={18} className="text-noovimo-500" />}
           />
         </div>
       </div>
 
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">Cumul annuel</h2>
-        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="mb-4 sm:mb-6">
+        <h2 className="text-lg sm:text-xl font-semibold mb-2">Cumul annuel</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
           <PerformanceCard
             title="Ventes réalisées"
             value={cumulativeData.sales.toString()}
-            icon={<Building2 size={20} className="text-noovimo-500" />}
+            icon={<Building2 size={18} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Compromis signés"
             value={cumulativeData.compromis.toString()}
-            icon={<Briefcase size={20} className="text-noovimo-500" />}
+            icon={<Briefcase size={18} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Volume de transactions"
             value={formatCurrency(cumulativeData.volume)}
-            icon={<BarChart3 size={20} className="text-noovimo-500" />}
+            icon={<BarChart3 size={18} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Commissions totales"
             value={formatCurrency(cumulativeData.commission)}
-            icon={<PiggyBank size={20} className="text-noovimo-500" />}
+            icon={<PiggyBank size={18} className="text-noovimo-500" />}
           />
         </div>
       </div>
 
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold mb-4">Évolution annuelle</h2>
-        <div className="glass-card rounded-xl p-4">
+      <div className="mb-4 sm:mb-6 hidden sm:block">
+        <h2 className="text-lg sm:text-xl font-semibold mb-2">Évolution annuelle</h2>
+        <div className="glass-card rounded-xl p-2 sm:p-4">
           <Tabs defaultValue="combined" className="w-full">
-            <TabsList className="mb-4 w-full flex flex-wrap justify-center md:justify-start">
-              <TabsTrigger value="combined" className="flex-1 md:flex-none">Combiné</TabsTrigger>
-              <TabsTrigger value="transactions" className="flex-1 md:flex-none">Transactions</TabsTrigger>
-              <TabsTrigger value="commissions" className="flex-1 md:flex-none">Commissions</TabsTrigger>
+            <TabsList className="mb-2 sm:mb-4 w-full flex flex-wrap justify-center md:justify-start">
+              <TabsTrigger value="combined" className="text-xs sm:text-sm flex-1 md:flex-none">Combiné</TabsTrigger>
+              <TabsTrigger value="transactions" className="text-xs sm:text-sm flex-1 md:flex-none">Transactions</TabsTrigger>
+              <TabsTrigger value="commissions" className="text-xs sm:text-sm flex-1 md:flex-none">Commissions</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="combined" className="h-[300px] min-h-[250px] w-full">
+            <TabsContent value="combined" className="h-[250px] min-h-[200px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart 
                   data={monthlyData}
@@ -164,20 +164,20 @@ const PerformanceDashboard: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month" 
-                    tick={{fontSize: 12}}
+                    tick={{fontSize: 10}}
                     tickFormatter={(value) => value.substring(0, 3)} // Show only first 3 chars on small screens
                   />
                   <YAxis 
                     yAxisId="left" 
                     tick={{fontSize: 10}} 
-                    width={30}
+                    width={25}
                   />
                   <YAxis 
                     yAxisId="right" 
                     orientation="right" 
                     tickFormatter={(value) => `${(value / 1000)}k€`} 
                     tick={{fontSize: 10}}
-                    width={40}
+                    width={35}
                   />
                   <Tooltip 
                     formatter={(value, name) => {
@@ -186,14 +186,14 @@ const PerformanceDashboard: React.FC = () => {
                     }}
                     contentStyle={{ fontSize: '12px' }}
                   />
-                  <Legend wrapperStyle={{ fontSize: '12px' }} />
+                  <Legend wrapperStyle={{ fontSize: '10px' }} />
                   <Line 
                     yAxisId="left"
                     type="monotone" 
                     dataKey="ventes" 
                     name="Ventes" 
                     stroke="#8884d8" 
-                    activeDot={{ r: 8 }} 
+                    activeDot={{ r: 6 }} 
                     strokeWidth={2}
                   />
                   <Line 
@@ -216,7 +216,7 @@ const PerformanceDashboard: React.FC = () => {
               </ResponsiveContainer>
             </TabsContent>
             
-            <TabsContent value="transactions" className="h-[300px] min-h-[250px]">
+            <TabsContent value="transactions" className="h-[250px] min-h-[200px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart 
                   data={monthlyData}
@@ -225,21 +225,21 @@ const PerformanceDashboard: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month" 
-                    tick={{fontSize: 12}}
+                    tick={{fontSize: 10}}
                     tickFormatter={(value) => value.substring(0, 3)} // Show only first 3 chars on small screens
                   />
-                  <YAxis tick={{fontSize: 10}} width={30} />
+                  <YAxis tick={{fontSize: 10}} width={25} />
                   <Tooltip
                     contentStyle={{ fontSize: '12px' }}
                   />
-                  <Legend wrapperStyle={{ fontSize: '12px' }} />
+                  <Legend wrapperStyle={{ fontSize: '10px' }} />
                   <Bar dataKey="ventes" name="Ventes" fill="#8884d8" />
                   <Bar dataKey="compromis" name="Compromis" fill="#82ca9d" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
             
-            <TabsContent value="commissions" className="h-[300px] min-h-[250px]">
+            <TabsContent value="commissions" className="h-[250px] min-h-[200px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart 
                   data={monthlyData}
@@ -248,19 +248,19 @@ const PerformanceDashboard: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month" 
-                    tick={{fontSize: 12}}
+                    tick={{fontSize: 10}}
                     tickFormatter={(value) => value.substring(0, 3)} // Show only first 3 chars on small screens
                   />
                   <YAxis 
                     tickFormatter={(value) => `${(value / 1000)}k€`} 
                     tick={{fontSize: 10}}
-                    width={40}
+                    width={35}
                   />
                   <Tooltip 
                     formatter={(value) => formatCurrency(Number(value))}
                     contentStyle={{ fontSize: '12px' }}
                   />
-                  <Legend wrapperStyle={{ fontSize: '12px' }} />
+                  <Legend wrapperStyle={{ fontSize: '10px' }} />
                   <Bar dataKey="commissions" name="Commissions" fill="#ff7300" />
                 </BarChart>
               </ResponsiveContainer>

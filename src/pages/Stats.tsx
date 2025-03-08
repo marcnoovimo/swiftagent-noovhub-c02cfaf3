@@ -89,14 +89,12 @@ const Stats = () => {
         <TimeFilterSelector activeFilter={timeFilter} onChange={setTimeFilter} />
       </div>
       
-      {/* Performance Dashboard Component with min-width to ensure correct display */}
-      <div className="w-full overflow-x-auto pb-2">
-        <div className="min-w-[320px]">
-          <PerformanceDashboard />
-        </div>
+      {/* Performance Dashboard Component - Simplified for mobile */}
+      <div className="w-full overflow-visible">
+        <PerformanceDashboard />
       </div>
       
-      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-4 sm:mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-4 sm:mb-8">
         <StatCard
           title="Ventes réalisées"
           value={stats.totalSales}
@@ -123,9 +121,9 @@ const Stats = () => {
         <div className="lg:col-span-2 glass-card rounded-xl p-2 sm:p-4 overflow-hidden">
           <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Évolution des transactions</h3>
           <Tabs defaultValue="bar" className="w-full">
-            <TabsList className="mb-2 sm:mb-4 flex flex-wrap w-full xs:w-auto">
-              <TabsTrigger value="bar" className="flex-1 xs:flex-none text-xs sm:text-sm">Barres</TabsTrigger>
-              <TabsTrigger value="line" className="flex-1 xs:flex-none text-xs sm:text-sm">Courbe</TabsTrigger>
+            <TabsList className="mb-2 sm:mb-4 flex w-full justify-start overflow-x-auto">
+              <TabsTrigger value="bar" className="text-xs sm:text-sm flex-none">Barres</TabsTrigger>
+              <TabsTrigger value="line" className="text-xs sm:text-sm flex-none">Courbe</TabsTrigger>
             </TabsList>
             
             <TabsContent value="bar" className="h-[200px] xs:h-[250px] sm:h-[300px] w-full">
@@ -248,9 +246,7 @@ const Stats = () => {
           <h3 className="text-base sm:text-lg font-semibold">Transactions récentes</h3>
         </div>
         <div className="overflow-x-auto w-full">
-          <div className="min-w-[300px]">
-            <TransactionTable transactions={stats.transactions.slice(0, 5)} />
-          </div>
+          <TransactionTable transactions={stats.transactions.slice(0, 5)} />
         </div>
       </div>
     </div>

@@ -12,11 +12,11 @@ interface StatCardProps {
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon, change, positive = true }) => {
   return (
-    <div className="glass-card rounded-xl p-4 transition-all hover:shadow-medium">
+    <div className="glass-card rounded-xl p-3 sm:p-4 transition-all hover:shadow-medium">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">{title}</p>
-          <h3 className="text-2xl font-semibold mt-2">
+          <p className="text-xs sm:text-sm text-muted-foreground">{title}</p>
+          <h3 className="text-lg sm:text-2xl font-semibold mt-1 sm:mt-2">
             {typeof value === 'number' && value >= 1000 
               ? value.toLocaleString('fr-FR')
               : value}
@@ -31,7 +31,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, change, positiv
           )}
         </div>
         
-        <div className="bg-noovimo-50 p-2 rounded-lg">
+        <div className="bg-noovimo-50 p-1.5 sm:p-2 rounded-lg">
           {icon}
         </div>
       </div>
