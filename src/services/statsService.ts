@@ -53,7 +53,7 @@ const calculateStats = (transactions: Transaction[]): StatsData => {
   const totalVolume = transactions.reduce((sum, t) => sum + t.amount, 0);
 
   // Données pour les graphiques
-  const monthMap: { [key: string]: { sales: number; compromis: number; commissions: number } } = {};
+  const monthMap: { [key: string]: { sales: number; compromis: number; commissions: number; displayName: string } } = {};
   
   transactions.forEach(t => {
     const date = new Date(t.date);
@@ -61,7 +61,7 @@ const calculateStats = (transactions: Transaction[]): StatsData => {
     const monthName = date.toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' });
     
     if (!monthMap[monthKey]) {
-      monthMap[monthKey] = { sales: 0, compromis: 0, commissions: 0, name: monthName };
+      monthMap[monthKey] = { sales: 0, compromis: 0, commissions: 0, displayName: monthName };
     }
     
     if (t.type === 'vente') {
@@ -76,17 +76,17 @@ const calculateStats = (transactions: Transaction[]): StatsData => {
   const sortedMonths = Object.keys(monthMap).sort();
   
   const monthlySales = sortedMonths.map(key => ({ 
-    month: monthMap[key].name || key, 
+    month: monthMap[key].displayName || key, 
     value: monthMap[key].sales 
   }));
   
   const monthlyCompromis = sortedMonths.map(key => ({ 
-    month: monthMap[key].name || key, 
+    month: monthMap[key].displayName || key, 
     value: monthMap[key].compromis 
   }));
   
   const monthlyCommissions = sortedMonths.map(key => ({ 
-    month: monthMap[key].name || key, 
+    month: monthMap[key].displayName || key, 
     value: monthMap[key].commissions 
   }));
 
