@@ -10,6 +10,7 @@ import Documents from "./pages/Documents";
 import Profile from "./pages/Profile";
 import Stats from "./pages/Stats";
 import Team from "./pages/Team";
+import AgentDetail from "./pages/AgentDetail";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/layout/Layout";
 import Login from "./components/auth/Login";
@@ -99,6 +100,16 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <Team />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/agent/:id"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <AgentDetail />
             </Layout>
           </ProtectedRoute>
         }
