@@ -18,7 +18,7 @@ const PerformanceCard: React.FC<PerformanceCardProps> = ({
   icon,
 }) => {
   return (
-    <div className="glass-card rounded-xl p-2 sm:p-4 transition-all duration-300 hover:shadow-medium">
+    <div className="glass-card rounded-xl p-2 sm:p-4 transition-all duration-300 hover:shadow-medium w-full">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs sm:text-sm text-muted-foreground">{title}</p>

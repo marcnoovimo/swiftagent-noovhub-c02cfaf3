@@ -120,6 +120,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
   border: 1px solid rgba(255, 255, 255, 0.2);
   width: 100%;
   box-sizing: border-box;
+  margin-bottom: 0.5rem;
 }
 
 /* Further responsive improvements for very small screens */
@@ -131,6 +132,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
   
   .glass-card {
     padding: 0.75rem !important;
+    margin-bottom: 0.5rem;
   }
   
   h3 {
@@ -155,6 +157,17 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
   .TabsTrigger {
     padding-left: 0.5rem !important;
     padding-right: 0.5rem !important;
+  }
+  
+  .card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  
+  .card-grid > div {
+    width: 100%;
   }
 }
 

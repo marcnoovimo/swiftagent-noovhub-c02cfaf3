@@ -93,7 +93,7 @@ const PerformanceDashboard: React.FC = () => {
     <div className="w-full animate-fade-in">
       <div className="mb-4 sm:mb-6">
         <h2 className="text-lg sm:text-xl font-semibold mb-2">Activité du mois</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+        <div className="card-grid">
           <PerformanceCard
             title="Ventes"
             value={currentMonth.sales.toString()}
@@ -121,7 +121,7 @@ const PerformanceDashboard: React.FC = () => {
 
       <div className="mb-4 sm:mb-6">
         <h2 className="text-lg sm:text-xl font-semibold mb-2">Cumul annuel</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+        <div className="card-grid">
           <PerformanceCard
             title="Ventes réalisées"
             value={cumulativeData.sales.toString()}

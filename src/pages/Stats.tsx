@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { 
@@ -94,7 +93,7 @@ const Stats = () => {
         <PerformanceDashboard />
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-4 sm:mb-8">
+      <div className="card-grid mb-4 sm:mb-8">
         <StatCard
           title="Ventes réalisées"
           value={stats.totalSales}

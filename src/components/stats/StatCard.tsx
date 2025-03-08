@@ -12,7 +12,7 @@ interface StatCardProps {
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon, change, positive = true }) => {
   return (
-    <div className="glass-card rounded-xl p-3 sm:p-4 transition-all hover:shadow-medium">
+    <div className="glass-card rounded-xl p-3 sm:p-4 transition-all hover:shadow-medium w-full">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs sm:text-sm text-muted-foreground">{title}</p>
