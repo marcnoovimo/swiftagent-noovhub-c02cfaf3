@@ -154,27 +154,31 @@ const Settings = () => {
         <div className="space-y-4">
           <h4 className="font-semibold">Détails des barèmes</h4>
           
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left py-2 px-3">Palier</th>
-                  <th className="text-left py-2 px-3">Honoraires cumulés</th>
-                  <th className="text-left py-2 px-3">Commission</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentPack.ranges.map((range, index) => (
-                  <tr key={index} className={`border-b ${agentCommission.currentPercentage === range.percentage ? 'bg-primary/10' : ''}`}>
-                    <td className="py-2 px-3">{index + 1}</td>
-                    <td className="py-2 px-3">
-                      {range.minAmount === 0 ? '0' : formatCurrency(range.minAmount)} - {range.maxAmount === 999999999 ? '+' : formatCurrency(range.maxAmount)}
-                    </td>
-                    <td className="py-2 px-3 font-medium">{range.percentage}%</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <div className="min-w-full inline-block align-middle">
+              <div className="overflow-hidden">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead>
+                    <tr className="bg-secondary/30">
+                      <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Palier</th>
+                      <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Honoraires cumulés</th>
+                      <th scope="col" className="px-3 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Commission</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {currentPack.ranges.map((range, index) => (
+                      <tr key={index} className={`${agentCommission.currentPercentage === range.percentage ? 'bg-primary/10' : ''}`}>
+                        <td className="px-3 py-2 whitespace-nowrap text-sm font-medium">{index + 1}</td>
+                        <td className="px-3 py-2 whitespace-nowrap text-sm">
+                          {range.minAmount === 0 ? '0' : formatCurrency(range.minAmount)} - {range.maxAmount === 999999999 ? '+' : formatCurrency(range.maxAmount)}
+                        </td>
+                        <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-right">{range.percentage}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
           
           <p className="text-xs text-muted-foreground italic">
@@ -190,63 +194,70 @@ const Settings = () => {
     if (!packs) return null;
     
     return (
-      <div className="space-y-8 mt-4">
+      <div className="space-y-6 mt-4">
         <h4 className="font-semibold text-lg">Tous les packs disponibles en {packs[0]?.year}</h4>
         
-        {packs.map(pack => (
-          <div key={pack.id} className="border rounded-lg overflow-hidden">
-            <div className="bg-secondary/20 p-4 flex justify-between items-center">
-              <div>
+        <div className="space-y-6">
+          {packs.map(pack => (
+            <div key={pack.id} className="border rounded-lg overflow-hidden">
+              <div className="bg-secondary/20 p-3 sm:p-4">
                 <h5 className="font-bold text-lg">{pack.name}</h5>
                 <p className="text-sm text-muted-foreground">{pack.description}</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="text-right">
-                  <p className="text-xs text-muted-foreground">Mensuel HT</p>
-                  <p className="font-medium">{pack.monthlyFeeHT} €</p>
+                
+                <div className="flex flex-wrap gap-4 mt-3">
+                  <div>
+                    <p className="text-xs text-muted-foreground">Mensuel HT</p>
+                    <p className="font-medium">{pack.monthlyFeeHT} €</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Mensuel TTC</p>
+                    <p className="font-medium">{pack.monthlyFeeTTC} €</p>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-xs text-muted-foreground">Mensuel TTC</p>
-                  <p className="font-medium">{pack.monthlyFeeTTC} €</p>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <div className="min-w-full inline-block align-middle">
+                  <div className="overflow-hidden">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                      <thead>
+                        <tr className="bg-secondary/10">
+                          <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Honoraires cumulés</th>
+                          <th scope="col" className="px-3 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Commission</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                        {pack.ranges.map((range, idx) => (
+                          <tr key={idx}>
+                            <td className="px-3 py-2 whitespace-nowrap text-sm">
+                              {range.minAmount === 0 ? '0' : formatCurrency(range.minAmount)} - {range.maxAmount === 999999999 ? '+' : formatCurrency(range.maxAmount)}
+                            </td>
+                            <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-right">{range.percentage}%</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
+              
+              {pack.referralRate && (
+                <div className="p-3 bg-primary/5 border-t">
+                  <p className="text-sm flex items-center gap-2">
+                    <Euro className="h-4 w-4" />
+                    <span>Taux référent: <span className="font-medium">{pack.referralRate}%</span></span>
+                  </p>
+                </div>
+              )}
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b bg-secondary/10">
-                    <th className="text-left py-2 px-3">Honoraires cumulés</th>
-                    <th className="text-right py-2 px-3">Commission</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pack.ranges.map((range, idx) => (
-                    <tr key={idx} className="border-b">
-                      <td className="py-2 px-3">
-                        {range.minAmount === 0 ? '0' : formatCurrency(range.minAmount)} - {range.maxAmount === 999999999 ? '+' : formatCurrency(range.maxAmount)}
-                      </td>
-                      <td className="py-2 px-3 text-right font-medium">{range.percentage}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {pack.referralRate && (
-              <div className="p-3 bg-primary/5 border-t">
-                <p className="text-sm flex items-center gap-2">
-                  <Euro className="h-4 w-4" />
-                  <span>Taux référent: <span className="font-medium">{pack.referralRate}%</span></span>
-                </p>
-              </div>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     );
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 animate-fade-in">
+    <div className="container mx-auto py-6 px-4 animate-fade-in">
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Paramètres</h1>
         <p className="text-muted-foreground mt-1">Gérez vos préférences et connexions</p>
@@ -254,29 +265,29 @@ const Settings = () => {
       
       <Tabs defaultValue="commission" className="w-full">
         <TabsList className="mb-6 grid grid-cols-3 w-full max-w-[600px]">
-          <TabsTrigger value="commission" className="flex items-center gap-2">
-            <Percent className="h-4 w-4 md:mr-2" />
-            <span className="hidden md:inline">Commission</span>
+          <TabsTrigger value="commission" className="flex items-center gap-1">
+            <Percent className="h-4 w-4" />
+            <span className="hidden xs:inline">Commission</span>
           </TabsTrigger>
-          <TabsTrigger value="email" className="flex items-center gap-2">
-            <Mail className="h-4 w-4 md:mr-2" />
-            <span className="hidden md:inline">Email</span>
+          <TabsTrigger value="email" className="flex items-center gap-1">
+            <Mail className="h-4 w-4" />
+            <span className="hidden xs:inline">Email</span>
           </TabsTrigger>
-          <TabsTrigger value="calendar" className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 md:mr-2" />
-            <span className="hidden md:inline">Agenda</span>
+          <TabsTrigger value="calendar" className="flex items-center gap-1">
+            <Calendar className="h-4 w-4" />
+            <span className="hidden xs:inline">Agenda</span>
           </TabsTrigger>
         </TabsList>
         
         <TabsContent value="commission">
           <Card>
-            <CardHeader>
+            <CardHeader className="px-4 sm:px-6">
               <CardTitle>Barème de commission</CardTitle>
               <CardDescription>
                 Votre barème de commission pour l'année {new Date().getFullYear()}
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4 sm:px-6">
               {renderCommissionPack()}
               {renderAllPacks()}
             </CardContent>
@@ -285,13 +296,13 @@ const Settings = () => {
         
         <TabsContent value="email">
           <Card>
-            <CardHeader>
+            <CardHeader className="px-4 sm:px-6">
               <CardTitle>Configuration Email</CardTitle>
               <CardDescription>
                 Connectez votre email professionnel Noovimo
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4 sm:px-6">
               <form onSubmit={connectWebmail} className="space-y-4">
                 <div className="space-y-2">
                   <h3 className="text-lg font-medium">Email OVH Noovimo</h3>
@@ -347,13 +358,13 @@ const Settings = () => {
         
         <TabsContent value="calendar">
           <Card>
-            <CardHeader>
+            <CardHeader className="px-4 sm:px-6">
               <CardTitle>Configuration Agenda</CardTitle>
               <CardDescription>
                 Synchronisez votre agenda avec Google Calendar
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4 sm:px-6">
               <div className="space-y-6">
                 <div className="space-y-2">
                   <h3 className="text-lg font-medium">Google Calendar</h3>

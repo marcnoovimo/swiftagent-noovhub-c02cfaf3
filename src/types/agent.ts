@@ -20,6 +20,15 @@ export interface Agent {
   address?: string;
   licensedSince?: string;
   avatar?: string;
+  
+  // Additional properties for agent details pages
+  photo?: string;
+  mantra?: string;
+  passions?: string[];
+  favoriteSport?: string;
+  family?: string;
+  birthday?: string;
+  idealVacation?: string;
 }
 
 // Commission pack interface

@@ -25,11 +25,11 @@ const PerformanceCard: React.FC<PerformanceCardProps> = ({
 }) => {
   return (
     <Card className={cn("overflow-hidden", className)}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <div className="h-4 w-4 text-muted-foreground">{icon}</div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-4">
         <div className="text-xl font-bold">{value}</div>
         {change ? (
           <div className="flex items-center text-xs mt-1">
