@@ -46,6 +46,7 @@ const contactFormSchema = z.object({
   photo: z.string().optional(),
 });
 
+// Important: Make this type match the Contact type without id/createdAt/updatedAt
 type ContactFormValues = z.infer<typeof contactFormSchema>;
 
 const ContactForm: React.FC<ContactFormProps> = ({ 
@@ -76,7 +77,26 @@ const ContactForm: React.FC<ContactFormProps> = ({
   });
 
   const onSubmit = (data: ContactFormValues) => {
-    onSave?.(data);
+    // Convert form values to the expected Contact type (without id/createdAt/updatedAt)
+    const contactData: Omit<Contact, 'id' | 'createdAt' | 'updatedAt'> = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email || undefined,
+      emailPro: data.emailPro || undefined,
+      phone: data.phone,
+      mobile: data.mobile,
+      company: data.company,
+      position: data.position,
+      address: data.address,
+      city: data.city,
+      notes: data.notes,
+      category: data.category,
+      tags: data.tags,
+      source: data.source,
+      photo: data.photo,
+    };
+    
+    onSave?.(contactData);
     
     toast({
       title: "Contact créé",
