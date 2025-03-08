@@ -16,6 +16,7 @@ import ResetPassword from "./components/auth/ResetPassword";
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import ChatbotButton from "./components/chatbot/ChatbotButton";
 
 const queryClient = new QueryClient();
 
@@ -106,6 +107,7 @@ const App = () => {
             <Sonner />
             <BrowserRouter>
               <AppRoutes />
+              <ChatbotButton />
             </BrowserRouter>
           </TooltipProvider>
         </QueryClientProvider>
