@@ -127,3 +127,25 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
     padding: 0.75rem !important;
   }
 }
+
+/* Agent map marker styles */
+.agent-marker {
+  font-size: 0.7rem;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.agent-marker:hover {
+  transform: scale(1.2);
+}
+
+/* Customize mapbox popup */
+.mapboxgl-popup-content {
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mapboxgl-popup-close-button {
+  display: none;
+}

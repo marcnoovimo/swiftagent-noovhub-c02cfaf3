@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +9,7 @@ import Messages from "./pages/Messages";
 import Documents from "./pages/Documents";
 import Profile from "./pages/Profile";
 import Stats from "./pages/Stats";
+import Team from "./pages/Team";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/layout/Layout";
 import Login from "./components/auth/Login";
@@ -87,6 +89,16 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <Stats />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/team"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Team />
             </Layout>
           </ProtectedRoute>
         }
