@@ -14,7 +14,7 @@ const Messages = () => {
         <p className="text-muted-foreground mt-1">Gérez vos communications en temps réel sur tous vos appareils</p>
       </div>
       
-      <Tabs defaultValue="instant" className="w-full">
+      <Tabs defaultValue="email" className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-6">
           <TabsTrigger value="instant" className="flex items-center gap-1 text-xs sm:text-sm md:text-base">
             <MessageCircle size={16} className="flex-shrink-0" />
