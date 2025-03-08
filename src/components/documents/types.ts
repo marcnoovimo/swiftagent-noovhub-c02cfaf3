@@ -32,7 +32,7 @@ export interface Folder {
 
 export interface Category {
   name: string;
-  icon: React.ReactNode;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
   count: number;
 }
 

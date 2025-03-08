@@ -4,11 +4,11 @@ import { FolderOpen, Star, Plus } from 'lucide-react';
 import { Folder, Category } from './types';
 
 interface DocumentSidebarProps {
-  title: string;
-  currentFolder: string;
+  title?: string;
+  currentFolder?: string;
   folders?: Folder[];
   categories?: Category[];
-  onFolderClick: (id: string, name: string) => void;
+  onFolderClick?: (id: string, name: string) => void;
   onCategoryClick?: (category: string) => void;
   starredCount?: number;
   totalCount?: number;
@@ -17,11 +17,11 @@ interface DocumentSidebarProps {
 }
 
 const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
-  title,
-  currentFolder,
+  title = "Documents",
+  currentFolder = "",
   folders = [],
   categories = [],
-  onFolderClick,
+  onFolderClick = () => {},
   onCategoryClick,
   starredCount,
   totalCount,
@@ -58,19 +58,22 @@ const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
           )}
         </div>
         
-        {categories.map(category => (
-          <div 
-            key={category.name}
-            className="flex items-center justify-between p-2 rounded-lg hover:bg-secondary cursor-pointer"
-            onClick={() => onCategoryClick && onCategoryClick(category.name)}
-          >
-            <div className="flex items-center gap-2">
-              {category.icon}
-              <span className="text-sm">{category.name}</span>
+        {categories.map(category => {
+          const IconComponent = category.icon;
+          return (
+            <div 
+              key={category.name}
+              className="flex items-center justify-between p-2 rounded-lg hover:bg-secondary cursor-pointer"
+              onClick={() => onCategoryClick && onCategoryClick(category.name)}
+            >
+              <div className="flex items-center gap-2">
+                <IconComponent size={18} className="text-noovimo-500" />
+                <span className="text-sm">{category.name}</span>
+              </div>
+              <span className="text-xs text-muted-foreground">{category.count}</span>
             </div>
-            <span className="text-xs text-muted-foreground">{category.count}</span>
-          </div>
-        ))}
+          );
+        })}
         
         {folders.map(folder => (
           <div 

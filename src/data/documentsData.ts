@@ -1,4 +1,4 @@
-import { Document, Folder } from '@/components/documents/types';
+import { Document, Folder, Category } from '@/components/documents/types';
 import { FileText, File, Image, FileArchive, FileCheck } from 'lucide-react';
 
 // Agent documents structure
@@ -169,7 +169,8 @@ export const noovimoFolders: Folder[] = [
   },
 ];
 
-export const agentCategories = [
+// Using the correct Category interface
+export const agentCategories: Category[] = [
   { name: 'Compromis', icon: FileText, count: 4 },
   { name: 'Mandats', icon: FileText, count: 8 },
   { name: 'Factures', icon: FileText, count: 6 },

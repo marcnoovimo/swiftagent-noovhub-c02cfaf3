@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PlusCircle, Upload, Search, FileText } from 'lucide-react';
+import { PlusCircle, Upload } from 'lucide-react';
 import { Document, Folder, Category } from '@/components/documents/types';
 import DocumentSearch from '@/components/documents/DocumentSearch';
 import DocumentList from '@/components/documents/DocumentList';
@@ -12,7 +12,7 @@ interface AgentDocumentsTabProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   currentFolder: string;
-  agentCategories: { name: string; icon: React.ComponentType<any>; count: number }[];
+  agentCategories: Category[];
   items: (Document | Folder)[];
   isSearchResult: boolean;
   onFileClick: (document: Document) => void;
@@ -39,9 +39,12 @@ const AgentDocumentsTab: React.FC<AgentDocumentsTabProps> = ({
     <div className="flex flex-col md:flex-row gap-6">
       <div className="hidden md:block w-64 shrink-0">
         <DocumentSidebar 
+          title="Mes Documents"
+          currentFolder={currentFolder}
           categories={agentCategories}
           starredCount={starredCount}
           totalCount={totalCount}
+          onFolderClick={onFolderClick}
         />
       </div>
       
