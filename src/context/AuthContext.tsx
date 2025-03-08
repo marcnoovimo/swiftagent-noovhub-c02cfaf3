@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
@@ -34,10 +33,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Récupérer la session au chargement
+    // Retrieve session on load
     const fetchSession = async () => {
       if (!isSupabaseConfigured) {
-        console.log("Mode démo activé: Supabase non configuré");
+        console.log("Demo mode enabled: Supabase not configured");
         
         // Check if we have a stored demo user
         try {
@@ -48,10 +47,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const parsedUser = JSON.parse(storedUser) as User;
             setUser(parsedUser);
             setIsAdmin(storedIsAdmin === 'true');
-            console.log("Session démo restaurée depuis localStorage");
+            console.log("Demo session restored from localStorage");
           }
         } catch (error) {
-          console.error("Erreur lors de la récupération de la session démo:", error);
+          console.error("Error retrieving demo session:", error);
         }
         
         setLoading(false);
@@ -60,15 +59,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       try {
         const { data: { session } } = await supabase.auth.getSession();
+        console.log("Supabase session retrieved:", session ? "Valid" : "None");
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          const userIsAdmin = checkIsAdmin(session.user);
+          const userIsAdmin = await checkIsAdmin(session.user);
           setIsAdmin(userIsAdmin);
         }
       } catch (error) {
-        console.error("Erreur lors de la récupération de la session:", error);
+        console.error("Error retrieving session:", error);
       } finally {
         setLoading(false);
       }
@@ -76,22 +76,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     fetchSession();
 
-    // Écouter les changements d'authentification
+    // Listen for auth changes
     let subscription: { unsubscribe: () => void } | null = null;
     
     if (isSupabaseConfigured) {
       try {
         const { data } = supabase.auth.onAuthStateChange(
-          (_event, session) => {
+          async (_event, session) => {
+            console.log("Auth state changed:", _event);
             setSession(session);
             setUser(session?.user ?? null);
-            setIsAdmin(session?.user ? checkIsAdmin(session.user) : false);
+            setIsAdmin(session?.user ? await checkIsAdmin(session.user) : false);
             setLoading(false);
           }
         );
         subscription = data.subscription;
       } catch (error) {
-        console.error("Erreur lors de l'écoute des changements d'auth:", error);
+        console.error("Error listening to auth changes:", error);
         setLoading(false);
       }
     }
@@ -106,8 +107,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signIn = async (email: string, password: string) => {
     try {
       if (!isSupabaseConfigured) {
-        console.log("Mode démo: connexion simulée pour", email);
-        // Simuler un utilisateur connecté en mode démo
+        console.log("Demo mode: simulated login for", email);
+        // Simulate logged in user in demo mode
         const demoUser = {
           id: '1',
           email: email,
@@ -142,7 +143,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         
         setUser(demoUser);
         
-        // Définir si l'utilisateur est admin en fonction de son email
+        // Set if user is admin based on email
         const userIsAdmin = email.endsWith('@admin.noovimo.fr');
         setIsAdmin(userIsAdmin);
         
@@ -150,7 +151,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.setItem(DEMO_USER_KEY, JSON.stringify(demoUser));
         localStorage.setItem(DEMO_ADMIN_KEY, userIsAdmin.toString());
         
-        toast.success("Mode démo activé. Bienvenue sur l'intranet Noovimo.");
+        toast.success("Demo mode enabled. Welcome to Noovimo intranet.");
         
         return { error: null };
       }
@@ -159,9 +160,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         email,
         password,
       });
+      
+      if (error) {
+        console.error("Login error:", error.message);
+      } else {
+        console.log("Login successful");
+      }
+      
       return { error };
     } catch (error) {
-      console.error("Erreur de connexion:", error);
+      console.error("Login error:", error);
       return { error: error as Error };
     }
   };
@@ -182,7 +190,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const resetPassword = async (email: string) => {
     try {
       if (!isSupabaseConfigured) {
-        console.log("Mode démo: réinitialisation simulée pour", email);
+        console.log("Demo mode: simulated reset for", email);
         return { error: null };
       }
 
@@ -191,7 +199,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
       return { error };
     } catch (error) {
-      console.error("Erreur de réinitialisation:", error);
+      console.error("Error resetting password:", error);
       return { error: error as Error };
     }
   };

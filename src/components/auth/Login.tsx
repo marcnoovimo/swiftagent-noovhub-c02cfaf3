@@ -15,7 +15,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { signIn, user, demoMode } = useAuth();
 
-  // Rediriger si déjà connecté
+  // Redirect if already logged in
   useEffect(() => {
     if (user) {
       navigate('/');
@@ -27,7 +27,7 @@ const Login: React.FC = () => {
     setIsLoading(true);
     
     try {
-      // Vérifier le domaine de l'email
+      // Check email domain
       if (!email.toLowerCase().endsWith('@noovimo.fr') && !email.toLowerCase().endsWith('@admin.noovimo.fr')) {
         toast.error('Veuillez utiliser une adresse email @noovimo.fr');
         setIsLoading(false);
@@ -38,11 +38,13 @@ const Login: React.FC = () => {
       
       if (error && !demoMode) {
         toast.error('Identifiants incorrects. Veuillez réessayer.');
+        console.error("Login error:", error);
       } else {
         toast.success('Connexion réussie! Bienvenue sur l\'intranet Noovimo.');
-        navigate('/');
+        // We don't need to navigate here, as the useEffect will handle it when user state updates
       }
     } catch (error) {
+      console.error("Login error:", error);
       toast.error('Une erreur est survenue lors de la connexion.');
     } finally {
       setIsLoading(false);
