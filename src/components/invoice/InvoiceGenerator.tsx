@@ -1,332 +1,321 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 import { useToast } from '@/components/ui/use-toast';
-import { Check, Download, FileText, Plus, Trash } from 'lucide-react';
-import { useForm, Controller } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { formatCurrency } from '@/lib/utils';
 
-// Schéma de validation pour le formulaire de facture
-const invoiceSchema = z.object({
-  clientName: z.string().min(1, { message: 'Le nom du client est requis' }),
-  clientAddress: z.string().min(1, { message: 'L\'adresse du client est requise' }),
-  invoiceNumber: z.string().min(1, { message: 'Le numéro de facture est requis' }),
-  invoiceDate: z.string().min(1, { message: 'La date de facture est requise' }),
-  dueDate: z.string().min(1, { message: 'La date d\'échéance est requise' }),
-  items: z.array(z.object({
-    description: z.string().min(1, { message: 'La description est requise' }),
-    quantity: z.number().min(1, { message: 'La quantité doit être au moins 1' }),
-    unitPrice: z.number().min(0, { message: 'Le prix unitaire doit être positif' }),
-  })).min(1, { message: 'Au moins un article est requis' }),
-  notes: z.string().optional(),
-  paymentMethod: z.string().min(1, { message: 'La méthode de paiement est requise' }),
-});
+interface InvoiceItem {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+}
 
-type InvoiceFormValues = z.infer<typeof invoiceSchema>;
-
-const InvoiceGenerator = () => {
+const InvoiceGenerator: React.FC = () => {
   const { toast } = useToast();
-  const [isGenerating, setIsGenerating] = useState(false);
-  
-  // Initialisation du formulaire avec des valeurs par défaut
-  const { control, handleSubmit, watch, setValue, formState: { errors } } = useForm<InvoiceFormValues>({
-    resolver: zodResolver(invoiceSchema),
-    defaultValues: {
-      clientName: '',
-      clientAddress: '',
-      invoiceNumber: `INV-${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
-      invoiceDate: new Date().toISOString().split('T')[0],
-      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      items: [{ description: '', quantity: 1, unitPrice: 0 }],
-      notes: '',
-      paymentMethod: 'bank_transfer',
-    },
-  });
-  
-  const items = watch('items');
-  
-  // Calcul du total de la facture
-  const calculateTotal = () => {
-    return items.reduce((total, item) => total + (item.quantity * item.unitPrice), 0);
-  };
-  
-  // Ajout d'un nouvel article
+  const [clientName, setClientName] = useState('');
+  const [clientAddress, setClientAddress] = useState('');
+  const [invoiceDate, setInvoiceDate] = useState(new Date().toISOString().split('T')[0]);
+  const [invoiceNumber, setInvoiceNumber] = useState(`INV-${Math.floor(Math.random() * 10000)}`);
+  const [items, setItems] = useState<InvoiceItem[]>([
+    { description: '', quantity: 1, unitPrice: 0 }
+  ]);
+  const [paymentTerms, setPaymentTerms] = useState('30');
+  const [notes, setNotes] = useState('');
+  const [isDownloading, setIsDownloading] = useState(false);
+
   const addItem = () => {
-    setValue('items', [...items, { description: '', quantity: 1, unitPrice: 0 }]);
+    setItems([...items, { description: '', quantity: 1, unitPrice: 0 }]);
   };
-  
-  // Suppression d'un article
+
+  const updateItem = (index: number, field: keyof InvoiceItem, value: string | number) => {
+    const newItems = [...items];
+    if (field === 'quantity' || field === 'unitPrice') {
+      newItems[index][field] = Number(value);
+    } else {
+      newItems[index][field as 'description'] = value as string;
+    }
+    setItems(newItems);
+  };
+
   const removeItem = (index: number) => {
     if (items.length > 1) {
-      setValue('items', items.filter((_, i) => i !== index));
+      const newItems = [...items];
+      newItems.splice(index, 1);
+      setItems(newItems);
     }
   };
-  
-  // Soumission du formulaire
-  const onSubmit = (data: InvoiceFormValues) => {
-    setIsGenerating(true);
-    
-    // Simulation de génération de facture
-    setTimeout(() => {
-      setIsGenerating(false);
-      toast({
-        title: "Facture générée avec succès",
-        description: `La facture ${data.invoiceNumber} a été générée et est prête à être téléchargée.`,
-        variant: "outline",
-      });
-    }, 1500);
-    
-    console.log('Données de la facture:', data);
+
+  const calculateSubtotal = () => {
+    return items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
   };
-  
+
+  const calculateTax = () => {
+    return calculateSubtotal() * 0.2; // 20% VAT
+  };
+
+  const calculateTotal = () => {
+    return calculateSubtotal() + calculateTax();
+  };
+
+  const handleDownloadPDF = () => {
+    if (!clientName) {
+      toast({
+        title: "Information manquante",
+        description: "Veuillez saisir le nom du client.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsDownloading(true);
+    
+    try {
+      const doc = new jsPDF();
+      
+      // Add company info
+      doc.setFontSize(20);
+      doc.setTextColor(0, 0, 0);
+      doc.text('NOOVIMO', 20, 20);
+      
+      doc.setFontSize(10);
+      doc.text('123 Avenue des Immobiliers', 20, 30);
+      doc.text('75000 Paris, France', 20, 35);
+      doc.text('Email: contact@noovimo.fr', 20, 40);
+      doc.text('Tel: +33 1 23 45 67 89', 20, 45);
+      
+      // Add invoice details
+      doc.setFontSize(16);
+      doc.text('FACTURE', 150, 20);
+      
+      doc.setFontSize(10);
+      doc.text(`Numéro: ${invoiceNumber}`, 150, 30);
+      doc.text(`Date: ${invoiceDate}`, 150, 35);
+      doc.text(`Échéance: ${paymentTerms} jours`, 150, 40);
+      
+      // Add client info
+      doc.setFontSize(12);
+      doc.text('Facturer à:', 20, 60);
+      
+      doc.setFontSize(10);
+      doc.text(clientName, 20, 65);
+      const addressLines = clientAddress.split('\n');
+      addressLines.forEach((line, index) => {
+        doc.text(line, 20, 70 + (index * 5));
+      });
+      
+      // Add items table
+      const tableColumn = ["Description", "Quantité", "Prix unitaire", "Total"];
+      const tableRows = items.map(item => [
+        item.description,
+        item.quantity.toString(),
+        formatCurrency(item.unitPrice),
+        formatCurrency(item.quantity * item.unitPrice)
+      ]);
+      
+      (doc as any).autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 90,
+        theme: 'grid',
+        styles: { fontSize: 9 },
+        headStyles: { fillColor: [41, 128, 185] }
+      });
+      
+      // Add totals
+      const finalY = (doc as any).lastAutoTable.finalY + 10;
+      
+      doc.text('Sous-total:', 140, finalY);
+      doc.text(formatCurrency(calculateSubtotal()), 170, finalY);
+      
+      doc.text('TVA (20%):', 140, finalY + 5);
+      doc.text(formatCurrency(calculateTax()), 170, finalY + 5);
+      
+      doc.setFontSize(12);
+      doc.text('Total:', 140, finalY + 15);
+      doc.text(formatCurrency(calculateTotal()), 170, finalY + 15);
+      
+      // Add notes
+      if (notes) {
+        doc.setFontSize(10);
+        doc.text('Notes:', 20, finalY + 30);
+        doc.text(notes, 20, finalY + 35);
+      }
+      
+      // Add footer
+      const pageCount = (doc as any).internal.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.text('Merci pour votre confiance.', 20, 280);
+        doc.text(`Page ${i} sur ${pageCount}`, 170, 280);
+      }
+      
+      // Save the PDF
+      doc.save(`Facture_${invoiceNumber}.pdf`);
+      
+      toast({
+        title: "Succès",
+        description: "Votre facture a été téléchargée avec succès.",
+      });
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la génération du PDF.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="text-xl">Générateur de facture</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <div className="container mx-auto py-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Générateur de facture</CardTitle>
+          <CardDescription>Créez et téléchargez des factures professionnelles</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Informations client</h3>
-              
-              <div className="space-y-2">
-                <Label htmlFor="clientName">Nom du client</Label>
-                <Controller
-                  name="clientName"
-                  control={control}
-                  render={({ field }) => (
-                    <Input id="clientName" {...field} placeholder="Nom complet du client" />
-                  )}
+              <div>
+                <Label htmlFor="invoiceNumber">Numéro de facture</Label>
+                <Input 
+                  id="invoiceNumber" 
+                  value={invoiceNumber} 
+                  onChange={(e) => setInvoiceNumber(e.target.value)} 
                 />
-                {errors.clientName && (
-                  <p className="text-sm text-red-500">{errors.clientName.message}</p>
-                )}
               </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="clientAddress">Adresse du client</Label>
-                <Controller
-                  name="clientAddress"
-                  control={control}
-                  render={({ field }) => (
-                    <Textarea id="clientAddress" {...field} placeholder="Adresse complète" />
-                  )}
+              <div>
+                <Label htmlFor="invoiceDate">Date de facture</Label>
+                <Input 
+                  id="invoiceDate" 
+                  type="date" 
+                  value={invoiceDate} 
+                  onChange={(e) => setInvoiceDate(e.target.value)} 
                 />
-                {errors.clientAddress && (
-                  <p className="text-sm text-red-500">{errors.clientAddress.message}</p>
-                )}
+              </div>
+              <div>
+                <Label htmlFor="paymentTerms">Conditions de paiement</Label>
+                <Select value={paymentTerms} onValueChange={setPaymentTerms}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionner une échéance" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">Paiement immédiat</SelectItem>
+                    <SelectItem value="15">15 jours</SelectItem>
+                    <SelectItem value="30">30 jours</SelectItem>
+                    <SelectItem value="60">60 jours</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
-            
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Détails de la facture</h3>
-              
-              <div className="space-y-2">
-                <Label htmlFor="invoiceNumber">Numéro de facture</Label>
-                <Controller
-                  name="invoiceNumber"
-                  control={control}
-                  render={({ field }) => (
-                    <Input id="invoiceNumber" {...field} />
-                  )}
+              <div>
+                <Label htmlFor="clientName">Nom du client</Label>
+                <Input 
+                  id="clientName" 
+                  value={clientName} 
+                  onChange={(e) => setClientName(e.target.value)} 
                 />
-                {errors.invoiceNumber && (
-                  <p className="text-sm text-red-500">{errors.invoiceNumber.message}</p>
-                )}
               </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="invoiceDate">Date de facture</Label>
-                  <Controller
-                    name="invoiceDate"
-                    control={control}
-                    render={({ field }) => (
-                      <Input id="invoiceDate" type="date" {...field} />
-                    )}
-                  />
-                  {errors.invoiceDate && (
-                    <p className="text-sm text-red-500">{errors.invoiceDate.message}</p>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="dueDate">Date d'échéance</Label>
-                  <Controller
-                    name="dueDate"
-                    control={control}
-                    render={({ field }) => (
-                      <Input id="dueDate" type="date" {...field} />
-                    )}
-                  />
-                  {errors.dueDate && (
-                    <p className="text-sm text-red-500">{errors.dueDate.message}</p>
-                  )}
-                </div>
+              <div>
+                <Label htmlFor="clientAddress">Adresse du client</Label>
+                <Textarea 
+                  id="clientAddress" 
+                  rows={3} 
+                  value={clientAddress} 
+                  onChange={(e) => setClientAddress(e.target.value)} 
+                />
               </div>
             </div>
           </div>
           
-          <Separator />
-          
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
+          <div>
+            <div className="flex justify-between items-center mb-2">
               <h3 className="text-lg font-medium">Articles</h3>
-              <Button type="button" variant="outline" size="sm" onClick={addItem}>
-                <Plus className="h-4 w-4 mr-2" />
-                Ajouter un article
-              </Button>
+              <Button variant="outline" size="sm" onClick={addItem}>Ajouter un article</Button>
             </div>
             
             {items.map((item, index) => (
-              <div key={index} className="grid grid-cols-12 gap-4 items-end">
-                <div className="col-span-6 space-y-2">
-                  <Label htmlFor={`items.${index}.description`}>Description</Label>
-                  <Controller
-                    name={`items.${index}.description`}
-                    control={control}
-                    render={({ field }) => (
-                      <Input id={`items.${index}.description`} {...field} />
-                    )}
+              <div key={index} className="grid grid-cols-12 gap-2 mb-2">
+                <div className="col-span-6">
+                  <Input 
+                    placeholder="Description" 
+                    value={item.description} 
+                    onChange={(e) => updateItem(index, 'description', e.target.value)} 
                   />
-                  {errors.items?.[index]?.description && (
-                    <p className="text-sm text-red-500">{errors.items[index]?.description?.message}</p>
-                  )}
                 </div>
-                
-                <div className="col-span-2 space-y-2">
-                  <Label htmlFor={`items.${index}.quantity`}>Quantité</Label>
-                  <Controller
-                    name={`items.${index}.quantity`}
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        id={`items.${index}.quantity`}
-                        type="number"
-                        min="1"
-                        {...field}
-                        onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
-                      />
-                    )}
+                <div className="col-span-2">
+                  <Input 
+                    type="number" 
+                    placeholder="Quantité" 
+                    value={item.quantity} 
+                    onChange={(e) => updateItem(index, 'quantity', e.target.value)} 
                   />
-                  {errors.items?.[index]?.quantity && (
-                    <p className="text-sm text-red-500">{errors.items[index]?.quantity?.message}</p>
-                  )}
                 </div>
-                
-                <div className="col-span-3 space-y-2">
-                  <Label htmlFor={`items.${index}.unitPrice`}>Prix unitaire (€)</Label>
-                  <Controller
-                    name={`items.${index}.unitPrice`}
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        id={`items.${index}.unitPrice`}
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        {...field}
-                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                      />
-                    )}
+                <div className="col-span-3">
+                  <Input 
+                    type="number" 
+                    placeholder="Prix unitaire" 
+                    value={item.unitPrice} 
+                    onChange={(e) => updateItem(index, 'unitPrice', e.target.value)} 
                   />
-                  {errors.items?.[index]?.unitPrice && (
-                    <p className="text-sm text-red-500">{errors.items[index]?.unitPrice?.message}</p>
-                  )}
                 </div>
-                
-                <div className="col-span-1">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
+                <div className="col-span-1 flex items-center justify-center">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
                     onClick={() => removeItem(index)}
-                    disabled={items.length <= 1}
+                    disabled={items.length === 1}
                   >
-                    <Trash className="h-4 w-4 text-red-500" />
+                    ×
                   </Button>
                 </div>
               </div>
             ))}
             
-            <div className="flex justify-end">
-              <div className="w-1/3 space-y-2">
-                <div className="flex justify-between">
-                  <span className="font-medium">Total:</span>
-                  <span className="font-bold">{calculateTotal().toFixed(2)} €</span>
-                </div>
+            <div className="flex flex-col items-end mt-4 space-y-1">
+              <div className="flex justify-between w-64">
+                <span>Sous-total:</span>
+                <span>{formatCurrency(calculateSubtotal())}</span>
+              </div>
+              <div className="flex justify-between w-64">
+                <span>TVA (20%):</span>
+                <span>{formatCurrency(calculateTax())}</span>
+              </div>
+              <div className="flex justify-between w-64 font-bold">
+                <span>Total:</span>
+                <span>{formatCurrency(calculateTotal())}</span>
               </div>
             </div>
           </div>
           
-          <Separator />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="notes">Notes</Label>
-              <Controller
-                name="notes"
-                control={control}
-                render={({ field }) => (
-                  <Textarea id="notes" {...field} placeholder="Informations supplémentaires, conditions de paiement, etc." />
-                )}
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="paymentMethod">Méthode de paiement</Label>
-              <Controller
-                name="paymentMethod"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger id="paymentMethod">
-                      <SelectValue placeholder="Sélectionner une méthode de paiement" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="bank_transfer">Virement bancaire</SelectItem>
-                      <SelectItem value="credit_card">Carte de crédit</SelectItem>
-                      <SelectItem value="check">Chèque</SelectItem>
-                      <SelectItem value="cash">Espèces</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              {errors.paymentMethod && (
-                <p className="text-sm text-red-500">{errors.paymentMethod.message}</p>
-              )}
-            </div>
+          <div>
+            <Label htmlFor="notes">Notes</Label>
+            <Textarea 
+              id="notes" 
+              placeholder="Informations complémentaires, conditions, etc." 
+              value={notes} 
+              onChange={(e) => setNotes(e.target.value)} 
+            />
           </div>
-          
-          <div className="flex justify-end space-x-4">
-            <Button type="button" variant="outline">
-              <FileText className="h-4 w-4 mr-2" />
-              Aperçu
-            </Button>
-            <Button type="submit" disabled={isGenerating}>
-              {isGenerating ? (
-                <>Génération en cours...</>
-              ) : (
-                <>
-                  <Download className="h-4 w-4 mr-2" />
-                  Générer la facture
-                </>
-              )}
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button variant="outline" onClick={() => window.print()}>Aperçu</Button>
+          <Button variant="default" onClick={handleDownloadPDF} disabled={isDownloading}>
+            {isDownloading ? "Téléchargement..." : "Télécharger PDF"}
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 
