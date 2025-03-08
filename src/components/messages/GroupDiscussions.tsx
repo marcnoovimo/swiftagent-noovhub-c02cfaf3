@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search, MoreVertical, Send, Paperclip, Mic, Users } from 'lucide-react';
+import { Search, MoreVertical, Send, Paperclip, Users, X } from 'lucide-react';
 import { useGroups } from '@/hooks/useGroups';
 import { useAuth } from '@/context/AuthContext';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -9,7 +9,11 @@ import CreateGroupDialog from './CreateGroupDialog';
 import GroupInfo from './GroupInfo';
 import { toast } from 'sonner';
 
-const GroupDiscussions = () => {
+interface GroupDiscussionsProps {
+  onClose?: () => void;
+}
+
+const GroupDiscussions = ({ onClose }: GroupDiscussionsProps) => {
   const { user } = useAuth();
   const { 
     groups, 
@@ -46,7 +50,19 @@ const GroupDiscussions = () => {
   const isAdmin = user?.email?.endsWith('@admin.noovimo.fr') || user?.email?.endsWith('@noovimo.fr');
 
   return (
-    <div className="glass-card rounded-xl overflow-hidden min-h-[600px] grid grid-cols-1 md:grid-cols-3">
+    <div className="glass-card rounded-xl overflow-hidden min-h-[600px] grid grid-cols-1 md:grid-cols-3 relative">
+      {/* Close button */}
+      {onClose && (
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="absolute top-2 right-2 z-10" 
+          onClick={onClose}
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      )}
+      
       {/* Groups list */}
       <div className="border-r border-border/50 p-4 overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
@@ -189,7 +205,7 @@ const GroupDiscussions = () => {
           </div>
           
           {/* Group messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 messages-container">
             {groupMessages.map((message) => (
               <div
                 key={message.id}
@@ -263,19 +279,6 @@ const GroupDiscussions = () => {
                   }}
                 />
               </div>
-              
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 mr-2">
-                      <Mic size={18} className="text-muted-foreground" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Enregistrer un message vocal</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
               
               <Button
                 variant="default"

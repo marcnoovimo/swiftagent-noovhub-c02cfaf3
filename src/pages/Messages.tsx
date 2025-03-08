@@ -1,14 +1,20 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Mail, MessageCircle, Users } from 'lucide-react';
+import { Mail, MessageCircle, Users, X } from 'lucide-react';
 import InstantMessages from '@/components/messages/InstantMessages';
 import GroupDiscussions from '@/components/messages/GroupDiscussions';
 import EmailClient from '@/components/messages/EmailClient';
 import { useAuth } from '@/context/AuthContext';
+import { Button } from '@/components/ui/button';
 
 const Messages = () => {
   const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState<string>('email');
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
@@ -17,7 +23,7 @@ const Messages = () => {
         <p className="text-muted-foreground mt-1">Gérez vos communications en temps réel sur tous vos appareils</p>
       </div>
       
-      <Tabs defaultValue="email" className="w-full">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-6">
           <TabsTrigger value="instant" className="flex items-center gap-1 text-xs sm:text-sm md:text-base">
             <MessageCircle size={16} className="flex-shrink-0" />
@@ -37,11 +43,11 @@ const Messages = () => {
         </TabsList>
         
         <TabsContent value="instant" className="mt-0">
-          <InstantMessages />
+          <InstantMessages onClose={() => setActiveTab('email')} />
         </TabsContent>
         
         <TabsContent value="groups" className="mt-0">
-          <GroupDiscussions />
+          <GroupDiscussions onClose={() => setActiveTab('email')} />
         </TabsContent>
         
         <TabsContent value="email" className="mt-0">

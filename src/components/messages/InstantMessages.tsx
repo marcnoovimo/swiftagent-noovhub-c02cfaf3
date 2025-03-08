@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { Search, MessageCircle, Phone, Video, Send, Paperclip, Mic, MoreVertical } from 'lucide-react';
+import { Search, MessageCircle, Phone, Video, Send, Paperclip, X } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 interface Message {
   id: string;
@@ -30,7 +31,11 @@ interface Conversation {
   };
 }
 
-const InstantMessages = () => {
+interface InstantMessagesProps {
+  onClose?: () => void;
+}
+
+const InstantMessages = ({ onClose }: InstantMessagesProps) => {
   const [conversations] = useState<Conversation[]>([
     {
       id: '1',
@@ -188,7 +193,19 @@ const InstantMessages = () => {
   };
 
   return (
-    <div className="glass-card rounded-xl overflow-hidden min-h-[600px] grid grid-cols-1 md:grid-cols-3">
+    <div className="glass-card rounded-xl overflow-hidden min-h-[600px] grid grid-cols-1 md:grid-cols-3 relative">
+      {/* Close button */}
+      {onClose && (
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="absolute top-2 right-2 z-10" 
+          onClick={onClose}
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      )}
+      
       {/* Conversation list */}
       <div className="border-r border-border/50 p-4 overflow-y-auto">
         <div className="mb-4">
@@ -276,14 +293,11 @@ const InstantMessages = () => {
             <button className="icon-button">
               <Video size={18} className="text-muted-foreground" />
             </button>
-            <button className="icon-button">
-              <MoreVertical size={18} className="text-muted-foreground" />
-            </button>
           </div>
         </div>
         
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 messages-container">
           {messages.map((message) => (
             <div
               key={message.id}
@@ -342,12 +356,8 @@ const InstantMessages = () => {
               />
             </div>
             
-            <button className="icon-button mx-2">
-              <Mic size={18} className="text-muted-foreground" />
-            </button>
-            
             <button
-              className="p-2 bg-[#d72345] text-white rounded-full"
+              className="p-2 bg-[#d72345] text-white rounded-full ml-2"
               onClick={handleSendMessage}
             >
               <Send size={18} />
