@@ -155,7 +155,7 @@ const Settings = () => {
           <h4 className="font-semibold">Détails des barèmes</h4>
           
           <div className="overflow-x-auto -mx-4 sm:mx-0">
-            <div className="min-w-full inline-block align-middle">
+            <div className="inline-block min-w-full align-middle">
               <div className="overflow-hidden">
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <thead>
@@ -170,7 +170,11 @@ const Settings = () => {
                       <tr key={index} className={`${agentCommission.currentPercentage === range.percentage ? 'bg-primary/10' : ''}`}>
                         <td className="px-3 py-2 whitespace-nowrap text-sm font-medium">{index + 1}</td>
                         <td className="px-3 py-2 whitespace-nowrap text-sm">
-                          {range.minAmount === 0 ? '0' : formatCurrency(range.minAmount)} - {range.maxAmount === 999999999 ? '+' : formatCurrency(range.maxAmount)}
+                          <span className="hidden sm:inline">{range.minAmount === 0 ? '0' : formatCurrency(range.minAmount)} - {range.maxAmount === 999999999 ? '+' : formatCurrency(range.maxAmount)}</span>
+                          <span className="sm:hidden">
+                            {range.minAmount === 0 ? '0' : (range.minAmount / 1000) + 'k'} - 
+                            {range.maxAmount === 999999999 ? '+' : (range.maxAmount / 1000) + 'k'}
+                          </span>
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-right">{range.percentage}%</td>
                       </tr>
@@ -217,7 +221,7 @@ const Settings = () => {
               </div>
               
               <div className="overflow-x-auto">
-                <div className="min-w-full inline-block align-middle">
+                <div className="inline-block min-w-full align-middle">
                   <div className="overflow-hidden">
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                       <thead>
@@ -230,7 +234,14 @@ const Settings = () => {
                         {pack.ranges.map((range, idx) => (
                           <tr key={idx}>
                             <td className="px-3 py-2 whitespace-nowrap text-sm">
-                              {range.minAmount === 0 ? '0' : formatCurrency(range.minAmount)} - {range.maxAmount === 999999999 ? '+' : formatCurrency(range.maxAmount)}
+                              <span className="hidden sm:inline">
+                                {range.minAmount === 0 ? '0' : formatCurrency(range.minAmount)} - 
+                                {range.maxAmount === 999999999 ? '+' : formatCurrency(range.maxAmount)}
+                              </span>
+                              <span className="sm:hidden">
+                                {range.minAmount === 0 ? '0' : (range.minAmount / 1000) + 'k'} - 
+                                {range.maxAmount === 999999999 ? '+' : (range.maxAmount / 1000) + 'k'}
+                              </span>
                             </td>
                             <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-right">{range.percentage}%</td>
                           </tr>

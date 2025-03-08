@@ -37,6 +37,12 @@ export function useIsTablet() {
   return !!isTablet
 }
 
+export function useIsDesktop() {
+  const isMobile = useIsMobile()
+  const isTablet = useIsTablet()
+  return !isMobile && !isTablet
+}
+
 export function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = React.useState(false)
 
