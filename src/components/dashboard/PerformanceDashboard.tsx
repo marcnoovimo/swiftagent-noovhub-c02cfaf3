@@ -17,7 +17,7 @@ import { Building2, CreditCard, TrendingUp, BarChart3, Calendar, Euro, PiggyBank
 import PerformanceCard from './PerformanceCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StatsService from '@/services/statsService';
-import { AuthContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 
 // Helper function to format currency
 const formatCurrency = (value: number): string => {
@@ -29,7 +29,7 @@ const formatCurrency = (value: number): string => {
 };
 
 const PerformanceDashboard: React.FC = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [cumulativeData, setCumulativeData] = useState({
     sales: 0,
     compromis: 0,

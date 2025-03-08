@@ -24,7 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
     { name: 'Tableau de bord', icon: Home, path: '/' },
     { name: 'Messages', icon: MessageCircle, path: '/messages' },
     { name: 'Documents', icon: FileText, path: '/documents' },
-    { name: 'Performance', icon: BarChart3, path: '/performance' },
+    { name: 'Performance', icon: BarChart3, path: '/stats' },
     { name: 'Équipe', icon: Users, path: '/team' },
     { name: 'Paramètres', icon: Settings, path: '/settings' },
   ];
