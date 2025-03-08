@@ -77,8 +77,8 @@ const Stats = () => {
   }
 
   return (
-    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 animate-fade-in">
-      <div className="flex flex-col md:flex-row justify-between items-start mb-4 sm:mb-6 gap-2 sm:gap-4">
+    <div className="container mx-auto px-1 sm:px-4 py-4 sm:py-8 animate-fade-in">
+      <div className="flex flex-col md:flex-row justify-between items-start mb-4 sm:mb-6 gap-2 sm:gap-4 px-2">
         <div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Statistiques de performance</h1>
           <p className="text-muted-foreground text-xs sm:text-sm mt-1">
@@ -97,22 +97,22 @@ const Stats = () => {
         <StatCard
           title="Ventes réalisées"
           value={stats.totalSales}
-          icon={<Home size={20} className="text-noovimo-500" />}
+          icon={<Home size={16} className="text-noovimo-500" />}
         />
         <StatCard
           title="Compromis signés"
           value={stats.totalCompromis}
-          icon={<Building2 size={20} className="text-noovimo-500" />}
+          icon={<Building2 size={16} className="text-noovimo-500" />}
         />
         <StatCard
           title="Volume de transactions"
           value={formatCurrency(stats.totalVolume)}
-          icon={<BarChart3 size={20} className="text-noovimo-500" />}
+          icon={<BarChart3 size={16} className="text-noovimo-500" />}
         />
         <StatCard
           title="Commissions totales"
           value={formatCurrency(stats.totalCommission)}
-          icon={<CreditCard size={20} className="text-noovimo-500" />}
+          icon={<CreditCard size={16} className="text-noovimo-500" />}
         />
       </div>
       

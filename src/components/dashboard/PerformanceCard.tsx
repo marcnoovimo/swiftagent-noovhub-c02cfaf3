@@ -18,11 +18,11 @@ const PerformanceCard: React.FC<PerformanceCardProps> = ({
   icon,
 }) => {
   return (
-    <div className="glass-card rounded-xl p-2 sm:p-4 transition-all duration-300 hover:shadow-medium w-full">
+    <div className="glass-card rounded-xl p-2 transition-all duration-300 hover:shadow-medium w-full">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs sm:text-sm text-muted-foreground">{title}</p>
-          <h3 className="text-xl sm:text-2xl font-semibold mt-1 sm:mt-2">{value}</h3>
+          <h3 className="text-xl sm:text-2xl font-semibold mt-1">{value}</h3>
           
           {change && (
             <div className="flex items-center mt-1">
@@ -35,7 +35,7 @@ const PerformanceCard: React.FC<PerformanceCardProps> = ({
         </div>
         
         {icon && (
-          <div className="bg-noovimo-50 p-1.5 sm:p-2 rounded-lg">
+          <div className="bg-noovimo-50 p-1.5 rounded-lg">
             {icon}
           </div>
         )}

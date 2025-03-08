@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { 
@@ -90,8 +89,8 @@ const PerformanceDashboard: React.FC = () => {
   const previousMonthSales = previousMonthData?.value || 0;
 
   return (
-    <div className="w-full animate-fade-in">
-      <div className="mb-4 sm:mb-6">
+    <div className="w-full animate-fade-in px-1">
+      <div className="mb-3 sm:mb-6">
         <h2 className="text-lg sm:text-xl font-semibold mb-2">Activité du mois</h2>
         <div className="card-grid">
           <PerformanceCard
@@ -99,48 +98,48 @@ const PerformanceDashboard: React.FC = () => {
             value={currentMonth.sales.toString()}
             change={getPercentChange(currentMonth.sales, previousMonthSales)}
             positive={currentMonth.sales >= previousMonthSales}
-            icon={<Building2 size={18} className="text-noovimo-500" />}
+            icon={<Building2 size={16} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Compromis"
             value={currentMonth.compromis.toString()}
-            icon={<Calendar size={18} className="text-noovimo-500" />}
+            icon={<Calendar size={16} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Honoraires"
             value={formatCurrency(currentMonth.commission)}
-            icon={<Euro size={18} className="text-noovimo-500" />}
+            icon={<Euro size={16} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Taux de transformation"
             value={`${(currentMonth.conversionRate * 100).toFixed(0)}%`}
-            icon={<TrendingUp size={18} className="text-noovimo-500" />}
+            icon={<TrendingUp size={16} className="text-noovimo-500" />}
           />
         </div>
       </div>
 
-      <div className="mb-4 sm:mb-6">
+      <div className="mb-3 sm:mb-6">
         <h2 className="text-lg sm:text-xl font-semibold mb-2">Cumul annuel</h2>
         <div className="card-grid">
           <PerformanceCard
             title="Ventes réalisées"
             value={cumulativeData.sales.toString()}
-            icon={<Building2 size={18} className="text-noovimo-500" />}
+            icon={<Building2 size={16} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Compromis signés"
             value={cumulativeData.compromis.toString()}
-            icon={<Briefcase size={18} className="text-noovimo-500" />}
+            icon={<Briefcase size={16} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Volume de transactions"
             value={formatCurrency(cumulativeData.volume)}
-            icon={<BarChart3 size={18} className="text-noovimo-500" />}
+            icon={<BarChart3 size={16} className="text-noovimo-500" />}
           />
           <PerformanceCard
             title="Commissions totales"
             value={formatCurrency(cumulativeData.commission)}
-            icon={<PiggyBank size={18} className="text-noovimo-500" />}
+            icon={<PiggyBank size={16} className="text-noovimo-500" />}
           />
         </div>
       </div>
