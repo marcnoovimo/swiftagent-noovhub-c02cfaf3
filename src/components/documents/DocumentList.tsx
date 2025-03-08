@@ -7,10 +7,13 @@ import {
   MoreVertical, 
   ChevronRight,
   Eye,
-  Printer
+  Printer,
+  Bell
 } from 'lucide-react';
 import { Document, Folder } from './types';
 import DocumentIcon from './DocumentIcon';
+import { motion } from 'framer-motion';
+import { Badge } from "@/components/ui/badge";
 
 interface DocumentListProps {
   items: (Document | Folder)[];
@@ -29,6 +32,22 @@ const DocumentList: React.FC<DocumentListProps> = ({
     return 'documents' in item;
   };
 
+  // Animation variants
+  const listVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-sm dark:bg-gray-800">
       <div className="p-4 border-b border-border">
@@ -38,24 +57,39 @@ const DocumentList: React.FC<DocumentListProps> = ({
         </div>
       </div>
       
-      <div className="divide-y divide-border">
+      <motion.div 
+        className="divide-y divide-border"
+        variants={listVariants}
+        initial="hidden"
+        animate="show"
+      >
         {items.length > 0 ? (
           items.map((item) => {
             if (isFolder(item) && !isSearchResult) {
               // Folder item (not in search results)
               return (
-                <div 
+                <motion.div 
                   key={item.id}
                   className="p-4 hover:bg-secondary/20 transition-colors cursor-pointer"
                   onClick={() => onFolderClick && onFolderClick(item.id, item.name)}
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
                 >
                   <div className="grid grid-cols-12 items-center">
                     <div className="col-span-8 flex items-center">
-                      <div className="mr-3">
+                      <div className="mr-3 relative">
                         <DocumentIcon type="folder" />
+                        {item.unreadCount && item.unreadCount > 0 && (
+                          <Badge className="absolute -top-2 -right-2 px-1.5 py-0.5 min-w-5 h-5 flex items-center justify-center bg-noovimo-500 text-white text-xs rounded-full">
+                            {item.unreadCount}
+                          </Badge>
+                        )}
                       </div>
                       <div>
-                        <div className="font-medium text-sm">{item.name}</div>
+                        <div className="font-medium text-sm flex items-center gap-1">
+                          {item.name}
+                        </div>
                         <div className="text-xs text-muted-foreground mt-1">
                           {item.documents.length} élément{item.documents.length !== 1 ? 's' : ''}
                         </div>
@@ -66,24 +100,37 @@ const DocumentList: React.FC<DocumentListProps> = ({
                       <ChevronRight size={16} className="text-muted-foreground" />
                     </div>
                   </div>
-                </div>
+                </motion.div>
               );
             } else {
               // Document item (or folder in search results - treat as document)
               const document = item as Document;
               return (
-                <div 
+                <motion.div 
                   key={document.id}
-                  className="p-4 hover:bg-secondary/20 transition-colors cursor-pointer"
+                  className={`p-4 hover:bg-secondary/20 transition-colors cursor-pointer ${document.unread ? 'bg-noovimo-50' : ''}`}
                   onClick={() => onFileClick && onFileClick(document)}
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
                 >
                   <div className="grid grid-cols-12 items-center">
                     <div className="col-span-8 flex items-center">
-                      <div className="mr-3">
+                      <div className="mr-3 relative">
                         <DocumentIcon type={document.type} />
+                        {document.unread && (
+                          <div className="absolute -top-1 -right-1 w-2 h-2 bg-noovimo-500 rounded-full"></div>
+                        )}
                       </div>
                       <div>
-                        <div className="font-medium text-sm">{document.name}</div>
+                        <div className="font-medium text-sm flex items-center gap-1">
+                          {document.name}
+                          {document.unread && (
+                            <Badge variant="outline" className="ml-2 bg-noovimo-50 text-noovimo-500 text-xs border-noovimo-200">
+                              Nouveau
+                            </Badge>
+                          )}
+                        </div>
                         <div className="text-xs text-muted-foreground mt-1">
                           {document.category}
                         </div>
@@ -92,7 +139,7 @@ const DocumentList: React.FC<DocumentListProps> = ({
                     
                     <div className="col-span-4 flex items-center justify-end gap-2">
                       {document.starred && (
-                        <Star size={16} className="text-yellow-500" />
+                        <Star size={16} className="text-yellow-500 fill-yellow-500" />
                       )}
                       
                       {document.documentType === 'noovimo' ? (
@@ -126,7 +173,7 @@ const DocumentList: React.FC<DocumentListProps> = ({
                       )}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               );
             }
           })
@@ -137,7 +184,7 @@ const DocumentList: React.FC<DocumentListProps> = ({
             </p>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };

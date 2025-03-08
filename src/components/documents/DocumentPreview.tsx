@@ -1,8 +1,11 @@
 
 import React from 'react';
 import { Document } from './types';
-import { X } from 'lucide-react';
+import { X, Download, Share2, Star, Printer, ArrowLeft } from 'lucide-react';
 import DocumentIcon from './DocumentIcon';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 interface DocumentPreviewProps {
   document: Document | null;
@@ -11,6 +14,25 @@ interface DocumentPreviewProps {
 
 const DocumentPreview: React.FC<DocumentPreviewProps> = ({ document, onClose }) => {
   if (!document) return null;
+
+  const handleDownload = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toast.success("Téléchargement démarré", {
+      description: `${document.name} sera bientôt disponible.`
+    });
+  };
+
+  const handleShare = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toast.success("Lien de partage créé", {
+      description: "Un lien temporaire a été copié dans votre presse-papier."
+    });
+  };
+
+  const handleStar = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toast.success(document.starred ? "Document retiré des favoris" : "Document ajouté aux favoris");
+  };
 
   const renderPreview = () => {
     // For now, just show a placeholder for different types of documents
@@ -64,32 +86,97 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({ document, onClose }) 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-        <div className="p-4 border-b border-border flex justify-between items-center">
-          <div className="flex items-center">
-            <DocumentIcon type={document.type} />
-            <h3 className="ml-2 font-medium">{document.name}</h3>
+    <AnimatePresence>
+      <motion.div 
+        className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div 
+          className="bg-white dark:bg-gray-900 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
+          initial={{ scale: 0.9, y: 20 }}
+          animate={{ scale: 1, y: 0 }}
+          exit={{ scale: 0.9, y: 20 }}
+        >
+          <div className="p-4 border-b border-border flex justify-between items-center bg-secondary/30">
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={onClose}
+                className="h-8 w-8 mr-1"
+              >
+                <ArrowLeft size={18} />
+              </Button>
+              <DocumentIcon type={document.type} />
+              <h3 className="font-medium">{document.name}</h3>
+            </div>
+            <div className="flex items-center">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={handleStar}
+                className="h-8 w-8 text-yellow-500"
+              >
+                <Star size={18} className={document.starred ? "fill-yellow-500" : ""} />
+              </Button>
+              
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={onClose}
+                className="h-8 w-8 text-muted-foreground"
+              >
+                <X size={18} />
+              </Button>
+            </div>
           </div>
-          <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
-            <X size={20} />
-          </button>
-        </div>
-        
-        <div className="p-6">
-          {renderPreview()}
           
-          <div className="mt-6 flex justify-end gap-2">
-            <button className="px-4 py-2 bg-secondary rounded-lg text-sm">
-              Télécharger
-            </button>
-            <button className="px-4 py-2 bg-noovimo-500 text-white rounded-lg text-sm">
-              Partager
-            </button>
+          <div className="p-6 overflow-y-auto flex-1">
+            {renderPreview()}
           </div>
-        </div>
-      </div>
-    </div>
+          
+          <div className="p-4 border-t border-border flex justify-between items-center bg-secondary/30">
+            <div className="text-sm text-muted-foreground">
+              {document.size ? `${(document.size / 1024).toFixed(2)} KB` : 'Taille inconnue'} • {document.createdAt ? new Date(document.createdAt).toLocaleDateString() : 'Date inconnue'}
+            </div>
+            
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1"
+                onClick={handleDownload}
+              >
+                <Download size={16} />
+                Télécharger
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1"
+                onClick={(e) => { e.stopPropagation(); }}
+              >
+                <Printer size={16} />
+                Imprimer
+              </Button>
+              
+              <Button
+                variant="default"
+                size="sm"
+                className="gap-1 bg-noovimo-500 hover:bg-noovimo-600"
+                onClick={handleShare}
+              >
+                <Share2 size={16} />
+                Partager
+              </Button>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

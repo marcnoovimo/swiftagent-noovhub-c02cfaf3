@@ -1,4 +1,3 @@
-
 export interface Document {
   id: string;
   name: string;
@@ -12,6 +11,7 @@ export interface Document {
   path?: string;
   accessLevel?: 'admin' | 'agent' | 'shared';
   url?: string;
+  unread?: boolean; // Nouvelle propriété pour identifier les documents non lus
 }
 
 export interface Folder {
@@ -20,6 +20,7 @@ export interface Folder {
   type: 'folder';
   documents: (Document | Folder)[];
   parentId?: string;
+  unreadCount?: number; // Nombre de documents non lus dans le dossier
 }
 
 export interface Category {
