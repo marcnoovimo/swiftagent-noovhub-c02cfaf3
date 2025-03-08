@@ -7,13 +7,19 @@ import { Input } from '@/components/ui/input';
 import ContactsList from '@/components/contacts/ContactsList';
 import ContactScanModal from '@/components/contacts/ContactScanModal';
 import ImportExportModal from '@/components/contacts/ImportExportModal';
+import ContactForm from '@/components/contacts/ContactForm';
 import { useContacts } from '@/hooks/useContacts';
+import { Contact } from '@/types/contact';
+import { createContact } from '@/services/contactService';
+import { useToast } from '@/hooks/use-toast';
 
 const Contacts = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [scanOpen, setScanOpen] = useState(false);
   const [importExportOpen, setImportExportOpen] = useState(false);
-  const { contacts, isLoading } = useContacts();
+  const [newContactOpen, setNewContactOpen] = useState(false);
+  const { contacts, isLoading, refetch } = useContacts();
+  const { toast } = useToast();
 
   const filteredContacts = contacts?.filter((contact) => {
     if (!searchQuery) return true;
@@ -27,6 +33,23 @@ const Contacts = () => {
       contact.city?.toLowerCase().includes(query)
     );
   });
+
+  const handleCreateContact = async (contactData: Omit<Contact, 'id' | 'createdAt' | 'updatedAt'>) => {
+    try {
+      await createContact(contactData);
+      refetch();
+      toast({
+        title: "Contact créé avec succès",
+        description: `${contactData.firstName} ${contactData.lastName} a été ajouté à votre répertoire.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur lors de la création du contact",
+        description: "Une erreur est survenue, veuillez réessayer.",
+        variant: "destructive",
+      });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -61,7 +84,7 @@ const Contacts = () => {
             <span className="hidden sm:inline">Synchroniser</span>
           </Button>
           
-          <Button className="flex items-center gap-2">
+          <Button onClick={() => setNewContactOpen(true)} className="flex items-center gap-2">
             <PlusCircle size={16} />
             <span>Nouveau contact</span>
           </Button>
@@ -93,6 +116,11 @@ const Contacts = () => {
       
       <ContactScanModal open={scanOpen} onOpenChange={setScanOpen} />
       <ImportExportModal open={importExportOpen} onOpenChange={setImportExportOpen} />
+      <ContactForm 
+        open={newContactOpen} 
+        onOpenChange={setNewContactOpen} 
+        onSave={handleCreateContact}
+      />
     </div>
   );
 };
