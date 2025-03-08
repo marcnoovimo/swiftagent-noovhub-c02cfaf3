@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { FileText } from 'lucide-react';
 import { Document, Folder, BreadcrumbItem } from '@/components/documents/types';
 
 export const useDocuments = () => {
