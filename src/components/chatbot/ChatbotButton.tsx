@@ -11,13 +11,13 @@ const ChatbotButton: React.FC = () => {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
+        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-40"
         size="icon"
       >
         <Bot size={24} />
       </Button>
       
-      <ChatbotInterface isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      {isOpen && <ChatbotInterface isOpen={isOpen} onClose={() => setIsOpen(false)} />}
     </>
   );
 };
