@@ -1,6 +1,5 @@
-
-import { FileText } from 'lucide-react';
 import { Document, Folder } from '@/components/documents/types';
+import { FileText, File, Image, FileArchive, FileCheck } from 'lucide-react';
 
 // Agent documents structure
 export const agentDocuments: Document[] = [
@@ -171,9 +170,9 @@ export const noovimoFolders: Folder[] = [
 ];
 
 export const agentCategories = [
-  { name: 'Compromis', icon: <FileText size={18} className="text-noovimo-500" />, count: 4 },
-  { name: 'Mandats', icon: <FileText size={18} className="text-green-500" />, count: 8 },
-  { name: 'Factures', icon: <FileText size={18} className="text-yellow-500" />, count: 6 },
-  { name: 'Photos', icon: <FileText size={18} className="text-purple-500" />, count: 12 },
-  { name: 'Diagnostics', icon: <FileText size={18} className="text-red-500" />, count: 5 },
+  { name: 'Compromis', icon: FileText, count: 4 },
+  { name: 'Mandats', icon: FileText, count: 8 },
+  { name: 'Factures', icon: FileText, count: 6 },
+  { name: 'Photos', icon: Image, count: 12 },
+  { name: 'Diagnostics', icon: FileCheck, count: 5 },
 ];
