@@ -52,24 +52,24 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-noovimo-50 to-white">
       <div className="w-full max-w-md animate-scale-in">
-        <div className="glass-card rounded-2xl p-8 shadow-medium">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">Intranet Noovimo</h1>
-            <p className="text-sm text-muted-foreground mt-2">Connectez-vous pour accéder à votre espace</p>
+        <div className="glass-card rounded-2xl p-4 sm:p-8 shadow-medium">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Intranet Noovimo</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-2">Connectez-vous pour accéder à votre espace</p>
           </div>
           
           {!isSupabaseConfigured && (
-            <Alert className="mb-6 bg-amber-50 border-amber-200">
-              <AlertCircle className="h-4 w-4 text-amber-600" />
-              <AlertDescription className="text-sm text-amber-800">
+            <Alert className="mb-4 sm:mb-6 bg-amber-50 border-amber-200 text-xs sm:text-sm">
+              <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4 text-amber-600" />
+              <AlertDescription className="text-xs sm:text-sm text-amber-800">
                 Mode démo activé. Vous pouvez vous connecter avec n'importe quels identifiants @noovimo.fr.
               </AlertDescription>
             </Alert>
           )}
           
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+            <div className="space-y-1 sm:space-y-2">
+              <label htmlFor="email" className="text-xs sm:text-sm font-medium">
                 Email
               </label>
               <input
@@ -78,13 +78,13 @@ const Login: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="agent@noovimo.fr"
-                className="w-full rounded-lg border border-input px-4 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="w-full rounded-lg border border-input px-3 sm:px-4 py-1.5 sm:py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30 text-sm"
                 required
               />
             </div>
             
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
+            <div className="space-y-1 sm:space-y-2">
+              <label htmlFor="password" className="text-xs sm:text-sm font-medium">
                 Mot de passe
               </label>
               <div className="relative">
@@ -94,33 +94,33 @@ const Login: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full rounded-lg border border-input px-4 py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="w-full rounded-lg border border-input px-3 sm:px-4 py-1.5 sm:py-2 bg-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30 text-sm"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
             
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between text-xs sm:text-sm">
               <div className="flex items-center">
                 <input
                   id="remember"
                   type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary/30"
+                  className="h-3 w-3 sm:h-4 sm:w-4 rounded border-gray-300 text-primary focus:ring-primary/30"
                 />
-                <label htmlFor="remember" className="ml-2 text-sm text-muted-foreground">
+                <label htmlFor="remember" className="ml-1.5 sm:ml-2 text-xs sm:text-sm text-muted-foreground">
                   Rester connecté
                 </label>
               </div>
               
-              <Link to="/forgot-password" className="text-sm font-medium text-noovimo-600 hover:text-noovimo-700">
+              <Link to="/forgot-password" className="text-xs sm:text-sm font-medium text-noovimo-600 hover:text-noovimo-700">
                 Mot de passe oublié?
               </Link>
             </div>
@@ -128,26 +128,26 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center bg-noovimo-500 hover:bg-noovimo-600 text-white rounded-lg px-4 py-2.5 font-medium transition-colors disabled:bg-noovimo-300"
+              className="w-full flex items-center justify-center bg-noovimo-500 hover:bg-noovimo-600 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-2.5 font-medium transition-colors disabled:bg-noovimo-300 text-sm"
             >
               {isLoading ? (
                 <span className="flex items-center">
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin -ml-1 mr-2 h-3 w-3 sm:h-4 sm:w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Connexion en cours...
+                  <span className="text-xs sm:text-sm">Connexion en cours...</span>
                 </span>
               ) : (
                 <span className="flex items-center">
-                  <LogIn size={18} className="mr-2" />
-                  Se connecter
+                  <LogIn size={16} className="mr-2" />
+                  <span className="text-xs sm:text-sm">Se connecter</span>
                 </span>
               )}
             </button>
           </form>
           
-          <div className="mt-6 text-center text-xs text-muted-foreground">
+          <div className="mt-4 sm:mt-6 text-center text-xs text-muted-foreground">
             <p>© 2023 Noovimo. Tous droits réservés.</p>
           </div>
         </div>

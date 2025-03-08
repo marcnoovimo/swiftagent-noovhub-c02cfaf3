@@ -25,19 +25,20 @@ export function Toaster() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.8 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              className="w-full sm:w-auto"
             >
-              <Toast key={id} {...props}>
+              <Toast key={id} {...props} className="max-w-[90vw] sm:max-w-md break-words">
                 <div className="grid gap-1">
                   {title && (
-                    <ToastTitle className="flex items-center gap-2">
+                    <ToastTitle className="flex items-center gap-2 text-sm">
                       <span className="bg-primary/10 text-primary p-1 rounded-full">
-                        <Bell size={14} />
+                        <Bell size={12} className="sm:size-14" />
                       </span>
-                      {title}
+                      <span className="break-words">{title}</span>
                     </ToastTitle>
                   )}
                   {description && (
-                    <ToastDescription>{description}</ToastDescription>
+                    <ToastDescription className="text-xs sm:text-sm break-words">{description}</ToastDescription>
                   )}
                 </div>
                 {action}
@@ -47,7 +48,7 @@ export function Toaster() {
           )
         })}
       </AnimatePresence>
-      <ToastViewport />
+      <ToastViewport className="p-2 md:p-4" />
     </ToastProvider>
   )
 }
