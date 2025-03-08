@@ -1,73 +1,70 @@
 
 import React from 'react';
-import { Plus, Inbox, Send as SendIcon, FileText, Trash2 } from 'lucide-react';
+import { Inbox, Send, FileText, Trash, PenSquare } from 'lucide-react';
 
 interface EmailSidebarProps {
   activeFolder: string;
   setActiveFolder: (folder: string) => void;
+  className?: string;
 }
 
-const EmailSidebar = ({ activeFolder, setActiveFolder }: EmailSidebarProps) => {
-  const folderIcons = {
-    inbox: <Inbox size={18} />,
-    sent: <SendIcon size={18} />,
-    drafts: <FileText size={18} />,
-    trash: <Trash2 size={18} />,
-  };
-
+const EmailSidebar = ({ activeFolder, setActiveFolder, className = '' }: EmailSidebarProps) => {
   return (
-    <div className="lg:col-span-2 border-r border-border/50 p-4 overflow-y-auto">
-      <div className="mb-6">
-        <button className="w-full flex items-center justify-center gap-2 p-3 bg-[#d72345] text-white rounded-lg hover:bg-[#c01f3c] transition-colors">
-          <Plus size={16} />
-          <span>Nouveau mail</span>
+    <div className={`lg:col-span-2 border-r border-border/50 overflow-hidden flex flex-col ${className}`}>
+      <div className="p-2 sm:p-3 border-b border-border/50">
+        <button className="w-full bg-[#d72345] text-white px-2 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-[#c01f3c] transition-colors flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm">
+          <PenSquare size={16} />
+          <span className="truncate">Nouveau message</span>
         </button>
       </div>
       
-      <nav className="space-y-1">
-        {['inbox', 'sent', 'drafts', 'trash'].map((folder) => (
-          <button
-            key={folder}
-            onClick={() => setActiveFolder(folder)}
-            className={`w-full flex items-center justify-between p-2 rounded-lg transition-colors ${
-              activeFolder === folder
-                ? 'bg-noovimo-50 text-[#d72345]'
-                : 'hover:bg-secondary/50'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              {folderIcons[folder as keyof typeof folderIcons]}
-              <span className="capitalize">{folder}</span>
-            </div>
-            
-            {folder === 'inbox' && (
-              <span className="flex items-center justify-center min-w-5 h-5 bg-[#d72345] text-white text-xs rounded-full px-1.5">
-                2
-              </span>
-            )}
-          </button>
-        ))}
-      </nav>
-      
-      <div className="mt-6 pt-6 border-t border-border/50">
-        <p className="text-xs font-medium text-muted-foreground mb-2">LIBELLÉS</p>
-        <div className="space-y-1">
-          <button className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-secondary/50 transition-colors">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <span>Important</span>
-          </button>
-          <button className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-secondary/50 transition-colors">
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <span>Personnel</span>
-          </button>
-          <button className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-secondary/50 transition-colors">
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-            <span>Clients</span>
-          </button>
-          <button className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-secondary/50 transition-colors">
-            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-            <span>Administratif</span>
-          </button>
+      <div className="overflow-y-auto flex-1">
+        <div 
+          onClick={() => setActiveFolder('inbox')}
+          className={`p-2 sm:p-3 cursor-pointer transition-colors flex items-center gap-2 ${
+            activeFolder === 'inbox' 
+              ? 'bg-secondary/70 font-medium' 
+              : 'hover:bg-secondary/50'
+          }`}
+        >
+          <Inbox size={16} className={activeFolder === 'inbox' ? 'text-[#d72345]' : 'text-muted-foreground'} />
+          <span className="text-xs sm:text-sm">Boîte de réception</span>
+        </div>
+        
+        <div 
+          onClick={() => setActiveFolder('sent')}
+          className={`p-2 sm:p-3 cursor-pointer transition-colors flex items-center gap-2 ${
+            activeFolder === 'sent' 
+              ? 'bg-secondary/70 font-medium' 
+              : 'hover:bg-secondary/50'
+          }`}
+        >
+          <Send size={16} className={activeFolder === 'sent' ? 'text-[#d72345]' : 'text-muted-foreground'} />
+          <span className="text-xs sm:text-sm">Messages envoyés</span>
+        </div>
+        
+        <div 
+          onClick={() => setActiveFolder('drafts')}
+          className={`p-2 sm:p-3 cursor-pointer transition-colors flex items-center gap-2 ${
+            activeFolder === 'drafts' 
+              ? 'bg-secondary/70 font-medium' 
+              : 'hover:bg-secondary/50'
+          }`}
+        >
+          <FileText size={16} className={activeFolder === 'drafts' ? 'text-[#d72345]' : 'text-muted-foreground'} />
+          <span className="text-xs sm:text-sm">Brouillons</span>
+        </div>
+        
+        <div 
+          onClick={() => setActiveFolder('trash')}
+          className={`p-2 sm:p-3 cursor-pointer transition-colors flex items-center gap-2 ${
+            activeFolder === 'trash' 
+              ? 'bg-secondary/70 font-medium' 
+              : 'hover:bg-secondary/50'
+          }`}
+        >
+          <Trash size={16} className={activeFolder === 'trash' ? 'text-[#d72345]' : 'text-muted-foreground'} />
+          <span className="text-xs sm:text-sm">Corbeille</span>
         </div>
       </div>
     </div>

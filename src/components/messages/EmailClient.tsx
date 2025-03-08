@@ -91,6 +91,7 @@ const EmailClient = () => {
       <EmailSidebar 
         activeFolder={activeFolder} 
         setActiveFolder={setActiveFolder} 
+        className="col-span-1 lg:col-span-2"
       />
       
       <EmailList 

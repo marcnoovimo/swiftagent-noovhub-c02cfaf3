@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Mail, MessageCircle, Users } from 'lucide-react';
 import InstantMessages from '@/components/messages/InstantMessages';
@@ -16,17 +16,17 @@ const Messages = () => {
       
       <Tabs defaultValue="instant" className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-6">
-          <TabsTrigger value="instant" className="flex items-center gap-2">
-            <MessageCircle size={18} />
-            <span>Messages instantanés</span>
+          <TabsTrigger value="instant" className="flex items-center gap-1 text-xs sm:text-sm md:text-base">
+            <MessageCircle size={16} className="flex-shrink-0" />
+            <span className="truncate">Messages</span>
           </TabsTrigger>
-          <TabsTrigger value="groups" className="flex items-center gap-2">
-            <Users size={18} />
-            <span>Groupes de discussion</span>
+          <TabsTrigger value="groups" className="flex items-center gap-1 text-xs sm:text-sm md:text-base">
+            <Users size={16} className="flex-shrink-0" />
+            <span className="truncate">Groupes</span>
           </TabsTrigger>
-          <TabsTrigger value="email" className="flex items-center gap-2">
-            <Mail size={18} />
-            <span>Emails @noovimo.fr</span>
+          <TabsTrigger value="email" className="flex items-center gap-1 text-xs sm:text-sm md:text-base">
+            <Mail size={16} className="flex-shrink-0" />
+            <span className="truncate">Emails</span>
           </TabsTrigger>
         </TabsList>
         

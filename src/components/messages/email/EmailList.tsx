@@ -23,13 +23,13 @@ const EmailList = ({ emails, selectedEmail, setSelectedEmail, activeFolder }: Em
 
   return (
     <div className="lg:col-span-3 border-r border-border/50 overflow-hidden flex flex-col">
-      <div className="p-3 border-b border-border/50">
+      <div className="p-2 sm:p-3 border-b border-border/50">
         <div className="search-bar flex items-center">
           <Search size={16} className="text-muted-foreground mr-2" />
           <input
             type="text"
-            placeholder="Rechercher des emails..."
-            className="bg-transparent border-none outline-none w-full placeholder:text-muted-foreground/70"
+            placeholder="Rechercher..."
+            className="bg-transparent border-none outline-none w-full placeholder:text-muted-foreground/70 text-xs sm:text-sm"
           />
         </div>
       </div>
@@ -39,7 +39,7 @@ const EmailList = ({ emails, selectedEmail, setSelectedEmail, activeFolder }: Em
           <div
             key={email.id}
             onClick={() => setSelectedEmail(email)}
-            className={`border-b border-border/50 p-3 cursor-pointer transition-colors ${
+            className={`border-b border-border/50 p-2 sm:p-3 cursor-pointer transition-colors ${
               selectedEmail?.id === email.id
                 ? 'bg-noovimo-50 border-l-2 border-[#d72345]'
                 : 'hover:bg-secondary/50'
@@ -52,9 +52,9 @@ const EmailList = ({ emails, selectedEmail, setSelectedEmail, activeFolder }: Em
                 <img
                   src={email.from.avatar}
                   alt={email.from.name}
-                  className="w-8 h-8 rounded-full object-cover mr-2"
+                  className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover mr-2"
                 />
-                <span className="text-sm truncate">{email.from.name}</span>
+                <span className="text-xs sm:text-sm truncate max-w-[100px] sm:max-w-[150px]">{email.from.name}</span>
               </div>
               <div className="flex items-center gap-1">
                 {email.hasAttachments && (
@@ -63,12 +63,12 @@ const EmailList = ({ emails, selectedEmail, setSelectedEmail, activeFolder }: Em
                 {email.isStarred && (
                   <Star size={14} className="text-yellow-400 fill-yellow-400" />
                 )}
-                <span className="text-xs text-muted-foreground">{email.timestamp}</span>
+                <span className="text-[10px] sm:text-xs text-muted-foreground">{email.timestamp}</span>
               </div>
             </div>
             
-            <h4 className="text-sm truncate">{email.subject}</h4>
-            <p className="text-xs text-muted-foreground truncate mt-1">
+            <h4 className="text-xs sm:text-sm truncate">{email.subject}</h4>
+            <p className="text-[10px] sm:text-xs text-muted-foreground truncate mt-1">
               {email.content.split('\n')[0]}
             </p>
           </div>

@@ -16,11 +16,11 @@ const EmailView = ({ selectedEmail, replyContent, setReplyContent, handleSendRep
     return (
       <div className="lg:col-span-7 flex flex-col h-[600px]">
         <div className="flex flex-col items-center justify-center h-full text-center p-4">
-          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-secondary/50 mb-4">
-            <MessageCircle size={24} className="text-muted-foreground" />
+          <div className="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center rounded-full bg-secondary/50 mb-4">
+            <MessageCircle size={20} className="text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-medium">Aucun email sélectionné</h3>
-          <p className="text-muted-foreground mt-1">
+          <h3 className="text-base sm:text-lg font-medium">Aucun email sélectionné</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
             Sélectionnez un email pour afficher son contenu
           </p>
         </div>
@@ -30,62 +30,62 @@ const EmailView = ({ selectedEmail, replyContent, setReplyContent, handleSendRep
 
   return (
     <div className="lg:col-span-7 flex flex-col h-[600px]">
-      <div className="p-4 border-b border-border/50 flex items-center justify-between">
-        <h3 className="font-medium">{selectedEmail.subject}</h3>
+      <div className="p-2 sm:p-4 border-b border-border/50 flex items-center justify-between">
+        <h3 className="text-sm sm:text-base font-medium truncate">{selectedEmail.subject}</h3>
         
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1 sm:space-x-2">
           <button className="icon-button">
-            <Clock size={18} className="text-muted-foreground" />
+            <Clock size={16} className="text-muted-foreground" />
           </button>
           <button className="icon-button">
-            <Flag size={18} className="text-muted-foreground" />
+            <Flag size={16} className="text-muted-foreground" />
           </button>
           <button className="icon-button">
-            <Bookmark size={18} className="text-muted-foreground" />
+            <Bookmark size={16} className="text-muted-foreground" />
           </button>
           <button className="icon-button">
-            <Trash2 size={18} className="text-muted-foreground" />
+            <Trash2 size={16} className="text-muted-foreground" />
           </button>
           <button className="icon-button">
-            <MoreVertical size={18} className="text-muted-foreground" />
+            <MoreVertical size={16} className="text-muted-foreground" />
           </button>
         </div>
       </div>
       
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-2 sm:p-4">
         <div className="flex items-start mb-4">
           <img
             src={selectedEmail.from.avatar}
             alt={selectedEmail.from.name}
-            className="w-10 h-10 rounded-full object-cover mr-3"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover mr-2 sm:mr-3"
           />
           
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div className="flex justify-between items-start">
-              <div>
-                <h4 className="font-medium">{selectedEmail.from.name}</h4>
-                <p className="text-xs text-muted-foreground">
+              <div className="min-w-0">
+                <h4 className="text-sm sm:text-base font-medium truncate">{selectedEmail.from.name}</h4>
+                <p className="text-[10px] sm:text-xs text-muted-foreground truncate">
                   {selectedEmail.from.email}
                 </p>
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[10px] sm:text-xs text-muted-foreground ml-2">
                 {selectedEmail.timestamp}
               </p>
             </div>
             
-            <div className="text-xs text-muted-foreground mt-1">
+            <div className="text-[10px] sm:text-xs text-muted-foreground mt-1 truncate">
               À: {selectedEmail.to.join(', ')}
             </div>
             
-            <div className="mt-4 whitespace-pre-line">
+            <div className="mt-4 whitespace-pre-line text-xs sm:text-sm break-words">
               {selectedEmail.content}
             </div>
             
             {selectedEmail.hasAttachments && (
-              <div className="mt-6 p-3 border border-border/50 rounded-lg">
+              <div className="mt-6 p-2 sm:p-3 border border-border/50 rounded-lg">
                 <div className="flex items-center">
-                  <FileText size={18} className="text-muted-foreground mr-2" />
-                  <span className="text-sm">document_joint.pdf</span>
+                  <FileText size={16} className="text-muted-foreground mr-2" />
+                  <span className="text-xs sm:text-sm truncate">document_joint.pdf</span>
                 </div>
               </div>
             )}
