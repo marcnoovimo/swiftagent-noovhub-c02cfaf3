@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { MapPin, Phone, Mail, Calendar, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Agent } from '@/types/agent';
+import { Link } from 'react-router-dom';
 
 interface AgentCardProps {
   agent: Agent;
@@ -46,10 +47,10 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent }) => {
       
       <CardFooter className="p-3 pt-0">
         <Button variant="outline" size="sm" className="w-full" asChild>
-          <a href={`/profile/${agent.id}`} className="inline-flex items-center justify-center">
+          <Link to={`/agent/${agent.id}`} className="inline-flex items-center justify-center">
             Voir profil
             <ExternalLink className="ml-1 h-3.5 w-3.5" />
-          </a>
+          </Link>
         </Button>
       </CardFooter>
     </Card>

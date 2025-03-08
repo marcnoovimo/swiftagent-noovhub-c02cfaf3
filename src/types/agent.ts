@@ -13,4 +13,10 @@ export interface Agent {
   bio?: string;
   specialties?: string[];
   status: 'active' | 'inactive';
+  passions?: string[];
+  favoriteSport?: string;
+  family?: string;
+  birthday?: string;
+  idealVacation?: string;
+  mantra?: string;
 }

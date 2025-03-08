@@ -3,6 +3,7 @@ import React from 'react';
 import { Agent } from '@/types/agent';
 import { Phone, Mail, Calendar, ExternalLink, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 interface AgentMapPopupProps {
   agent: Agent;
@@ -38,10 +39,10 @@ const AgentMapPopup: React.FC<AgentMapPopupProps> = ({ agent, onClose }) => {
       </div>
       
       <Button variant="outline" size="sm" className="w-full text-xs h-7" asChild>
-        <a href={`/profile/${agent.id}`} className="inline-flex items-center justify-center">
+        <Link to={`/agent/${agent.id}`} className="inline-flex items-center justify-center">
           Voir profil
           <ExternalLink className="ml-1 h-3 w-3" />
-        </a>
+        </Link>
       </Button>
     </div>
   );

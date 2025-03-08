@@ -1,4 +1,3 @@
-
 import { Agent } from '@/types/agent';
 
 // Données simulées des agents pour la démo
@@ -14,9 +13,15 @@ const mockAgents: Agent[] = [
     joinDate: "Jan 2020",
     latitude: 47.218371,
     longitude: -1.553621,
-    bio: "Spécialiste en immobilier résidentiel à Nantes et ses environs.",
+    bio: "Spécialiste en immobilier résidentiel à Nantes et ses environs depuis plus de 5 ans. J'accompagne mes clients dans tous leurs projets immobiliers avec passion et professionnalisme.",
     specialties: ["Résidentiel", "Investissement locatif"],
-    status: "active"
+    status: "active",
+    passions: ["Photographie", "Jardinage", "Cuisine"],
+    favoriteSport: "Yoga",
+    family: "Mariée, 2 enfants",
+    birthday: "15 avril",
+    idealVacation: "Une semaine en Italie, entre culture et gastronomie",
+    mantra: "L'immobilier est avant tout une histoire de personnes, pas de propriétés"
   },
   {
     id: "2",
@@ -30,7 +35,11 @@ const mockAgents: Agent[] = [
     latitude: 48.117266,
     longitude: -1.677793,
     specialties: ["Maisons individuelles", "Terrains"],
-    status: "active"
+    status: "active",
+    bio: "Ancien architecte reconverti dans l'immobilier, je vous aide à trouver le bien qui vous correspond vraiment.",
+    passions: ["Architecture", "Design", "Voyages"],
+    favoriteSport: "VTT",
+    birthday: "3 septembre"
   },
   {
     id: "3",
@@ -44,7 +53,12 @@ const mockAgents: Agent[] = [
     latitude: 44.837789,
     longitude: -0.579180,
     specialties: ["Appartements", "Immobilier de luxe"],
-    status: "active"
+    status: "active",
+    bio: "Passionnée par l'immobilier de caractère et les biens d'exception. J'aime mettre en relation des personnes avec le lieu où elles se sentiront chez elles.",
+    passions: ["Œnologie", "Art contemporain"],
+    favoriteSport: "Tennis",
+    family: "Un fils de 8 ans",
+    mantra: "Chaque bien a une âme, chaque client a une histoire"
   },
   {
     id: "4",
@@ -58,7 +72,14 @@ const mockAgents: Agent[] = [
     latitude: 45.764043,
     longitude: 4.835659,
     specialties: ["Immobilier commercial", "Bureaux"],
-    status: "active"
+    status: "active",
+    bio: undefined,
+    passions: undefined,
+    favoriteSport: undefined,
+    family: undefined,
+    birthday: undefined,
+    idealVacation: undefined,
+    mantra: undefined
   },
   {
     id: "5",
@@ -72,7 +93,14 @@ const mockAgents: Agent[] = [
     latitude: 43.604652,
     longitude: 1.444209,
     specialties: ["Résidentiel", "Premier achat"],
-    status: "active"
+    status: "active",
+    bio: undefined,
+    passions: undefined,
+    favoriteSport: undefined,
+    family: undefined,
+    birthday: undefined,
+    idealVacation: undefined,
+    mantra: undefined
   },
   {
     id: "6",
@@ -86,7 +114,14 @@ const mockAgents: Agent[] = [
     latitude: 48.573405,
     longitude: 7.752111,
     specialties: ["Maisons anciennes", "Rénovation"],
-    status: "active"
+    status: "active",
+    bio: undefined,
+    passions: undefined,
+    favoriteSport: undefined,
+    family: undefined,
+    birthday: undefined,
+    idealVacation: undefined,
+    mantra: undefined
   },
   {
     id: "7",
@@ -100,7 +135,14 @@ const mockAgents: Agent[] = [
     latitude: 43.296482,
     longitude: 5.369780,
     specialties: ["Vue mer", "Résidences secondaires"],
-    status: "active"
+    status: "active",
+    bio: undefined,
+    passions: undefined,
+    favoriteSport: undefined,
+    family: undefined,
+    birthday: undefined,
+    idealVacation: undefined,
+    mantra: undefined
   },
   {
     id: "8",
@@ -114,7 +156,14 @@ const mockAgents: Agent[] = [
     latitude: 50.629250,
     longitude: 3.057256,
     specialties: ["Studios", "Investissement"],
-    status: "active"
+    status: "active",
+    bio: undefined,
+    passions: undefined,
+    favoriteSport: undefined,
+    family: undefined,
+    birthday: undefined,
+    idealVacation: undefined,
+    mantra: undefined
   },
   {
     id: "9",
@@ -128,7 +177,14 @@ const mockAgents: Agent[] = [
     latitude: 43.710173,
     longitude: 7.261953,
     specialties: ["Immobilier de luxe", "International"],
-    status: "active"
+    status: "active",
+    bio: undefined,
+    passions: undefined,
+    favoriteSport: undefined,
+    family: undefined,
+    birthday: undefined,
+    idealVacation: undefined,
+    mantra: undefined
   },
   {
     id: "10",
@@ -142,7 +198,14 @@ const mockAgents: Agent[] = [
     latitude: 43.610769,
     longitude: 3.876716,
     specialties: ["Résidentiel", "Neuf"],
-    status: "active"
+    status: "active",
+    bio: undefined,
+    passions: undefined,
+    favoriteSport: undefined,
+    family: undefined,
+    birthday: undefined,
+    idealVacation: undefined,
+    mantra: undefined
   }
 ];
 
