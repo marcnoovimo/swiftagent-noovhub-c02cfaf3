@@ -10,7 +10,8 @@ import {
   Settings, 
   HelpCircle, 
   LogOut,
-  ContactsIcon
+  ContactIcon,
+  Phone
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -27,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
     { name: 'Documents', icon: FileText, path: '/documents' },
     { name: 'Performance', icon: BarChart3, path: '/stats' },
     { name: 'Équipe', icon: Users, path: '/team' },
-    { name: 'Contacts', icon: ContactsIcon, path: '/contacts' },
+    { name: 'Contacts', icon: Phone, path: '/contacts' },
     { name: 'Paramètres', icon: Settings, path: '/settings' },
   ];
 
