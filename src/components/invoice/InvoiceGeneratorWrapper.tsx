@@ -2,18 +2,57 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 
-// This is a wrapper to fix the build error without modifying the read-only file
-// It will fix the 'Type '"outline"' is not assignable to type '"default" | "destructive"'' error
-// in the InvoiceGenerator component
-
-const FixedVariantButton = (props: any) => {
-  // Convert "outline" to "default" since outline is not a valid variant in our current shadcn UI version
-  const fixedProps = {
-    ...props,
-    variant: props.variant === "outline" ? "default" : props.variant
-  };
-  
-  return <Button {...fixedProps}>{props.children}</Button>;
+// This component is a wrapper to fix the button variant type issue
+// It uses the correct variant types from shadcn/ui Button component
+export const FixedVariantButton = ({ 
+  children, 
+  onClick, 
+  className,
+  disabled,
+  type
+}: { 
+  children: React.ReactNode; 
+  onClick?: () => void;
+  className?: string;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
+}) => {
+  return (
+    <Button
+      variant="default"
+      onClick={onClick}
+      className={className}
+      disabled={disabled}
+      type={type}
+    >
+      {children}
+    </Button>
+  );
 };
 
-export default FixedVariantButton;
+// Export a separate success variant button that uses the correct variant
+export const SuccessButton = ({ 
+  children, 
+  onClick, 
+  className,
+  disabled,
+  type
+}: { 
+  children: React.ReactNode; 
+  onClick?: () => void;
+  className?: string;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
+}) => {
+  return (
+    <Button
+      variant="default"
+      onClick={onClick}
+      className={`bg-green-500 hover:bg-green-600 ${className || ""}`}
+      disabled={disabled}
+      type={type}
+    >
+      {children}
+    </Button>
+  );
+};
