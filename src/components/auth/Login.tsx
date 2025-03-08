@@ -28,8 +28,8 @@ const Login: React.FC = () => {
     
     try {
       // Vérifier le domaine de l'email
-      if (!email.toLowerCase().endsWith('@noovimo.fr')) {
-        toast.error('Veuillez utiliser une adresse email @noovimo.fr.');
+      if (!email.toLowerCase().endsWith('@noovimo.fr') && !email.toLowerCase().endsWith('@admin.noovimo.fr')) {
+        toast.error('Veuillez utiliser une adresse email @noovimo.fr');
         setIsLoading(false);
         return;
       }

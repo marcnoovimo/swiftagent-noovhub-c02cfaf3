@@ -15,7 +15,7 @@ import {
 import { Building2, CreditCard, TrendingUp, BarChart3, Calendar, Euro, PiggyBank, Briefcase } from 'lucide-react';
 import PerformanceCard from './PerformanceCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import StatsService from '@/services/statsService';
+import { statsService } from '@/services/statsService';
 import { useAuth } from '@/context/AuthContext';
 
 // Helper function to format currency
@@ -39,14 +39,14 @@ const PerformanceDashboard: React.FC = () => {
   // Fetch current month stats for the agent
   const { data: monthlyStats, isLoading: isLoadingMonthly } = useQuery({
     queryKey: ['agentStats', user?.id],
-    queryFn: () => StatsService.getAgentStats(user?.id || ''),
+    queryFn: () => statsService.getAgentStats(user?.id || ''),
     enabled: !!user?.id,
   });
   
   // Fetch yearly stats for comparison
   const { data: yearlyStats, isLoading: isLoadingYearly } = useQuery({
     queryKey: ['yearlyStats'],
-    queryFn: () => StatsService.getStats('year'),
+    queryFn: () => statsService.getStats('year'),
   });
 
   // Calculate cumulative values

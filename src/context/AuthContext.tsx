@@ -113,7 +113,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           email: email,
           app_metadata: {},
           user_metadata: {
-            full_name: 'Utilisateur Démo',
+            full_name: email.split('@')[0].replace('.', ' ').split(' ').map(word => 
+              word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
             avatar_url: '',
           },
           aud: 'authenticated',

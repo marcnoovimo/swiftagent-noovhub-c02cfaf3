@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { 
@@ -22,7 +21,8 @@ import {
   Upload,
   Award,
   FileText,
-  Briefcase
+  Briefcase,
+  Download
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Agent } from '@/types/agent';
@@ -37,20 +37,21 @@ const Profile = () => {
     id: user?.id || '1',
     name: user?.user_metadata?.full_name || 'Agent Noovimo',
     email: user?.email || 'agent@noovimo.fr',
-    role: 'Agent immobilier',
-    location: 'Nantes, France',
-    status: 'Actif',
+    status: 'active',
     joinDate: '2021-06-15',
     phone: '+33 6 12 34 56 78',
-    address: '12 rue de la Paix, 44000 Nantes',
-    licensedSince: '2020-01-10',
-    avatar: user?.user_metadata?.avatar_url || '',
     city: 'Nantes',
     department: '44',
     latitude: 47.2173,
     longitude: -1.5534,
     bio: "Agent immobilier passionné avec plus de 3 ans d'expérience dans le secteur immobilier nantais.",
-    specialties: ['Appartements', 'Maisons', 'Locaux commerciaux']
+    specialties: ['Appartements', 'Maisons', 'Locaux commerciaux'],
+    // Additional properties needed
+    role: 'Agent immobilier',
+    location: 'Nantes, France',
+    address: '12 rue de la Paix, 44000 Nantes',
+    licensedSince: '2020-01-10',
+    avatar: user?.user_metadata?.avatar_url || ''
   };
 
   return (

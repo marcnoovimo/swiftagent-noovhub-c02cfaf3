@@ -18,7 +18,7 @@ import {
 import { Building2, CreditCard, TrendingUp, Home, BarChart3 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TimeFilter } from '@/types/stats';
-import StatsService from '@/services/statsService';
+import { statsService } from '@/services/statsService';
 import TimeFilterSelector from '@/components/stats/TimeFilterSelector';
 import StatCard from '@/components/stats/StatCard';
 import TransactionTable from '@/components/stats/TransactionTable';
@@ -31,7 +31,7 @@ const Stats = () => {
   
   const { data: stats, isLoading, refetch } = useQuery({
     queryKey: ['stats', timeFilter],
-    queryFn: () => StatsService.getStats(timeFilter),
+    queryFn: () => statsService.getStats(timeFilter),
   });
   
   useEffect(() => {
