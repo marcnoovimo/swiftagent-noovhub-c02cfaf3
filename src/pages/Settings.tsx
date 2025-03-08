@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Settings as SettingsIcon, Mail, Calendar, Percent, Lock, Eye, EyeOff } from 'lucide-react';
+import { Settings as SettingsIcon, Mail, Calendar, Percent, Lock, Eye, EyeOff, Euro } from 'lucide-react';
 import { 
   Tabs, 
   TabsContent, 
@@ -21,7 +21,7 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from '@/context/AuthContext';
 import { CommissionService } from '@/services/commissionService';
 import { toast } from 'sonner';
-import { CommissionPack, AgentCommission } from '@/types/commission';
+import { CommissionPack } from '@/types/commission';
 import GoogleCalendarSync from '@/components/calendar/GoogleCalendarSync';
 
 const Settings = () => {
@@ -67,6 +67,15 @@ const Settings = () => {
     }, 1000);
   };
   
+  // Format currency helper
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('fr-FR', { 
+      style: 'currency', 
+      currency: 'EUR',
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
+  
   // Fonction pour afficher le pack de commission
   const renderCommissionPack = () => {
     if (!agentCommission || !packs) return null;
@@ -93,6 +102,25 @@ const Settings = () => {
           </div>
         </div>
         
+        {currentPack.monthlyFeeHT && (
+          <div className="flex flex-wrap gap-4 p-4 bg-secondary/20 rounded-lg">
+            <div>
+              <p className="text-sm text-muted-foreground">Montant mensuel HT</p>
+              <p className="font-semibold">{currentPack.monthlyFeeHT} €</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Montant mensuel TTC</p>
+              <p className="font-semibold">{currentPack.monthlyFeeTTC} €</p>
+            </div>
+            {currentPack.referralRate && (
+              <div>
+                <p className="text-sm text-muted-foreground">Taux référent</p>
+                <p className="font-semibold">{currentPack.referralRate}%</p>
+              </div>
+            )}
+          </div>
+        )}
+        
         <Separator />
         
         <div className="space-y-4">
@@ -113,7 +141,7 @@ const Settings = () => {
               </div>
               
               <p className="text-sm text-muted-foreground">
-                Il vous reste <span className="font-medium">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(nextLevelInfo.amountNeeded)}</span> d'honoraires pour atteindre le prochain palier.
+                Il vous reste <span className="font-medium">{formatCurrency(nextLevelInfo.amountNeeded)}</span> d'honoraires pour atteindre le prochain palier.
               </p>
             </>
           ) : (
@@ -140,7 +168,7 @@ const Settings = () => {
                   <tr key={index} className={`border-b ${agentCommission.currentPercentage === range.percentage ? 'bg-primary/10' : ''}`}>
                     <td className="py-2 px-3">{index + 1}</td>
                     <td className="py-2 px-3">
-                      {range.minAmount.toLocaleString('fr-FR')}€ - {range.maxAmount === Infinity ? '+' : range.maxAmount.toLocaleString('fr-FR') + '€'}
+                      {range.minAmount === 0 ? '0' : formatCurrency(range.minAmount)} - {range.maxAmount === 999999999 ? '+' : formatCurrency(range.maxAmount)}
                     </td>
                     <td className="py-2 px-3 font-medium">{range.percentage}%</td>
                   </tr>
@@ -153,6 +181,66 @@ const Settings = () => {
             Les paliers de commission sont calculés sur les honoraires cumulés du 1er janvier au 31 décembre {currentPack.year}.
           </p>
         </div>
+      </div>
+    );
+  };
+  
+  // Fonction pour afficher tous les packs
+  const renderAllPacks = () => {
+    if (!packs) return null;
+    
+    return (
+      <div className="space-y-8 mt-4">
+        <h4 className="font-semibold text-lg">Tous les packs disponibles en {packs[0]?.year}</h4>
+        
+        {packs.map(pack => (
+          <div key={pack.id} className="border rounded-lg overflow-hidden">
+            <div className="bg-secondary/20 p-4 flex justify-between items-center">
+              <div>
+                <h5 className="font-bold text-lg">{pack.name}</h5>
+                <p className="text-sm text-muted-foreground">{pack.description}</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <p className="text-xs text-muted-foreground">Mensuel HT</p>
+                  <p className="font-medium">{pack.monthlyFeeHT} €</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-muted-foreground">Mensuel TTC</p>
+                  <p className="font-medium">{pack.monthlyFeeTTC} €</p>
+                </div>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b bg-secondary/10">
+                    <th className="text-left py-2 px-3">Honoraires cumulés</th>
+                    <th className="text-right py-2 px-3">Commission</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pack.ranges.map((range, idx) => (
+                    <tr key={idx} className="border-b">
+                      <td className="py-2 px-3">
+                        {range.minAmount === 0 ? '0' : formatCurrency(range.minAmount)} - {range.maxAmount === 999999999 ? '+' : formatCurrency(range.maxAmount)}
+                      </td>
+                      <td className="py-2 px-3 text-right font-medium">{range.percentage}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {pack.referralRate && (
+              <div className="p-3 bg-primary/5 border-t">
+                <p className="text-sm flex items-center gap-2">
+                  <Euro className="h-4 w-4" />
+                  <span>Taux référent: <span className="font-medium">{pack.referralRate}%</span></span>
+                </p>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     );
   };
@@ -190,6 +278,7 @@ const Settings = () => {
             </CardHeader>
             <CardContent>
               {renderCommissionPack()}
+              {renderAllPacks()}
             </CardContent>
           </Card>
         </TabsContent>

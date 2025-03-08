@@ -1,45 +1,134 @@
 
 import { CommissionPack, CommissionRange, AgentCommission, CommissionCalculationParams, RevenueRecord } from "@/types/commission";
 
-// Données statiques pour les packs de commission
+// Données 2025 pour les packs de commission
 const commissionPacks: CommissionPack[] = [
   {
-    id: "pack1",
-    name: "Pack Starter",
-    description: "Pack de démarrage pour nouveaux agents",
-    year: 2024,
+    id: "bronze",
+    name: "BRONZE",
+    description: "Pack Bronze pour agents",
+    year: 2025,
     isActive: true,
+    monthlyFeeHT: 119.00,
+    monthlyFeeTTC: 142.80,
     ranges: [
-      { minAmount: 0, maxAmount: 30000, percentage: 60 },
-      { minAmount: 30001, maxAmount: 60000, percentage: 70 },
-      { minAmount: 60001, maxAmount: 100000, percentage: 80 },
-      { minAmount: 100001, maxAmount: Infinity, percentage: 85 }
+      { minAmount: 0, maxAmount: 35000, percentage: 68 },
+      { minAmount: 35001, maxAmount: 70000, percentage: 72 },
+      { minAmount: 70001, maxAmount: 100000, percentage: 76 },
+      { minAmount: 100001, maxAmount: 150000, percentage: 80 },
+      { minAmount: 150001, maxAmount: 999999999, percentage: 84 }
     ]
   },
   {
-    id: "pack2",
-    name: "Pack Expert",
-    description: "Pack pour agents confirmés",
-    year: 2024,
+    id: "ivoire",
+    name: "IVOIRE",
+    description: "Pack Ivoire pour agents",
+    year: 2025,
     isActive: true,
+    monthlyFeeHT: 129.00,
+    monthlyFeeTTC: 154.80,
     ranges: [
-      { minAmount: 0, maxAmount: 50000, percentage: 70 },
-      { minAmount: 50001, maxAmount: 100000, percentage: 80 },
-      { minAmount: 100001, maxAmount: 150000, percentage: 85 },
-      { minAmount: 150001, maxAmount: Infinity, percentage: 90 }
+      { minAmount: 0, maxAmount: 35000, percentage: 70 },
+      { minAmount: 35001, maxAmount: 70000, percentage: 74 },
+      { minAmount: 70001, maxAmount: 100000, percentage: 78 },
+      { minAmount: 100001, maxAmount: 150000, percentage: 82 },
+      { minAmount: 150001, maxAmount: 999999999, percentage: 86 }
     ]
   },
   {
-    id: "pack3",
-    name: "Pack Elite",
-    description: "Pack pour agents d'élite",
-    year: 2024,
+    id: "silver",
+    name: "SILVER",
+    description: "Pack Silver pour agents",
+    year: 2025,
     isActive: true,
+    monthlyFeeHT: 179.00,
+    monthlyFeeTTC: 214.80,
     ranges: [
-      { minAmount: 0, maxAmount: 80000, percentage: 80 },
-      { minAmount: 80001, maxAmount: 150000, percentage: 85 },
-      { minAmount: 150001, maxAmount: 200000, percentage: 90 },
-      { minAmount: 200001, maxAmount: Infinity, percentage: 95 }
+      { minAmount: 0, maxAmount: 35000, percentage: 72 },
+      { minAmount: 35001, maxAmount: 70000, percentage: 76 },
+      { minAmount: 70001, maxAmount: 100000, percentage: 80 },
+      { minAmount: 100001, maxAmount: 150000, percentage: 84 },
+      { minAmount: 150001, maxAmount: 999999999, percentage: 88 }
+    ]
+  },
+  {
+    id: "emeraude",
+    name: "EMERAUDE",
+    description: "Pack Emeraude pour agents",
+    year: 2025,
+    isActive: true,
+    monthlyFeeHT: 79.00,
+    monthlyFeeTTC: 94.80,
+    ranges: [
+      { minAmount: 0, maxAmount: 35000, percentage: 62 },
+      { minAmount: 35001, maxAmount: 70000, percentage: 66 },
+      { minAmount: 70001, maxAmount: 100000, percentage: 70 },
+      { minAmount: 100001, maxAmount: 150000, percentage: 74 },
+      { minAmount: 150001, maxAmount: 999999999, percentage: 78 }
+    ]
+  },
+  {
+    id: "gold",
+    name: "GOLD",
+    description: "Pack Gold pour agents premium",
+    year: 2025,
+    isActive: true,
+    monthlyFeeHT: 229.00,
+    monthlyFeeTTC: 274.80,
+    ranges: [
+      { minAmount: 0, maxAmount: 35000, percentage: 75 },
+      { minAmount: 35001, maxAmount: 70000, percentage: 79 },
+      { minAmount: 70001, maxAmount: 100000, percentage: 83 },
+      { minAmount: 100001, maxAmount: 150000, percentage: 87 },
+      { minAmount: 150001, maxAmount: 999999999, percentage: 91 }
+    ]
+  },
+  {
+    id: "platinium",
+    name: "PLATINIUM",
+    description: "Pack Platinium pour agents élite",
+    year: 2025,
+    isActive: true,
+    monthlyFeeHT: 269.00,
+    monthlyFeeTTC: 322.80,
+    ranges: [
+      { minAmount: 0, maxAmount: 35000, percentage: 77 },
+      { minAmount: 35001, maxAmount: 70000, percentage: 81 },
+      { minAmount: 70001, maxAmount: 100000, percentage: 85 },
+      { minAmount: 100001, maxAmount: 150000, percentage: 89 },
+      { minAmount: 150001, maxAmount: 999999999, percentage: 93 }
+    ]
+  },
+  {
+    id: "platinium-referent",
+    name: "PLATINIUM REFERENT",
+    description: "Pack Platinium Référent pour agents élite",
+    year: 2025,
+    isActive: true,
+    monthlyFeeHT: 269.00,
+    monthlyFeeTTC: 322.80,
+    referralRate: 2.40,
+    ranges: [
+      { minAmount: 0, maxAmount: 35000, percentage: 79 },
+      { minAmount: 35001, maxAmount: 70000, percentage: 82 },
+      { minAmount: 70001, maxAmount: 100000, percentage: 86 },
+      { minAmount: 100001, maxAmount: 150000, percentage: 90 },
+      { minAmount: 150001, maxAmount: 999999999, percentage: 94 }
+    ]
+  },
+  {
+    id: "booster-pack",
+    name: "BOOSTER PACK",
+    description: "Pack Booster pour agents à haut potentiel",
+    year: 2025,
+    isActive: true,
+    monthlyFeeHT: 269.00,
+    monthlyFeeTTC: 322.80,
+    ranges: [
+      { minAmount: 0, maxAmount: 70000, percentage: 81 },
+      { minAmount: 70001, maxAmount: 100000, percentage: 86 },
+      { minAmount: 100001, maxAmount: 150000, percentage: 90 },
+      { minAmount: 150001, maxAmount: 999999999, percentage: 94 }
     ]
   }
 ];
@@ -48,14 +137,14 @@ const commissionPacks: CommissionPack[] = [
 let agentCommissions: AgentCommission[] = [
   {
     agentId: "1",
-    packId: "pack2",
+    packId: "silver",
     currentPercentage: 80,
     salesAmount: 95000,
     rentalAmount: 15000,
     propertyManagementAmount: 5000,
     totalAmount: 115000,
-    startDate: "2024-01-01",
-    endDate: "2024-12-31"
+    startDate: "2025-01-01",
+    endDate: "2025-12-31"
   }
 ];
 
@@ -66,7 +155,7 @@ let revenueRecords: RevenueRecord[] = [
     agentId: "1",
     source: "sale",
     amount: 95000,
-    date: "2024-05-15",
+    date: "2025-05-15",
     propertyAddress: "123 Rue de Paris, 75001 Paris",
     clientName: "Jean Dupont"
   },
@@ -75,7 +164,7 @@ let revenueRecords: RevenueRecord[] = [
     agentId: "1",
     source: "rental",
     amount: 15000,
-    date: "2024-04-10",
+    date: "2025-04-10",
     propertyAddress: "45 Avenue des Fleurs, 69000 Lyon",
     clientName: "Marie Martin"
   }

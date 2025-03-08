@@ -6,6 +6,9 @@ export interface CommissionPack {
   ranges: CommissionRange[];
   year: number;
   isActive: boolean;
+  monthlyFeeHT?: number;
+  monthlyFeeTTC?: number;
+  referralRate?: number;
 }
 
 export interface CommissionRange {
