@@ -138,10 +138,12 @@ export const createContact = async (contact: Omit<Contact, 'id' | 'createdAt' | 
 // Fonction pour extraire les informations d'une carte de visite scannée
 export const extractBusinessCardInfo = async (imageData: string): Promise<Partial<Contact>> => {
   // Dans une vraie application, on enverrait l'image à une API d'OCR/IA
+  console.log("Extracting business card info from image");
+  
   return new Promise((resolve) => {
     setTimeout(() => {
-      // Simuler une extraction réussie
-      resolve({
+      // Simuler une extraction réussie - données plus complètes pour démonstration
+      const extractedData: Partial<Contact> = {
         firstName: "Arthur",
         lastName: "Bernard",
         email: "a.bernard@entreprise.fr",
@@ -152,7 +154,10 @@ export const extractBusinessCardInfo = async (imageData: string): Promise<Partia
         city: "Paris",
         category: "prospect",
         source: "scan"
-      });
+      };
+      
+      console.log("Extracted data:", extractedData);
+      resolve(extractedData);
     }, 1500);
   });
 };

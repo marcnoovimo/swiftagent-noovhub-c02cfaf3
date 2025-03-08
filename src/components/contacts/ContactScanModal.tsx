@@ -49,6 +49,7 @@ const ContactScanModal: React.FC<ContactScanModalProps> = ({ open, onOpenChange 
     try {
       // Extract information from the business card
       const extractedData = await extractBusinessCardInfo(imageData);
+      console.log("Extracted data:", extractedData); // Debug log
       setContactData(extractedData);
       setScanComplete(true);
       setIsScanning(false);
@@ -96,12 +97,7 @@ const ContactScanModal: React.FC<ContactScanModalProps> = ({ open, onOpenChange 
 
         {showCamera ? (
           <DocumentScanner 
-            onCapture={(imageData) => handleCameraCapture(imageData, {
-              documentName: "Carte de visite",
-              category: "Contacts",
-              autoClassify: false,
-              accessLevel: "agent"
-            })}
+            onCapture={handleCameraCapture}
             options={{
               documentName: "Carte de visite",
               category: "Contacts",
