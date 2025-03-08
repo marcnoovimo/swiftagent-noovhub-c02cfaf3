@@ -46,3 +46,43 @@ export interface RevenueRecord {
   clientName?: string;
   notes?: string;
 }
+
+export interface CommissionSimulation {
+  baseAmount: number;
+  additionalAmount: number;
+  estimatedTotal: number;
+  currentPercentage: number;
+  estimatedPercentage: number;
+  currentCommission: number;
+  estimatedCommission: number;
+  increasedCommission: number;
+  nextThreshold?: number;
+}
+
+export interface InvoiceData {
+  id: string;
+  agentId: string;
+  agentName: string;
+  revenueId: string;
+  amount: number;
+  commissionAmount: number;
+  commissionRate: number;
+  status: 'draft' | 'submitted' | 'approved' | 'paid';
+  propertyAddress: string;
+  clientName: string;
+  createdAt: string;
+  updatedAt: string;
+  paidAt?: string;
+  notes?: string;
+}
+
+export interface Notification {
+  id: string;
+  userId: string;
+  type: 'compromis' | 'invoice_submitted' | 'invoice_approved' | 'invoice_paid' | 'commission_threshold';
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: string;
+  data?: any;
+}

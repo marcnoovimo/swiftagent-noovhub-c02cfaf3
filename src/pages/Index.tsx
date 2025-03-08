@@ -6,6 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PerformanceDashboard from '@/components/dashboard/PerformanceDashboard';
 import PerformanceCard from '@/components/dashboard/PerformanceCard';
 import ActivityFeed from '@/components/dashboard/ActivityFeed';
+import CommissionSimulator from '@/components/commission/CommissionSimulator';
+import MonthlyRevenueChart from '@/components/commission/MonthlyRevenueChart';
+import InvoiceGenerator from '@/components/invoice/InvoiceGenerator';
 import { Building, Home, Key, Percent, TrendingUp } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { CommissionService } from '@/services/commissionService';
@@ -90,6 +93,7 @@ const Index = () => {
               <TabsTrigger value="performance">Performance</TabsTrigger>
               <TabsTrigger value="commissions">Commissions</TabsTrigger>
               <TabsTrigger value="transactions">Transactions</TabsTrigger>
+              <TabsTrigger value="factures">Factures</TabsTrigger>
             </TabsList>
             <TabsContent value="performance">
               <Card>
@@ -170,6 +174,11 @@ const Index = () => {
                           </tbody>
                         </table>
                       </div>
+                      
+                      {/* Nouveau: Graphique d'évolution mensuelle */}
+                      <div className="mt-6">
+                        <MonthlyRevenueChart />
+                      </div>
                     </div>
                   )}
                 </CardContent>
@@ -188,20 +197,32 @@ const Index = () => {
                 </CardContent>
               </Card>
             </TabsContent>
+            <TabsContent value="factures">
+              <InvoiceGenerator />
+            </TabsContent>
           </Tabs>
         </div>
         <div className="md:col-span-2">
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle>Activité récente</CardTitle>
-              <CardDescription>
-                Derniers événements
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ActivityFeed />
-            </CardContent>
-          </Card>
+          <div className="grid gap-6 h-full">
+            <Card className="h-full md:h-[45%]">
+              <CardHeader>
+                <CardTitle>Activité récente</CardTitle>
+                <CardDescription>
+                  Derniers événements
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ActivityFeed />
+              </CardContent>
+            </Card>
+            
+            {/* Nouveau: Simulateur de commissions */}
+            <Card className="h-full md:h-[55%]">
+              <CardContent className="p-0">
+                <CommissionSimulator />
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

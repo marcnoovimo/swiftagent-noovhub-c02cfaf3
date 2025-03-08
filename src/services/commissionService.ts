@@ -1,5 +1,6 @@
 
-import { CommissionPack, CommissionRange, AgentCommission, CommissionCalculationParams, RevenueRecord } from "@/types/commission";
+import { CommissionPack, CommissionRange, AgentCommission, CommissionCalculationParams, RevenueRecord, CommissionSimulation } from "@/types/commission";
+import { NotificationService } from "./notificationService";
 
 // Données 2025 pour les packs de commission
 const commissionPacks: CommissionPack[] = [
@@ -170,6 +171,22 @@ let revenueRecords: RevenueRecord[] = [
   }
 ];
 
+// Données fictives pour l'évolution mensuelle du chiffre d'affaires
+const monthlyRevenueData = [
+  { month: "Jan", revenue: 15000, commission: 10800 },
+  { month: "Fév", revenue: 20000, commission: 14400 },
+  { month: "Mar", revenue: 18000, commission: 12960 },
+  { month: "Avr", revenue: 22000, commission: 16720 },
+  { month: "Mai", revenue: 35000, commission: 26600 },
+  { month: "Juin", revenue: 40000, commission: 30400 },
+  { month: "Juil", revenue: 0, commission: 0 },
+  { month: "Août", revenue: 0, commission: 0 },
+  { month: "Sep", revenue: 0, commission: 0 },
+  { month: "Oct", revenue: 0, commission: 0 },
+  { month: "Nov", revenue: 0, commission: 0 },
+  { month: "Déc", revenue: 0, commission: 0 }
+];
+
 export const CommissionService = {
   // Obtenir tous les packs de commission
   getCommissionPacks: (): Promise<CommissionPack[]> => {
@@ -189,8 +206,9 @@ export const CommissionService = {
   },
 
   // Mettre à jour le pack d'un agent
-  updateAgentPack: (agentId: string, packId: string): Promise<AgentCommission> => {
+  updateAgentPack: async (agentId: string, packId: string): Promise<AgentCommission> => {
     let commission = agentCommissions.find(c => c.agentId === agentId);
+    const oldPercentage = commission?.currentPercentage || 0;
     
     if (commission) {
       commission.packId = packId;
@@ -213,11 +231,18 @@ export const CommissionService = {
       agentCommissions.push(commission);
     }
     
+    // Vérifier si le changement de pack a déclenché un nouveau palier
+    await NotificationService.checkCommissionThreshold(
+      agentId, 
+      oldPercentage, 
+      commission.currentPercentage
+    );
+    
     return Promise.resolve(commission);
   },
 
   // Ajouter un revenu
-  addRevenue: (record: Omit<RevenueRecord, 'id'>): Promise<RevenueRecord> => {
+  addRevenue: async (record: Omit<RevenueRecord, 'id'>): Promise<RevenueRecord> => {
     const newRecord: RevenueRecord = {
       ...record,
       id: `rev${revenueRecords.length + 1}`
@@ -227,6 +252,7 @@ export const CommissionService = {
     
     // Mettre à jour la commission de l'agent
     const commission = agentCommissions.find(c => c.agentId === record.agentId);
+    const oldPercentage = commission?.currentPercentage || 0;
     
     if (commission) {
       if (record.source === 'sale') {
@@ -241,6 +267,26 @@ export const CommissionService = {
       commission.currentPercentage = CommissionService.calculateCurrentPercentage({
         amount: commission.totalAmount,
         packId: commission.packId
+      });
+    }
+    
+    // Vérifier si l'ajout de revenu a déclenché un nouveau palier
+    if (commission) {
+      await NotificationService.checkCommissionThreshold(
+        record.agentId, 
+        oldPercentage, 
+        commission.currentPercentage
+      );
+    }
+    
+    // Créer une notification pour un compromis
+    if (record.source === 'sale') {
+      await NotificationService.createNotification({
+        userId: record.agentId,
+        type: 'compromis',
+        title: 'Nouveau compromis enregistré',
+        message: `Un compromis a été enregistré pour la propriété à ${record.propertyAddress || 'adresse non spécifiée'}.`,
+        data: { revenueId: newRecord.id }
       });
     }
     
@@ -332,6 +378,68 @@ export const CommissionService = {
       nextPercentage: nextRange.percentage,
       amountNeeded,
       progress
+    });
+  },
+  
+  // Obtenir l'évolution mensuelle du chiffre d'affaires
+  getMonthlyRevenue: (agentId: string): Promise<{ month: string; revenue: number; commission: number; }[]> => {
+    // Dans une vraie application, ces données viendraient d'une API qui les calculerait à partir des transactions réelles
+    return Promise.resolve(monthlyRevenueData);
+  },
+  
+  // Simuler l'impact d'un montant supplémentaire sur la commission
+  simulateCommission: async (params: { agentId: string; additionalAmount: number }): Promise<CommissionSimulation> => {
+    const { agentId, additionalAmount } = params;
+    
+    // Récupérer les données actuelles de l'agent
+    const commission = await CommissionService.getAgentCommission(agentId);
+    if (!commission) {
+      throw new Error("Agent commission not found");
+    }
+    
+    const pack = await CommissionService.getCommissionPack(commission.packId);
+    if (!pack) {
+      throw new Error("Commission pack not found");
+    }
+    
+    // Calculer les valeurs actuelles
+    const baseAmount = commission.totalAmount;
+    const currentPercentage = commission.currentPercentage;
+    const currentCommission = baseAmount * (currentPercentage / 100);
+    
+    // Simuler avec le montant additionnel
+    const estimatedTotal = baseAmount + additionalAmount;
+    const estimatedPercentage = CommissionService.calculateCurrentPercentage({
+      amount: estimatedTotal,
+      packId: commission.packId
+    });
+    const estimatedCommission = estimatedTotal * (estimatedPercentage / 100);
+    const increasedCommission = estimatedCommission - currentCommission;
+    
+    // Déterminer le prochain seuil
+    let nextThreshold: number | undefined;
+    
+    const currentRange = pack.ranges.find(range => 
+      estimatedTotal >= range.minAmount && estimatedTotal <= range.maxAmount
+    );
+    
+    if (currentRange) {
+      const currentIndex = pack.ranges.indexOf(currentRange);
+      if (currentIndex < pack.ranges.length - 1) {
+        nextThreshold = pack.ranges[currentIndex + 1].minAmount;
+      }
+    }
+    
+    return Promise.resolve({
+      baseAmount,
+      additionalAmount,
+      estimatedTotal,
+      currentPercentage,
+      estimatedPercentage,
+      currentCommission,
+      estimatedCommission,
+      increasedCommission,
+      nextThreshold
     });
   }
 };
