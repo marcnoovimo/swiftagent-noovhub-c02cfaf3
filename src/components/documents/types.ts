@@ -15,6 +15,10 @@ export interface Document {
   unread?: boolean;
   isScanned?: boolean; // Flag to indicate if document was scanned
   scanDate?: string; // Date when document was scanned
+  analyzeText?: boolean; // Flag to indicate if document text should be analyzed
+  extractedContent?: string; // Content extracted from document via OCR
+  confidenceScore?: number; // OCR confidence score
+  classificationScore?: number; // Auto-classification confidence score
 }
 
 export interface Folder {
@@ -49,4 +53,5 @@ export interface ScanOptions {
   accessLevel: AccessLevel;
   documentName: string;
   autoClassify: boolean;
+  analyzeText?: boolean; // Option pour analyser le texte du document scanné
 }
