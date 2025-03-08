@@ -159,16 +159,23 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
     padding-right: 0.5rem !important;
   }
   
+  /* Improved card-grid for better mobile alignment */
   .card-grid {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    width: 90%;
+    width: 80%; /* Reduce width to 80% to match screenshot */
     margin: 0 auto;
   }
   
   .card-grid > div {
     width: 100%;
+  }
+
+  /* Narrower container for performance card sections */
+  .performance-section {
+    width: 80%;
+    margin: 0 auto;
   }
 }
 

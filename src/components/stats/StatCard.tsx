@@ -31,7 +31,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, change, positiv
           )}
         </div>
         
-        <div className="bg-noovimo-50 p-1.5 rounded-lg">
+        <div className="bg-noovimo-50 p-1 rounded-lg">
           {icon}
         </div>
       </div>
