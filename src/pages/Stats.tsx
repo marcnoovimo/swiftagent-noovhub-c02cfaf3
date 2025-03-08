@@ -54,6 +54,17 @@ const Stats = () => {
     return value;
   };
 
+  // Custom label for pie chart that works on mobile screens
+  const renderPieChartLabel = ({ name, percent }: { name: string; percent: number }) => {
+    // On small screens, only show the percentage
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 400) {
+      return `${(percent * 100).toFixed(0)}%`;
+    }
+    // On larger screens, show name and percentage
+    return `${name}: ${(percent * 100).toFixed(0)}%`;
+  };
+
   if (isLoading || !stats) {
     return (
       <div className="container mx-auto px-4 py-8 animate-fade-in">
@@ -67,7 +78,7 @@ const Stats = () => {
   }
 
   return (
-    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 animate-fade-in overflow-x-hidden">
+    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start mb-4 sm:mb-6 gap-2 sm:gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Statistiques de performance</h1>
@@ -78,9 +89,9 @@ const Stats = () => {
         <TimeFilterSelector activeFilter={timeFilter} onChange={setTimeFilter} />
       </div>
       
-      {/* Performance Dashboard Component */}
-      <div className="w-full overflow-x-auto">
-        <div className="min-w-[300px]">
+      {/* Performance Dashboard Component with min-width to ensure correct display */}
+      <div className="w-full overflow-x-auto pb-2">
+        <div className="min-w-[320px]">
           <PerformanceDashboard />
         </div>
       </div>
@@ -89,22 +100,22 @@ const Stats = () => {
         <StatCard
           title="Ventes réalisées"
           value={stats.totalSales}
-          icon={<Home size={24} className="text-noovimo-500" />}
+          icon={<Home size={20} className="text-noovimo-500" />}
         />
         <StatCard
           title="Compromis signés"
           value={stats.totalCompromis}
-          icon={<Building2 size={24} className="text-noovimo-500" />}
+          icon={<Building2 size={20} className="text-noovimo-500" />}
         />
         <StatCard
           title="Volume de transactions"
           value={formatCurrency(stats.totalVolume)}
-          icon={<BarChart3 size={24} className="text-noovimo-500" />}
+          icon={<BarChart3 size={20} className="text-noovimo-500" />}
         />
         <StatCard
           title="Commissions totales"
           value={formatCurrency(stats.totalCommission)}
-          icon={<CreditCard size={24} className="text-noovimo-500" />}
+          icon={<CreditCard size={20} className="text-noovimo-500" />}
         />
       </div>
       
@@ -117,7 +128,7 @@ const Stats = () => {
               <TabsTrigger value="line" className="flex-1 xs:flex-none text-xs sm:text-sm">Courbe</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="bar" className="h-[250px] sm:h-[300px] w-full">
+            <TabsContent value="bar" className="h-[200px] xs:h-[250px] sm:h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart 
                   data={stats.monthlySales}
@@ -126,21 +137,21 @@ const Stats = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month" 
-                    tick={{fontSize: 10}}
+                    tick={{fontSize: 9}}
                     tickFormatter={(value) => value.substring(0, 3)} 
                   />
-                  <YAxis tick={{fontSize: 10}} width={25} />
+                  <YAxis tick={{fontSize: 9}} width={25} />
                   <Tooltip 
                     formatter={formatTooltipValue}
-                    contentStyle={{ fontSize: '12px' }}
+                    contentStyle={{ fontSize: '11px' }}
                   />
-                  <Legend wrapperStyle={{ fontSize: '10px' }} />
+                  <Legend wrapperStyle={{ fontSize: '9px' }} />
                   <Bar name="Ventes" dataKey="value" fill="#8B5CF6" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
             
-            <TabsContent value="line" className="h-[250px] sm:h-[300px] w-full">
+            <TabsContent value="line" className="h-[200px] xs:h-[250px] sm:h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart 
                   data={stats.monthlySales}
@@ -149,21 +160,21 @@ const Stats = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month" 
-                    tick={{fontSize: 10}}
+                    tick={{fontSize: 9}}
                     tickFormatter={(value) => value.substring(0, 3)} 
                   />
-                  <YAxis tick={{fontSize: 10}} width={25} />
+                  <YAxis tick={{fontSize: 9}} width={25} />
                   <Tooltip 
                     formatter={formatTooltipValue}
-                    contentStyle={{ fontSize: '12px' }}
+                    contentStyle={{ fontSize: '11px' }}
                   />
-                  <Legend wrapperStyle={{ fontSize: '10px' }} />
+                  <Legend wrapperStyle={{ fontSize: '9px' }} />
                   <Line 
                     type="monotone" 
                     name="Ventes" 
                     dataKey="value" 
                     stroke="#8B5CF6" 
-                    activeDot={{ r: 6 }}
+                    activeDot={{ r: 4 }}
                     strokeWidth={2} 
                   />
                 </LineChart>
@@ -174,7 +185,7 @@ const Stats = () => {
         
         <div className="glass-card rounded-xl p-2 sm:p-4 overflow-hidden">
           <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Répartition des commissions</h3>
-          <div className="h-[250px] sm:h-[300px] flex items-center justify-center w-full">
+          <div className="h-[200px] xs:h-[250px] sm:h-[300px] flex items-center justify-center w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
                 <Pie
@@ -182,12 +193,11 @@ const Stats = () => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  outerRadius={70}
+                  outerRadius={65}
                   fill="#8884d8"
                   dataKey="value"
                   nameKey="name"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  labelStyle={{fontSize: '10px'}}
+                  label={renderPieChartLabel}
                 >
                   {stats.commissionsByType.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -205,7 +215,7 @@ const Stats = () => {
       
       <div className="glass-card rounded-xl p-2 sm:p-4 mb-4 sm:mb-8 overflow-hidden">
         <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Évolution des commissions</h3>
-        <div className="h-[250px] sm:h-[300px] w-full">
+        <div className="h-[200px] xs:h-[250px] sm:h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart 
               data={stats.monthlyCommissions}
@@ -214,31 +224,31 @@ const Stats = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
                 dataKey="month" 
-                tick={{fontSize: 10}}
+                tick={{fontSize: 9}}
                 tickFormatter={(value) => value.substring(0, 3)} 
               />
               <YAxis 
                 tickFormatter={(value) => `${(value / 1000).toFixed(0)}k€`} 
-                tick={{fontSize: 10}}
-                width={35}
+                tick={{fontSize: 9}}
+                width={30}
               />
               <Tooltip 
                 formatter={(value) => formatCurrency(value as number)}
                 contentStyle={{ fontSize: '10px' }}
               />
-              <Legend wrapperStyle={{ fontSize: '10px' }} />
+              <Legend wrapperStyle={{ fontSize: '9px' }} />
               <Bar name="Commissions" dataKey="value" fill="#EC4899" />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
       
-      <div className="glass-card rounded-xl p-2 sm:p-4 sm:p-6 overflow-x-auto">
+      <div className="glass-card rounded-xl p-2 sm:p-4 overflow-x-auto">
         <div className="flex items-center justify-between mb-2 sm:mb-4">
           <h3 className="text-base sm:text-lg font-semibold">Transactions récentes</h3>
         </div>
         <div className="overflow-x-auto w-full">
-          <div className="min-w-[600px]">
+          <div className="min-w-[300px]">
             <TransactionTable transactions={stats.transactions.slice(0, 5)} />
           </div>
         </div>
