@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, Upload } from 'lucide-react';
 
 interface DocumentSearchProps {
   searchQuery: string;

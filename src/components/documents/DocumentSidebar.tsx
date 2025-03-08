@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { FolderOpen, Star } from 'lucide-react';
+import { FolderOpen, Star, Plus } from 'lucide-react';
 import { Folder, Category } from './types';
 
 interface DocumentSidebarProps {
