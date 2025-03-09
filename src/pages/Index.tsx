@@ -90,7 +90,7 @@ const Index = () => {
 
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <PerformanceCard
-          title="Honoraires € HT"
+          title="Honoraires HT"
           value={statsData?.totalRevenue || "0 €"}
           description="Cumul annuel"
           icon={<Euro className="h-4 w-4" />}
@@ -98,7 +98,7 @@ const Index = () => {
         <PerformanceCard
           title="Unités de ventes"
           value={statsData?.salesCount || "0"}
-          description="Transactions cette année"
+          description="Cumul annuel"
           icon={<TrendingUp className="h-4 w-4" />}
         />
         <PerformanceCard
@@ -140,19 +140,58 @@ const Index = () => {
               </TabsList>
 
               <TabsContent value="pending" className="space-y-4">
-                <div className="text-center py-8 text-muted-foreground text-sm">
-                  Aucune transaction en cours
+                <div className="rounded-lg border">
+                  <div className="p-4 flex justify-between items-start">
+                    <div className="space-y-1">
+                      <p className="font-medium">Appartement à Nantes</p>
+                      <p className="text-sm text-muted-foreground">Vendeur: Dupont Jean</p>
+                      <p className="text-sm text-muted-foreground">Acquéreur: Martin Sophie</p>
+                      <div className="flex gap-4 mt-1">
+                        <p className="text-xs text-muted-foreground">Avant-contrat: 15/03/2023</p>
+                        <p className="text-xs text-muted-foreground">Acte prévu: 15/06/2023</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold">7 500 €</p>
+                      <p className="text-xs text-muted-foreground">Honoraires</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="rounded-lg border">
+                  <div className="p-4 flex justify-between items-start">
+                    <div className="space-y-1">
+                      <p className="font-medium">Maison à Saint-Herblain</p>
+                      <p className="text-sm text-muted-foreground">Vendeur: Leroy Michel</p>
+                      <p className="text-sm text-muted-foreground">Acquéreur: Petit Laura</p>
+                      <div className="flex gap-4 mt-1">
+                        <p className="text-xs text-muted-foreground">Avant-contrat: 02/04/2023</p>
+                        <p className="text-xs text-muted-foreground">Acte prévu: 02/07/2023</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold">12 300 €</p>
+                      <p className="text-xs text-muted-foreground">Honoraires</p>
+                    </div>
+                  </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="completed" className="space-y-4">
                 <div className="rounded-lg border">
-                  <div className="p-4 flex justify-between items-center">
-                    <div>
+                  <div className="p-4 flex justify-between items-start">
+                    <div className="space-y-1">
                       <p className="font-medium">Appartement à Nantes</p>
-                      <p className="text-sm text-muted-foreground">Vendu le 01/04/2023</p>
+                      <p className="text-sm text-muted-foreground">Vendeur: Moreau Philippe</p>
+                      <p className="text-sm text-muted-foreground">Acquéreur: Thomas Pierre</p>
+                      <div className="flex gap-4 mt-1">
+                        <p className="text-xs text-muted-foreground">Avant-contrat: 01/02/2023</p>
+                        <p className="text-xs text-muted-foreground">Acte final: 01/04/2023</p>
+                      </div>
                     </div>
-                    <p className="font-bold">280 000 €</p>
+                    <div className="text-right">
+                      <p className="font-bold">8 400 €</p>
+                      <p className="text-xs text-muted-foreground">Honoraires</p>
+                    </div>
                   </div>
                 </div>
               </TabsContent>

@@ -59,72 +59,90 @@ const MonthlyRevenueChart = () => {
           </TabsList>
           
           <TabsContent value="line" className="h-[250px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={monthlyRevenue}
-                margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" tick={{ fontSize: 10 }} />
-                <YAxis 
-                  tickFormatter={(value) => `${(value / 1000)}k€`}
-                  tick={{ fontSize: 10 }}
-                  width={40}
-                />
-                <Tooltip 
-                  formatter={formatTooltipValue}
-                  contentStyle={{ fontSize: '12px' }}
-                />
-                <Legend wrapperStyle={{ fontSize: '10px' }} />
-                <Line
-                  type="monotone"
-                  dataKey="revenue"
-                  name="Honoraires"
-                  stroke="#8884d8"
-                  activeDot={{ r: 6 }}
-                  strokeWidth={2}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="commission"
-                  name="Commission"
-                  stroke="#82ca9d"
-                  strokeWidth={2}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+            <div className="h-[220px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={monthlyRevenue}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                  <YAxis 
+                    tickFormatter={(value) => `${(value / 1000)}k€`}
+                    tick={{ fontSize: 10 }}
+                    width={40}
+                  />
+                  <Tooltip 
+                    formatter={formatTooltipValue}
+                    contentStyle={{ fontSize: '12px' }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="revenue"
+                    name="Honoraires"
+                    stroke="#8884d8"
+                    activeDot={{ r: 6 }}
+                    strokeWidth={2}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="commission"
+                    name="Commission"
+                    stroke="#82ca9d"
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-2 text-center">
+              <Legend 
+                wrapperStyle={{ fontSize: '10px', display: 'inline-block' }} 
+                layout="horizontal"
+                align="center"
+                verticalAlign="bottom"
+              />
+            </div>
           </TabsContent>
           
           <TabsContent value="bar" className="h-[250px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={monthlyRevenue}
-                margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" tick={{ fontSize: 10 }} />
-                <YAxis 
-                  tickFormatter={(value) => `${(value / 1000)}k€`}
-                  tick={{ fontSize: 10 }}
-                  width={40}
-                />
-                <Tooltip 
-                  formatter={formatTooltipValue}
-                  contentStyle={{ fontSize: '12px' }}
-                />
-                <Legend wrapperStyle={{ fontSize: '10px' }} />
-                <Bar
-                  dataKey="revenue"
-                  name="Honoraires cumulés"
-                  fill="#8884d8"
-                />
-                <Bar
-                  dataKey="commission"
-                  name="Commission cumulés"
-                  fill="#82ca9d"
-                />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="h-[220px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={monthlyRevenue}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                  <YAxis 
+                    tickFormatter={(value) => `${(value / 1000)}k€`}
+                    tick={{ fontSize: 10 }}
+                    width={40}
+                  />
+                  <Tooltip 
+                    formatter={formatTooltipValue}
+                    contentStyle={{ fontSize: '12px' }}
+                  />
+                  <Bar
+                    dataKey="revenue"
+                    name="Honoraires cumulés"
+                    fill="#8884d8"
+                  />
+                  <Bar
+                    dataKey="commission"
+                    name="Commission cumulés"
+                    fill="#82ca9d"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-2 text-center">
+              <Legend 
+                wrapperStyle={{ fontSize: '10px', display: 'inline-block' }} 
+                layout="horizontal"
+                align="center"
+                verticalAlign="bottom"
+              />
+            </div>
           </TabsContent>
         </Tabs>
       </CardContent>
