@@ -17,6 +17,7 @@ import TransactionTable from '@/components/stats/TransactionTable';
 import PerformanceDashboard from '@/components/dashboard/PerformanceDashboard';
 import { useMediaQuery } from '@/hooks/use-mobile';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Helmet } from 'react-helmet';
 
 const Stats = () => {
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('year');
@@ -70,6 +71,9 @@ const Stats = () => {
   if (isLoading || !stats) {
     return (
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        <Helmet>
+          <title>Statistiques | Intranet Noovimo</title>
+        </Helmet>
         <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
           <Skeleton className="h-12 w-64" />
           <Skeleton className="h-10 w-40" />
@@ -90,6 +94,10 @@ const Stats = () => {
 
   return (
     <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 animate-fade-in">
+      <Helmet>
+        <title>Statistiques | Intranet Noovimo</title>
+      </Helmet>
+      
       <div className="flex flex-col md:flex-row justify-between items-start mb-4 sm:mb-6 gap-2 sm:gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Statistiques de performance</h1>

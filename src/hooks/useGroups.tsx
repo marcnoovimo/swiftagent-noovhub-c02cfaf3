@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { Group, GroupMessage } from '@/types/group';
@@ -10,7 +10,6 @@ export const useGroups = () => {
   const [activeGroup, setActiveGroup] = useState<Group | null>(null);
   const [groupMessages, setGroupMessages] = useState<GroupMessage[]>([]);
   const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
   const { user } = useAuth();
 
   // Fonction pour charger tous les groupes dont l'utilisateur est membre
@@ -82,11 +81,7 @@ export const useGroups = () => {
       setLoading(false);
     } catch (error) {
       console.error('Erreur lors du chargement des groupes:', error);
-      toast({
-        title: 'Erreur',
-        description: 'Impossible de charger les groupes de discussion',
-        variant: 'destructive',
-      });
+      toast.error('Impossible de charger les groupes de discussion');
       setLoading(false);
     }
   };
@@ -176,11 +171,7 @@ export const useGroups = () => {
       setLoading(false);
     } catch (error) {
       console.error('Erreur lors du chargement des messages:', error);
-      toast({
-        title: 'Erreur',
-        description: 'Impossible de charger les messages du groupe',
-        variant: 'destructive',
-      });
+      toast.error('Impossible de charger les messages du groupe');
       setLoading(false);
     }
   };
@@ -225,11 +216,7 @@ export const useGroups = () => {
       return true;
     } catch (error) {
       console.error('Erreur lors de l\'envoi du message:', error);
-      toast({
-        title: 'Erreur',
-        description: 'Impossible d\'envoyer le message',
-        variant: 'destructive',
-      });
+      toast.error('Impossible d\'envoyer le message');
       return false;
     }
   };
@@ -253,19 +240,12 @@ export const useGroups = () => {
       };
       
       setGroups(prev => [newGroup, ...prev]);
-      toast({
-        title: 'Succès',
-        description: `Le groupe "${name}" a été créé`,
-      });
+      toast.success(`Le groupe "${name}" a été créé`);
       
       return true;
     } catch (error) {
       console.error('Erreur lors de la création du groupe:', error);
-      toast({
-        title: 'Erreur',
-        description: 'Impossible de créer le groupe',
-        variant: 'destructive',
-      });
+      toast.error('Impossible de créer le groupe');
       return false;
     }
   };
@@ -282,18 +262,12 @@ export const useGroups = () => {
         )
       );
       
-      toast({
-        description: 'Vous avez rejoint le groupe',
-      });
+      toast.success('Vous avez rejoint le groupe');
       
       return true;
     } catch (error) {
       console.error('Erreur lors de l\'adhésion au groupe:', error);
-      toast({
-        title: 'Erreur',
-        description: 'Impossible de rejoindre le groupe',
-        variant: 'destructive',
-      });
+      toast.error('Impossible de rejoindre le groupe');
       return false;
     }
   };

@@ -6,6 +6,7 @@ import InstantMessages from '@/components/messages/InstantMessages';
 import GroupDiscussions from '@/components/messages/GroupDiscussions';
 import EmailClient from '@/components/messages/EmailClient';
 import { useAuth } from '@/context/AuthContext';
+import { Helmet } from 'react-helmet';
 
 const Messages = () => {
   const { user } = useAuth();
@@ -17,6 +18,10 @@ const Messages = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
+      <Helmet>
+        <title>Communication | Intranet Noovimo</title>
+      </Helmet>
+      
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Communication</h1>
         <p className="text-muted-foreground mt-1">Gérez vos communications en temps réel sur tous vos appareils</p>
