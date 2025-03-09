@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { Camera, FileText, X, Check } from 'lucide-react';
+import { Camera, FileText, X, Check, FileUp } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription } from '@/components/ui/form';
@@ -14,6 +14,7 @@ interface DocumentScanFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   capturedImage: string | null;
+  selectedFile: File | null;
   onImageCapture: (imageData: string) => void;
   onClose: () => void;
 }
@@ -83,11 +84,13 @@ const DocumentScanForm: React.FC<DocumentScanFormProps> = ({
   open,
   onOpenChange,
   capturedImage,
+  selectedFile,
   onImageCapture,
   onClose
 }) => {
   const [isCameraActive, setIsCameraActive] = useState<boolean>(false);
   const [isCapturing, setIsCapturing] = useState<boolean>(false);
+  const [pdfPreviewUrl, setPdfPreviewUrl] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const { toast } = useToast();
 
@@ -134,6 +137,19 @@ const DocumentScanForm: React.FC<DocumentScanFormProps> = ({
     }
   });
 
+  // Generate PDF preview URL when selectedFile changes
+  React.useEffect(() => {
+    if (selectedFile) {
+      const url = URL.createObjectURL(selectedFile);
+      setPdfPreviewUrl(url);
+      
+      // Clean up the URL when the component unmounts or the file changes
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    }
+  }, [selectedFile]);
+
   const onSubmit = (data: ScanFormData) => {
     console.log('Document data submitted:', data);
     
@@ -152,7 +168,9 @@ const DocumentScanForm: React.FC<DocumentScanFormProps> = ({
     // Process the completed form
     toast({
       title: "Document enregistré",
-      description: "Le document scanné et les métadonnées ont été enregistrés avec succès."
+      description: selectedFile 
+        ? "Le document importé et les métadonnées ont été enregistrés avec succès."
+        : "Le document scanné et les métadonnées ont été enregistrés avec succès."
     });
     
     // Close the form
@@ -262,6 +280,9 @@ const DocumentScanForm: React.FC<DocumentScanFormProps> = ({
     return () => subscription.unsubscribe();
   }, [form.watch]);
 
+  // Determine if we have a document to show (either scanned or imported)
+  const hasDocument = capturedImage || selectedFile;
+
   return (
     <Dialog open={open} onOpenChange={(isOpen) => {
       if (!isOpen) {
@@ -271,10 +292,12 @@ const DocumentScanForm: React.FC<DocumentScanFormProps> = ({
     }}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Numérisation de document</DialogTitle>
+          <DialogTitle>
+            {selectedFile ? "Importer un document" : "Numérisation de document"}
+          </DialogTitle>
         </DialogHeader>
         
-        {!capturedImage && !isCameraActive && (
+        {!hasDocument && !isCameraActive && (
           <div className="flex flex-col items-center justify-center p-6">
             <Button onClick={startCamera} className="flex items-center gap-2">
               <Camera size={16} />
@@ -316,15 +339,35 @@ const DocumentScanForm: React.FC<DocumentScanFormProps> = ({
           </div>
         )}
         
-        {capturedImage && (
+        {hasDocument && (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="flex flex-col md:flex-row gap-4 items-start">
                 <div className="w-full md:w-1/3 mb-4">
                   <div className="rounded-lg overflow-hidden border border-gray-200">
-                    <img src={capturedImage} alt="Document scanné" className="w-full" />
+                    {capturedImage && (
+                      <img src={capturedImage} alt="Document scanné" className="w-full" />
+                    )}
+                    {selectedFile && pdfPreviewUrl && (
+                      <div className="relative bg-gray-100 p-4 rounded-lg flex flex-col items-center justify-center aspect-video">
+                        <FileText size={48} className="text-gray-500 mb-2" />
+                        <p className="text-sm font-medium text-center break-all">{selectedFile.name}</p>
+                        <div className="mt-2">
+                          <a 
+                            href={pdfPreviewUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-blue-500 hover:underline text-xs"
+                          >
+                            Aperçu du PDF
+                          </a>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  <p className="text-sm text-muted-foreground mt-2 text-center">Document numérisé</p>
+                  <p className="text-sm text-muted-foreground mt-2 text-center">
+                    {selectedFile ? "Document importé" : "Document numérisé"}
+                  </p>
                 </div>
                 
                 <div className="w-full md:w-2/3 space-y-6">
