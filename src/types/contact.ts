@@ -24,4 +24,6 @@ export interface Contact {
     date: string;
     summary: string;
   }[];
+  gender?: 'male' | 'female' | 'other';
+  dateOfBirth?: string;
 }

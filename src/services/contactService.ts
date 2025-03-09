@@ -119,6 +119,25 @@ export const fetchContactById = async (id: string): Promise<Contact | undefined>
   });
 };
 
+// Fonction pour vérifier si un contact existe déjà par téléphone ou email
+export const checkContactExists = async (phone?: string, email?: string): Promise<Contact | null> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      if (!phone && !email) {
+        resolve(null);
+        return;
+      }
+      
+      const contact = mockContacts.find(contact => 
+        (phone && (contact.phone === phone || contact.mobile === phone)) || 
+        (email && (contact.email === email || contact.emailPro === email))
+      );
+      
+      resolve(contact || null);
+    }, 500);
+  });
+};
+
 // Fonction pour créer un nouveau contact
 export const createContact = async (contact: Omit<Contact, 'id' | 'createdAt' | 'updatedAt'>): Promise<Contact> => {
   return new Promise((resolve) => {
@@ -133,6 +152,55 @@ export const createContact = async (contact: Omit<Contact, 'id' | 'createdAt' | 
       resolve(newContact);
     }, 500);
   });
+};
+
+// Fonction pour créer un contact à partir d'un document scanné
+export const createContactFromDocument = async (
+  documentData: { 
+    type: 'buyer' | 'seller' | 'notary';
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    email?: string;
+    company?: string;
+    city?: string;
+  }
+): Promise<Contact | null> => {
+  // Vérifier si le contact existe déjà
+  const existingContact = await checkContactExists(documentData.phone, documentData.email);
+  
+  if (existingContact) {
+    console.log(`Contact existant trouvé: ${existingContact.firstName} ${existingContact.lastName}`);
+    return existingContact;
+  }
+  
+  // Déterminer la catégorie en fonction du type de document
+  let category: Contact['category'] = 'client';
+  if (documentData.type === 'notary') {
+    category = 'notary';
+  } else if (documentData.type === 'buyer' || documentData.type === 'seller') {
+    category = 'client';
+  }
+  
+  // Créer le nouveau contact
+  const newContactData: Omit<Contact, 'id' | 'createdAt' | 'updatedAt'> = {
+    firstName: documentData.firstName || '',
+    lastName: documentData.lastName || '',
+    phone: documentData.phone,
+    email: documentData.email,
+    company: documentData.company,
+    city: documentData.city,
+    category,
+    tags: documentData.type === 'buyer' ? ['acquéreur'] : 
+           documentData.type === 'seller' ? ['vendeur'] : 
+           documentData.type === 'notary' ? ['notaire'] : [],
+    source: 'scan',
+  };
+  
+  const newContact = await createContact(newContactData);
+  console.log(`Nouveau contact créé: ${newContact.firstName} ${newContact.lastName}`);
+  
+  return newContact;
 };
 
 // Fonction pour extraire les informations d'une carte de visite scannée
@@ -191,5 +259,27 @@ export const exportContacts = async (format: 'csv' | 'vcard'): Promise<string> =
       // Retourne une URL de téléchargement fictive
       resolve("data:text/csv;charset=utf-8,exported_contacts.csv");
     }, 1000);
+  });
+};
+
+// Fonction pour mettre à jour un contact existant
+export const updateContact = async (id: string, updates: Partial<Contact>): Promise<Contact | undefined> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const index = mockContacts.findIndex(c => c.id === id);
+      if (index === -1) {
+        resolve(undefined);
+        return;
+      }
+      
+      const updatedContact = {
+        ...mockContacts[index],
+        ...updates,
+        updatedAt: new Date().toISOString()
+      };
+      
+      mockContacts[index] = updatedContact;
+      resolve(updatedContact);
+    }, 500);
   });
 };
