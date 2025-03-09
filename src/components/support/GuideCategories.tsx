@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/accordion";
 import { Guide, GuideCategory } from './types';
 import { cn } from '@/lib/utils';
+import SearchResultItem from './SearchResultItem';
+import CategoryGuideList from './CategoryGuideList';
 
 interface GuideCategoriesProps {
   categories: GuideCategory[];
@@ -28,23 +30,11 @@ const GuideCategories: React.FC<GuideCategoriesProps> = ({
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
         <h3 className="font-medium mb-4">Résultats de recherche ({searchResults.length})</h3>
-        <ul className="space-y-2">
-          {searchResults.map((guide) => (
-            <li key={guide.id}>
-              <button
-                onClick={() => setActiveGuide(guide)}
-                className={cn(
-                  "w-full text-left px-3 py-2 rounded-md text-sm transition-colors",
-                  activeGuide?.id === guide.id
-                    ? "bg-noovimo-50 text-noovimo-700 font-medium dark:bg-gray-700 dark:text-noovimo-300"
-                    : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                )}
-              >
-                {guide.title}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <SearchResultItem 
+          searchResults={searchResults}
+          activeGuideId={activeGuide?.id}
+          onGuideSelect={setActiveGuide}
+        />
       </div>
     );
   }
@@ -61,23 +51,11 @@ const GuideCategories: React.FC<GuideCategoriesProps> = ({
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <ul className="space-y-1 px-4 pb-2">
-                {category.guides.map((guide) => (
-                  <li key={guide.id}>
-                    <button
-                      onClick={() => setActiveGuide(guide)}
-                      className={cn(
-                        "w-full text-left px-3 py-2 rounded-md text-sm transition-colors",
-                        activeGuide?.id === guide.id
-                          ? "bg-noovimo-50 text-noovimo-700 font-medium dark:bg-gray-700 dark:text-noovimo-300"
-                          : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                      )}
-                    >
-                      {guide.title}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              <CategoryGuideList 
+                guides={category.guides}
+                activeGuideId={activeGuide?.id}
+                onGuideSelect={setActiveGuide}
+              />
             </AccordionContent>
           </AccordionItem>
         ))}

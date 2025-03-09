@@ -86,7 +86,7 @@ export const useGuide = () => {
 
   // Function to get guides by category
   const getGuidesByCategory = useCallback((categoryId: string): Guide[] => {
-    return guides.filter(guide => guide.categoryId === categoryId);
+    return guides.filter(guide => guide.category === categoryId);
   }, [guides]);
 
   return {
