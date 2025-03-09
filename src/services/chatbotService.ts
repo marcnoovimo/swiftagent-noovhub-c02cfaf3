@@ -1,6 +1,8 @@
+
 import { OpenAIConfig } from '@/types/chatbot';
-import { searchDocumentsForQuery, formatDocumentsAsContext } from './documentSearchService';
+import { searchDocumentsForQuery, formatDocumentsAsContext, isPriceQuery } from './documentSearchService';
 import { getOpenAIResponse } from './openaiService';
+import { CommissionService } from './commissionService';
 
 // Re-export document search functionality
 export { searchDocumentsForQuery } from './documentSearchService';
@@ -13,6 +15,22 @@ export const generateChatbotResponse = async (
   documentSuggestions: any[],
   openaiConfig?: OpenAIConfig
 ): Promise<string> => {
+  // Check if this is a price/pack question first
+  const priceQuery = isPriceQuery(query);
+  if (priceQuery.isPriceQuestion && priceQuery.packName) {
+    try {
+      const packName = priceQuery.packName;
+      const pack = await CommissionService.getCommissionPacks()
+        .then(packs => packs.find(p => p.id.toLowerCase().includes(packName)));
+      
+      if (pack) {
+        return `Le Pack ${pack.name} coûte ${pack.monthlyFeeHT}€ HT par mois (${pack.monthlyFeeTTC}€ TTC). Ce pack propose des commissions de ${pack.ranges[0].percentage}% à ${pack.ranges[pack.ranges.length-1].percentage}% selon votre chiffre d'affaires.`;
+      }
+    } catch (error) {
+      console.error("Error fetching commission pack data:", error);
+    }
+  }
+  
   // If OpenAI config is provided, use the OpenAI API
   if (openaiConfig?.apiKey) {
     // Format documents as context strings
@@ -23,6 +41,13 @@ export const generateChatbotResponse = async (
   
   // Fallback to the mock response logic when no API key is configured
   const queryLower = query.toLowerCase();
+  
+  // Document request responses with direct links
+  if (documentSuggestions.length > 0 && 
+      (queryLower.includes('document') || queryLower.includes('fichier') || 
+       queryLower.includes('mandat') || queryLower.includes('compromis'))) {
+    return `J'ai trouvé ${documentSuggestions.length} document(s) qui semblent correspondre à votre recherche. Vous pouvez y accéder directement depuis les suggestions ci-dessous. Cliquez sur un document pour l'ouvrir dans la base documentaire.`;
+  }
   
   // Intranet-related responses
   if (queryLower.includes('intranet') || queryLower.includes('plateforme') || queryLower.includes('système')) {
@@ -67,9 +92,10 @@ export const generateChatbotResponse = async (
   }
   
   if (documentSuggestions.length > 0) {
-    return `J'ai trouvé ${documentSuggestions.length} document(s) qui pourraient répondre à votre question. Consultez les suggestions ci-dessous pour plus d'informations sur ${queryLower.includes('transaction') || queryLower.includes('immobil') ? 'cette transaction immobilière' : 'cette fonctionnalité de l\'intranet'}.`;
+    return `J'ai trouvé ${documentSuggestions.length} document(s) qui pourraient répondre à votre question. Cliquez sur un document dans les suggestions ci-dessous pour l'ouvrir directement.`;
   }
   
   // Default response
   return "Je suis Arthur, votre assistant expert en immobilier et sur l'utilisation de l'intranet Noovimo. Je peux vous aider sur les questions concernant la plateforme ou les transactions immobilières en France. N'hésitez pas à me poser une question plus précise ou à reformuler votre demande pour que je puisse mieux vous assister.";
 };
+

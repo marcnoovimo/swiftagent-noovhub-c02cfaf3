@@ -5,12 +5,47 @@ import { detectDocumentType } from '@/lib/utils';
 import { searchInFolder } from '@/utils/documentUtils';
 
 /**
+ * Extract key terms from a query to improve search accuracy
+ */
+const extractKeyTerms = (query: string): string[] => {
+  const normalizedQuery = query.toLowerCase();
+  
+  // Extract pack names - looking for words after "pack" with special handling
+  const packMatch = normalizedQuery.match(/pack\s+(\w+)/i);
+  const packTerms = packMatch ? [packMatch[1]] : [];
+  
+  // Extract specific document types that might be mentioned
+  const docTypeTerms = [];
+  if (normalizedQuery.includes('mandat')) docTypeTerms.push('mandat');
+  if (normalizedQuery.includes('compromis')) docTypeTerms.push('compromis');
+  if (normalizedQuery.includes('vefa')) docTypeTerms.push('vefa');
+  if (normalizedQuery.includes('diagnostic')) docTypeTerms.push('diagnostic');
+  
+  // Extract key terms like "prix", "cout", "tarif" that indicate price questions
+  const priceTerms = [];
+  if (/prix|cout|tarif|combien|montant/.test(normalizedQuery)) {
+    priceTerms.push('prix');
+    // If a pack name is mentioned in a price question, boost it significantly
+    if (/(silver|gold|bronze|ivoire|emeraude|platinium|booster)/.test(normalizedQuery)) {
+      const packName = normalizedQuery.match(/(silver|gold|bronze|ivoire|emeraude|platinium|booster)/i);
+      if (packName) priceTerms.push(packName[0]);
+    }
+  }
+  
+  // Extract standard search terms (words longer than 3 characters)
+  const standardTerms = query.toLowerCase().split(' ')
+    .filter(term => term.length > 3 && !priceTerms.includes(term) && !docTypeTerms.includes(term));
+  
+  return [...standardTerms, ...packTerms, ...docTypeTerms, ...priceTerms];
+}
+
+/**
  * Search for documents related to a user query
  */
 export const searchDocumentsForQuery = (query: string): DocumentReference[] => {
   if (!query || query.trim() === '') return [];
   
-  const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 3);
+  const searchTerms = extractKeyTerms(query);
   if (searchTerms.length === 0) return [];
   
   // Results from agent documents
@@ -75,6 +110,28 @@ export const searchDocumentsForQuery = (query: string): DocumentReference[] => {
 };
 
 /**
+ * Check if query is asking about price/cost of a pack
+ */
+export const isPriceQuery = (query: string): { isPriceQuestion: boolean, packName?: string } => {
+  const normalizedQuery = query.toLowerCase();
+  
+  if (!/prix|cout|tarif|combien|montant/.test(normalizedQuery)) {
+    return { isPriceQuestion: false };
+  }
+  
+  // Check for pack names
+  const packMatch = normalizedQuery.match(/(pack\s+)?(silver|gold|bronze|ivoire|emeraude|platinium|booster)/i);
+  if (packMatch) {
+    return { 
+      isPriceQuestion: true, 
+      packName: packMatch[2].toLowerCase()
+    };
+  }
+  
+  return { isPriceQuestion: true };
+};
+
+/**
  * Format document references as context strings for AI
  */
 export const formatDocumentsAsContext = (documents: DocumentReference[]): string[] => {
@@ -82,3 +139,11 @@ export const formatDocumentsAsContext = (documents: DocumentReference[]): string
     `Document: ${doc.name}, Type: ${doc.type}, Catégorie: ${doc.category}`
   );
 };
+
+/**
+ * Create a direct link to open a document in the document module
+ */
+export const getDocumentLink = (documentId: string): string => {
+  return `/documents?docId=${documentId}`;
+};
+
