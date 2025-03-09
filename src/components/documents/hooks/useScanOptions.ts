@@ -4,23 +4,24 @@ import { ScanOptions } from '@/components/documents/types';
 
 export const useScanOptions = () => {
   const [scanOptions, setScanOptions] = useState<ScanOptions>({
-    category: 'Compromis',
+    category: 'Avant-contrat',
     accessLevel: 'agent',
     documentName: '',
     autoClassify: true
   });
 
   const [availableCategories] = useState([
-    'Compromis',
-    'Mandats',
-    'Factures',
+    'Avant-contrat',
+    'Mandat',
+    'Attestation de propriété',
     'Diagnostics',
-    'Photos',
+    'Avenants',
+    'Taxe foncière',
     'Autres'
   ]);
 
   const isCompromis = 
-    scanOptions.category === 'Compromis' || 
+    scanOptions.category === 'Avant-contrat' || 
     scanOptions.category === 'Compromis de vente' || 
     scanOptions.category === 'Promesse de vente' || 
     scanOptions.category === 'Location' ||
@@ -28,7 +29,7 @@ export const useScanOptions = () => {
 
   const resetScanOptions = () => {
     setScanOptions({
-      category: 'Compromis',
+      category: 'Avant-contrat',
       accessLevel: 'agent',
       documentName: '',
       autoClassify: true

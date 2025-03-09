@@ -45,11 +45,14 @@ export function dataURLtoFile(dataurl: string, filename: string): File {
 export function detectDocumentType(name: string): string {
   const lowerName = name.toLowerCase();
   
-  if (lowerName.includes('compromis')) return 'Compromis';
-  if (lowerName.includes('mandat')) return 'Mandats';
-  if (lowerName.includes('facture') || lowerName.includes('honoraire')) return 'Factures';
+  if (lowerName.includes('compromis')) return 'Compromis de vente';
+  if (lowerName.includes('promesse')) return 'Promesse de vente';
+  if (lowerName.includes('bail') || lowerName.includes('location')) return 'Location';
+  if (lowerName.includes('mandat')) return 'Mandat';
+  if (lowerName.includes('attestation')) return 'Attestation de propriété';
   if (lowerName.includes('diagnostic') || lowerName.includes('dpe')) return 'Diagnostics';
-  if (lowerName.includes('photo')) return 'Photos';
+  if (lowerName.includes('avenant')) return 'Avenants';
+  if (lowerName.includes('taxe') || lowerName.includes('foncière') || lowerName.includes('fonciere')) return 'Taxe foncière';
   
   // Default category
   return 'Autres';

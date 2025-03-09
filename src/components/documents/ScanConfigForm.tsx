@@ -22,19 +22,18 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
   isCompromis,
   onStartScan
 }) => {
-  const [showSubCategories, setShowSubCategories] = useState(scanOptions.category === 'Compromis');
+  const [showSubCategories, setShowSubCategories] = useState(scanOptions.category === 'Avant-contrat');
   
-  // Sous-catégories spécifiques pour Compromis
-  const compromisSubs = [
+  // Sous-catégories spécifiques pour les avant-contrats
+  const avantContratSubs = [
     'Compromis de vente',
     'Promesse de vente',
-    'Location',
-    'Autres'
+    'Location'
   ];
 
   const handleCategoryChange = (value: string) => {
     setScanOptions({...scanOptions, category: value});
-    setShowSubCategories(value === 'Compromis');
+    setShowSubCategories(value === 'Avant-contrat');
   };
 
   const handleSubCategoryChange = (value: string) => {
@@ -72,7 +71,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
         </Select>
       </div>
       
-      {/* Affichage des sous-catégories uniquement pour Compromis */}
+      {/* Affichage des sous-catégories uniquement pour Avant-contrat */}
       {showSubCategories && (
         <div className="space-y-2 pl-4 border-l-2 border-noovimo-100">
           <Label htmlFor="subCategory">Type d'avant-contrat</Label>
@@ -84,7 +83,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
               <SelectValue placeholder="Sélectionner un type" />
             </SelectTrigger>
             <SelectContent>
-              {compromisSubs.map((subCategory) => (
+              {avantContratSubs.map((subCategory) => (
                 <SelectItem key={subCategory} value={subCategory}>
                   {subCategory}
                 </SelectItem>

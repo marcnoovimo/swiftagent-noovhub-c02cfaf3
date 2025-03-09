@@ -1,6 +1,6 @@
 
 import { Document, Folder, Category } from '@/components/documents/types';
-import { FileText, File, Image, FileArchive, FileCheck } from 'lucide-react';
+import { FileText, File, Image, FileArchive, FileCheck, Receipt, Building, Landmark } from 'lucide-react';
 
 // Agent documents structure
 export const agentDocuments: Document[] = [
@@ -32,7 +32,7 @@ export const agentDocuments: Document[] = [
     id: '2',
     name: 'Mandat exclusif - 8 Avenue des Roses',
     type: 'docx',
-    category: 'Mandats',
+    category: 'Mandat',
     starred: false,
     documentType: 'agent'
   },
@@ -40,7 +40,7 @@ export const agentDocuments: Document[] = [
     id: '3',
     name: 'Facture commission - Sept 2023',
     type: 'pdf',
-    category: 'Factures',
+    category: 'Autres',
     starred: true,
     documentType: 'agent'
   },
@@ -48,7 +48,7 @@ export const agentDocuments: Document[] = [
     id: '4',
     name: 'Photos - Appartement Centre-ville',
     type: 'zip',
-    category: 'Photos',
+    category: 'Autres',
     starred: false,
     documentType: 'agent'
   },
@@ -188,9 +188,11 @@ export const noovimoFolders: Folder[] = [
 
 // Using the correct Category interface
 export const agentCategories: Category[] = [
-  { name: 'Compromis', icon: FileText, count: 4 },
-  { name: 'Mandats', icon: FileText, count: 8 },
-  { name: 'Factures', icon: FileText, count: 6 },
-  { name: 'Photos', icon: Image, count: 12 },
+  { name: 'Avant-contrat', icon: FileText, count: 4 },
+  { name: 'Mandat', icon: FileText, count: 8 },
+  { name: 'Attestation de propriété', icon: Building, count: 3 },
   { name: 'Diagnostics', icon: FileCheck, count: 5 },
+  { name: 'Avenants', icon: FileText, count: 2 },
+  { name: 'Taxe foncière', icon: Receipt, count: 4 },
+  { name: 'Autres', icon: File, count: 10 },
 ];

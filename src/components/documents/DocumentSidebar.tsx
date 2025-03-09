@@ -29,7 +29,7 @@ const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
   showAddCategory = false,
   onAddCategory
 }) => {
-  const [expandedCategories, setExpandedCategories] = useState<string[]>(['Compromis']);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(['Avant-contrat']);
 
   const toggleCategory = (categoryName: string) => {
     if (expandedCategories.includes(categoryName)) {
@@ -40,11 +40,10 @@ const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
   };
 
   // Sous-catégories pour les avant-contrats
-  const compromisSubs = [
+  const avantContratSubs = [
     { name: 'Compromis de vente', count: 2 },
     { name: 'Promesse de vente', count: 1 },
     { name: 'Location', count: 1 },
-    { name: 'Autres', count: 0 },
   ];
 
   return (
@@ -79,7 +78,7 @@ const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
         
         {categories.map(category => {
           const IconComponent = category.icon;
-          const hasSubMenu = category.name === 'Compromis';
+          const hasSubMenu = category.name === 'Avant-contrat';
           const isExpanded = expandedCategories.includes(category.name);
           
           return (
@@ -104,10 +103,10 @@ const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
                 <span className="text-xs text-muted-foreground">{category.count}</span>
               </div>
               
-              {/* Sous-menus pour la catégorie Compromis */}
+              {/* Sous-menus pour la catégorie Avant-contrat */}
               {hasSubMenu && isExpanded && (
                 <ScrollArea className="h-auto max-h-[150px] pl-8 space-y-1 mt-1">
-                  {compromisSubs.map(sub => (
+                  {avantContratSubs.map(sub => (
                     <div 
                       key={sub.name}
                       className="flex items-center justify-between p-1 rounded-lg hover:bg-secondary cursor-pointer"
