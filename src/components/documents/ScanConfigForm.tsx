@@ -117,7 +117,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
           <SelectTrigger id="accessLevel" className="w-full">
             <SelectValue placeholder="Sélectionner un niveau d'accès" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="z-50">
             <SelectItem value="agent">Agent uniquement</SelectItem>
             <SelectItem value="shared">Partagé avec le siège</SelectItem>
           </SelectContent>
@@ -155,13 +155,13 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
           className="flex-1 sm:flex-none"
         >
           <Upload size={16} className="mr-2" />
-          Importer
+          <span className="truncate">Importer</span>
         </Button>
         <Button 
           onClick={onStartScan}
           className="flex-1 sm:flex-none"
         >
-          Commencer le scan
+          <span className="truncate">Commencer le scan</span>
         </Button>
       </div>
     </div>
