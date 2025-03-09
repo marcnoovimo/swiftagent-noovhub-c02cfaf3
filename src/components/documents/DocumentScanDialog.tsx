@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import DocumentScanner from './DocumentScanner';
 import { useScanDialog } from './hooks/useScanDialog';
 import ScanConfigForm from './ScanConfigForm';
@@ -40,28 +41,30 @@ const DocumentScanDialog: React.FC<DocumentScanDialogProps> = ({
         }
         onOpenChange(newOpen);
       }}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>
               {scanMode === 'config' ? 'Scanner un document' : 'Capturer le document'}
             </DialogTitle>
           </DialogHeader>
           
-          {scanMode === 'config' ? (
-            <ScanConfigForm 
-              scanOptions={scanOptions}
-              setScanOptions={setScanOptions}
-              availableCategories={availableCategories}
-              isCompromis={isCompromis}
-              onStartScan={handleStartScan}
-            />
-          ) : (
-            <DocumentScanner 
-              onCapture={handleCaptureComplete}
-              options={scanOptions}
-              onClose={() => resetScanState()}
-            />
-          )}
+          <ScrollArea className="max-h-[calc(90vh-120px)] overflow-y-auto pr-4">
+            {scanMode === 'config' ? (
+              <ScanConfigForm 
+                scanOptions={scanOptions}
+                setScanOptions={setScanOptions}
+                availableCategories={availableCategories}
+                isCompromis={isCompromis}
+                onStartScan={handleStartScan}
+              />
+            ) : (
+              <DocumentScanner 
+                onCapture={handleCaptureComplete}
+                options={scanOptions}
+                onClose={() => resetScanState()}
+              />
+            )}
+          </ScrollArea>
         </DialogContent>
       </Dialog>
       

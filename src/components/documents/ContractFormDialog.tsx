@@ -2,6 +2,7 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import ContractForm from './contract-form/ContractForm';
 import { ContractFormValues } from './contract-form/schema';
@@ -37,7 +38,7 @@ const ContractFormDialog: React.FC<ContractFormDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[550px]">
+      <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-hidden">
         <DialogHeader>
           <DialogTitle>
             {fromScannedDocument 
@@ -46,12 +47,14 @@ const ContractFormDialog: React.FC<ContractFormDialogProps> = ({
           </DialogTitle>
         </DialogHeader>
         
-        <ContractForm 
-          initialData={initialData}
-          onSubmit={handleFormSubmit}
-        />
+        <ScrollArea className="max-h-[calc(90vh-120px)] overflow-y-auto pr-4">
+          <ContractForm 
+            initialData={initialData}
+            onSubmit={handleFormSubmit}
+          />
+        </ScrollArea>
         
-        <DialogFooter>
+        <DialogFooter className="mt-4">
           <Button 
             type="button" 
             variant="outline" 
