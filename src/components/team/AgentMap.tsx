@@ -24,44 +24,56 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    // Utiliser le token Mapbox
-    mapboxgl.accessToken = "pk.eyJ1IjoibWFyY2dhbGxvbm5vb3ZpbW8iLCJhIjoiY204MGVxZGp2MHQwaDJpc2E4N3hqb2lscCJ9.0xzWL6xP3sdy__klOQWCdg";
-    
-    // Afficher un message pour le debug
-    console.log("Initializing map with token:", mapboxgl.accessToken);
-    
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: [2.213749, 46.227638], // Centre de la France
-      zoom: 5.5, // Zoom légèrement augmenté pour mieux voir la France
-      bounds: [
-        [-5.5591, 41.3233], // Sud-ouest de la France
-        [9.5595, 51.1485]   // Nord-est de la France
-      ],
-      fitBoundsOptions: {
-        padding: 50,
-      }
-    });
+    try {
+      // Utiliser le token Mapbox
+      mapboxgl.accessToken = "pk.eyJ1IjoibWFyY2dhbGxvbm5vb3ZpbW8iLCJhIjoiY204MGVxZGp2MHQwaDJpc2E4N3hqb2lscCJ9.0xzWL6xP3sdy__klOQWCdg";
+      
+      // Debug logs
+      console.log("Initializing map with token:", mapboxgl.accessToken);
+      console.log("Map container exists:", !!mapContainer.current);
+      
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/light-v11',
+        center: [2.213749, 46.227638], // Centre de la France
+        zoom: 5.5, // Zoom légèrement augmenté pour mieux voir la France
+        bounds: [
+          [-5.5591, 41.3233], // Sud-ouest de la France
+          [9.5595, 51.1485]   // Nord-est de la France
+        ],
+        fitBoundsOptions: {
+          padding: 50,
+        }
+      });
 
-    // Ajouter les contrôles de navigation
-    map.current.addControl(
-      new mapboxgl.NavigationControl(),
-      'bottom-right'
-    );
+      // Ajouter les contrôles de navigation
+      map.current.addControl(
+        new mapboxgl.NavigationControl(),
+        'bottom-right'
+      );
 
-    // Ajouter un gestionnaire d'événements pour détecter si la carte se charge correctement
-    map.current.on('load', () => {
-      console.log("Map loaded successfully");
-    });
+      // Ajouter un gestionnaire d'événements pour détecter si la carte se charge correctement
+      map.current.on('load', () => {
+        console.log("Map loaded successfully");
+        // Forcer un redimensionnement car parfois la carte n'occupe pas tout l'espace
+        if (map.current) {
+          setTimeout(() => {
+            map.current?.resize();
+          }, 100);
+        }
+      });
 
-    map.current.on('error', (e) => {
-      console.error("Map error:", e);
-    });
+      map.current.on('error', (e) => {
+        console.error("Map error:", e);
+      });
+    } catch (error) {
+      console.error("Failed to initialize map:", error);
+    }
 
     // Cleanup
     return () => {
       map.current?.remove();
+      map.current = null;
     };
   }, []);
 
@@ -88,6 +100,11 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
       agents.forEach(agent => {
         if (!map.current) return;
         
+        if (!agent.longitude || !agent.latitude) {
+          console.warn(`Agent ${agent.name} has invalid coordinates:`, agent.longitude, agent.latitude);
+          return;
+        }
+        
         console.log(`Adding marker for ${agent.name} at [${agent.longitude}, ${agent.latitude}]`);
         
         const markerElement = document.createElement('div');
@@ -105,41 +122,45 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
         }
         
         // Créer le marqueur
-        const marker = new mapboxgl.Marker(markerElement)
-          .setLngLat([agent.longitude, agent.latitude])
-          .addTo(map.current);
-        
-        // Ajouter l'événement de clic
-        markerElement.addEventListener('click', (e) => {
-          e.stopPropagation(); // Empêcher la propagation pour éviter les conflits
-
-          // Si on fait un double-clic sur le marqueur, naviguer vers le profil
-          if (e.detail === 2) {
-            handleAgentClick(agent);
-            return;
-          }
-          
-          setSelectedAgent(agent);
-          setPopupCoordinates([agent.longitude, agent.latitude]);
-          setPopupOpen(true);
-          
-          // Si un popup existe déjà, le fermer
-          if (popupRef.current) {
-            popupRef.current.remove();
-          }
-          
-          // Créer un popup
-          popupRef.current = new mapboxgl.Popup({ closeButton: false })
+        try {
+          const marker = new mapboxgl.Marker(markerElement)
             .setLngLat([agent.longitude, agent.latitude])
-            .setDOMContent(document.createElement('div'))
             .addTo(map.current);
           
-          // Centrer la carte sur le marqueur
-          map.current.flyTo({
-            center: [agent.longitude, agent.latitude],
-            zoom: 9
+          // Ajouter l'événement de clic
+          markerElement.addEventListener('click', (e) => {
+            e.stopPropagation(); // Empêcher la propagation pour éviter les conflits
+
+            // Si on fait un double-clic sur le marqueur, naviguer vers le profil
+            if (e.detail === 2) {
+              handleAgentClick(agent);
+              return;
+            }
+            
+            setSelectedAgent(agent);
+            setPopupCoordinates([agent.longitude, agent.latitude]);
+            setPopupOpen(true);
+            
+            // Si un popup existe déjà, le fermer
+            if (popupRef.current) {
+              popupRef.current.remove();
+            }
+            
+            // Créer un popup
+            popupRef.current = new mapboxgl.Popup({ closeButton: false })
+              .setLngLat([agent.longitude, agent.latitude])
+              .setDOMContent(document.createElement('div'))
+              .addTo(map.current);
+            
+            // Centrer la carte sur le marqueur
+            map.current.flyTo({
+              center: [agent.longitude, agent.latitude],
+              zoom: 9
+            });
           });
-        });
+        } catch (error) {
+          console.error(`Error creating marker for agent ${agent.name}:`, error);
+        }
       });
       
       // Définir les limites de la France
@@ -178,6 +199,19 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
     } else {
       map.current.on('load', onMapLoad);
     }
+
+    // Ajouter un gestionnaire d'événements pour redimensionner la carte si la fenêtre change de taille
+    const handleResize = () => {
+      if (map.current) {
+        map.current.resize();
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [agents, navigate]);
 
   // Gestion de la fermeture du popup

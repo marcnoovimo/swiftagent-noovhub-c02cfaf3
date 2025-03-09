@@ -20,6 +20,7 @@
 /* Mapbox styles */
 .mapboxgl-popup {
   max-width: 250px !important;
+  z-index: 10 !important;
 }
 
 .mapboxgl-popup-content {
@@ -31,8 +32,28 @@
 
 .agent-marker {
   transition: all 0.2s ease;
+  z-index: 5;
 }
 
 .agent-marker:hover {
   transform: scale(1.1);
+  z-index: 6;
+}
+
+/* Ensure the map container takes full height */
+.mapboxgl-map {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Improve popup appearance */
+.mapboxgl-popup-close-button {
+  font-size: 16px !important;
+  padding: 5px !important;
+}
+
+/* Fix map controls positioning */
+.mapboxgl-ctrl-bottom-right {
+  bottom: 10px !important;
+  right: 10px !important;
 }

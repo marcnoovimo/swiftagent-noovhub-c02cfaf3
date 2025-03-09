@@ -10,6 +10,7 @@ import AgentMap from '@/components/team/AgentMap';
 import AgentCard from '@/components/team/AgentCard';
 import { Agent } from '@/types/agent';
 import { fetchAgents } from '@/services/teamService';
+import { Helmet } from 'react-helmet';
 
 const Team = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,6 +35,9 @@ const Team = () => {
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
+        <Helmet>
+          <title>Equipe Noovimo | Intranet Noovimo</title>
+        </Helmet>
         <div className="flex justify-center items-center h-64">
           <div className="animate-pulse text-noovimo-500 font-bold text-xl">
             Chargement de l'équipe...
@@ -45,6 +49,10 @@ const Team = () => {
 
   return (
     <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 animate-fade-in">
+      <Helmet>
+        <title>Equipe Noovimo | Intranet Noovimo</title>
+      </Helmet>
+      
       <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Equipe Noovimo</h1>
@@ -74,7 +82,7 @@ const Team = () => {
 
       <Tabs defaultValue="map" value={viewMode} className="w-full">
         <TabsContent value="map" className="mt-0">
-          <div className="glass-card rounded-xl overflow-hidden p-0">
+          <div className="glass-card rounded-xl overflow-hidden p-0 shadow-md border border-gray-100 dark:border-gray-800">
             <AgentMap agents={filteredAgents || []} />
           </div>
         </TabsContent>
