@@ -5,7 +5,7 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, L
 import { Euro, TrendingUp } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/context/AuthContext';
-import { CommissionService } from '@/services/commissionService';
+import { RevenueService } from '@/services/revenueService';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const MonthlyRevenueChart = () => {
@@ -13,7 +13,7 @@ const MonthlyRevenueChart = () => {
 
   const { data: monthlyRevenue, isLoading } = useQuery({
     queryKey: ['monthlyRevenue', user?.id],
-    queryFn: () => CommissionService.getMonthlyRevenue(user?.id || ''),
+    queryFn: () => RevenueService.getMonthlyRevenue(user?.id || ''),
     enabled: !!user?.id,
   });
 
