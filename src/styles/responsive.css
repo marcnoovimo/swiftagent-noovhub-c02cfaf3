@@ -1,0 +1,197 @@
+
+/* Responsive utilities */
+.mobile-only {
+  display: block;
+}
+
+.desktop-only {
+  display: none;
+}
+
+.tablet-up {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+  
+  .tablet-up {
+    display: block;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* Table responsive behavior */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+  border-radius: var(--radius);
+}
+
+/* Container handling */
+.container {
+  max-width: 100%;
+  overflow-x: hidden;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Card grid for better mobile alignment */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Messages and chat components responsive fixes */
+.messages-container {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .messages-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .message-sidebar {
+    display: none;
+  }
+  
+  .message-content {
+    grid-column: span 1 !important;
+  }
+}
+
+/* Responsive container */
+.responsive-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+@media (min-width: 640px) {
+  .responsive-container {
+    padding-left: max(2rem, env(safe-area-inset-left));
+    padding-right: max(2rem, env(safe-area-inset-right));
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  h1 {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+  
+  h2 {
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+  }
+  
+  h3 {
+    font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+  }
+  
+  .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Touch target improvements */
+  button, 
+  .button,
+  [role="button"],
+  .tab,
+  .input,
+  select,
+  a.link,
+  .nav-item {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .TabsTrigger {
+    @apply px-2 py-1.5 text-xs;
+    max-width: 80px;
+  }
+  
+  .TabsList {
+    @apply px-2 py-1 gap-1;
+  }
+  
+  input, select, textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+  }
+  
+  .TabsContent {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  
+  .form-group + .form-group,
+  .input-group + .input-group,
+  .form-field + .form-field,
+  .form-item + .form-item {
+    margin-top: 1rem !important;
+  }
+}
+
+/* Large screen optimizations */
+@media (min-width: 1280px) {
+  .container-xl {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  #root {
+    max-width: 1280px;
+    padding: 0 2rem;
+  }
+}
+
+/* Notch support */
+@supports(padding: max(0px)) {
+  body, header, footer, .fixed-element {
+    padding-left: min(1rem, env(safe-area-inset-left));
+    padding-right: min(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* Print optimizations */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    font-size: 12pt;
+    background: white;
+    color: black;
+  }
+  
+  .page-break {
+    page-break-before: always;
+  }
+}
