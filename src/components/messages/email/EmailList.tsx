@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
 import { Search, Star, Paperclip, Tag, Clock } from 'lucide-react';
 import { Email } from '../types/email';
 import { Badge } from '@/components/ui/badge';
+import '@/styles/components.css'; // Import for search-bar and other component styles
 
 interface EmailListProps {
   emails: Email[];

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from 'lucide-react';
@@ -9,6 +8,8 @@ import { UseFormReturn } from 'react-hook-form';
 import { cn, formatDate } from '@/lib/utils';
 import { fr } from "date-fns/locale";
 import { ContractFormValues } from './schema';
+import '@/styles/forms.css'; // Direct import of form styles
+import '@/styles/buttons.css'; // Direct import of button styles
 
 interface DatePickerFieldProps {
   form: UseFormReturn<ContractFormValues>;

@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { RotateCw, Check, FileX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScanOptions } from '../types';
+import '@/styles/buttons.css'; // Direct import of button styles
 
 interface ImagePreviewProps {
   imageData: string;

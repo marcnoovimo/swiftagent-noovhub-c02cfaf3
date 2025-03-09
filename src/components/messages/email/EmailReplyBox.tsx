@@ -1,8 +1,9 @@
-
 import React, { useState } from 'react';
 import { Paperclip, Send, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
+import '@/styles/buttons.css'; // Direct import of button styles
+import '@/styles/forms.css'; // Direct import of form styles for textarea
 
 interface EmailReplyBoxProps {
   replyContent: string;

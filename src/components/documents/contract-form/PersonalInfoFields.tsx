@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { UseFormReturn } from 'react-hook-form';
 import { ContractFormValues } from './schema';
+import '@/styles/forms.css'; // Direct import of form styles
 
 interface PersonalInfoFieldsProps {
   form: UseFormReturn<ContractFormValues>;

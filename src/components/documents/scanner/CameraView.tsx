@@ -1,8 +1,8 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import { Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import '@/styles/buttons.css'; // Direct import of button styles
 
 interface CameraViewProps {
   onCapture: (imageData: string) => void;

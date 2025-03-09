@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { User, Mail, Phone } from 'lucide-react';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { UseFormReturn } from 'react-hook-form';
 import { ContactFormValues } from './types';
+import '@/styles/forms.css'; // Direct import of form styles
 
 interface ContactPersonalInfoProps {
   form: UseFormReturn<ContactFormValues>;

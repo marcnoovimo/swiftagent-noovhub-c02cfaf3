@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { DialogFooter } from '@/components/ui/dialog';
 import { Save, X } from 'lucide-react';
+import '@/styles/buttons.css'; // Direct import of button styles
 
 interface ContactFormActionsProps {
   onCancel: () => void;

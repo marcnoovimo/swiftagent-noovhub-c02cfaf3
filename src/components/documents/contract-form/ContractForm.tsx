@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,6 +7,8 @@ import { contractFormSchema, ContractFormProps, ContractFormValues } from './sch
 import PersonalInfoFields from './PersonalInfoFields';
 import PropertyInfoFields from './PropertyInfoFields';
 import DateFields from './DateFields';
+import '@/styles/forms.css'; // Direct import of form styles
+import '@/styles/buttons.css'; // Direct import of button styles
 
 const ContractForm: React.FC<ContractFormProps> = ({ 
   initialData, 

@@ -1,9 +1,10 @@
-
 import React from 'react';
 import { Inbox, Send, FileText, Trash, PenSquare, Users, Archive, Star, AlertCircle, Home, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { EmailFolder } from '../types/email';
+import '@/styles/buttons.css'; // Direct import of button styles
+import '@/styles/components.css'; // Import for sidebar specific styles
 
 interface EmailSidebarProps {
   activeFolder: string;
