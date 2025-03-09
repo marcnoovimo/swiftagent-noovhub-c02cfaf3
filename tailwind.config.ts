@@ -56,7 +56,7 @@ const config = {
           '200': '#f9d0d8',
           '300': '#f4a9b8',
           '400': '#ed7591',
-          '500': '#b32842', // Mise à jour de la couleur Noovimo ici
+          '500': '#b32842', // #b32842 - couleur Noovimo principale
           '600': '#a1233a', // Teinte légèrement plus foncée
           '700': '#8c1f32',
           '800': '#721929',

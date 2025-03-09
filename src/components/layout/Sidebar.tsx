@@ -53,16 +53,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true }) => {
   
   return (
     <>
+      <Button variant="ghost" size="icon" className="md:hidden fixed top-4 left-4 z-40" onClick={() => setIsMenuOpen(true)}>
+        <Menu strokeWidth={2} />
+      </Button>
+      
       <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-        <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden absolute top-4 left-4 z-50">
-            <Menu strokeWidth={2} />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0">
+        <SheetContent side="left" className="w-64 p-0 z-50">
           <div className="flex flex-col h-full">
             <div className="px-4 py-6 text-center border-b">
-              <Link to="/" className="flex items-center justify-center gap-2 font-bold">
+              <Link to="/" className="flex items-center justify-center gap-2 font-bold" onClick={() => setIsMenuOpen(false)}>
                 <img 
                   src="/lovable-uploads/95557113-347d-4013-8965-a832356ec898.png" 
                   alt="Noovimo Logo" 
