@@ -3,9 +3,23 @@ import { OpenAIConfig } from '@/types/chatbot';
 import { searchDocumentsForQuery, formatDocumentsAsContext, isPriceQuery } from './documentSearchService';
 import { getOpenAIResponse } from './openaiService';
 import { CommissionService } from './commissionService';
+import { supportGuides } from '@/data/guideData';
 
 // Re-export document search functionality
 export { searchDocumentsForQuery } from './documentSearchService';
+
+// Search in support guides
+export const searchSupportGuides = (query: string) => {
+  if (!query || query.trim() === '') return [];
+  
+  const normalizedQuery = query.toLowerCase();
+  
+  return supportGuides.filter(guide => 
+    guide.title.toLowerCase().includes(normalizedQuery) || 
+    guide.content.toLowerCase().includes(normalizedQuery) ||
+    guide.tags.some(tag => tag.toLowerCase().includes(normalizedQuery))
+  ).slice(0, 3); // Limit to 3 most relevant results
+};
 
 /**
  * Generate a chatbot response based on user query and document context
@@ -29,6 +43,15 @@ export const generateChatbotResponse = async (
     } catch (error) {
       console.error("Error fetching commission pack data:", error);
     }
+  }
+  
+  // Search for relevant support guides
+  const relevantGuides = searchSupportGuides(query);
+  if (relevantGuides.length > 0) {
+    const mainGuide = relevantGuides[0];
+    const guideLinks = relevantGuides.map(guide => `- ${guide.title}`).join('\n');
+    
+    return `J'ai trouvé quelques guides dans notre documentation qui pourraient vous aider:\n\n${guideLinks}\n\nVoici un extrait du guide principal:\n"${mainGuide.title}": ${mainGuide.content.replace(/<[^>]*>/g, '').substring(0, 200)}...\n\nJe vous recommande de consulter la section Support pour plus de détails.`;
   }
   
   // If OpenAI config is provided, use the OpenAI API
@@ -98,4 +121,3 @@ export const generateChatbotResponse = async (
   // Default response
   return "Je suis Arthur, votre assistant expert en immobilier et sur l'utilisation de l'intranet Noovimo. Je peux vous aider sur les questions concernant la plateforme ou les transactions immobilières en France. N'hésitez pas à me poser une question plus précise ou à reformuler votre demande pour que je puisse mieux vous assister.";
 };
-

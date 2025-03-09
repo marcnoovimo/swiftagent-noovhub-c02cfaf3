@@ -21,6 +21,7 @@ import AgentProfile from './pages/AgentProfile';
 import NotFound from './pages/NotFound';
 import Calendar from './pages/Calendar';
 import Settings from './pages/Settings';
+import Support from './pages/Support';
 import ChatbotInterface from './components/chatbot/ChatbotInterface';
 
 // Create a client
@@ -49,6 +50,7 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/agent-profile" element={<AgentProfile />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/support" element={<Support />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
