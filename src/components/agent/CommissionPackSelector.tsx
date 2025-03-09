@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Percent } from 'lucide-react';
-import { CommissionService } from '@/services/commissionService';
+import { PackService } from '@/services/packService';
 import { toast } from 'sonner';
 import { Agent } from '@/types/agent';
 import { CommissionPack } from '@/types/commission';
@@ -27,13 +27,13 @@ const CommissionPackSelector: React.FC<CommissionPackSelectorProps> = ({ agent, 
   // Récupérer tous les packs de commission
   const { data: packs, isLoading: isLoadingPacks } = useQuery({
     queryKey: ['commissionPacks'],
-    queryFn: CommissionService.getCommissionPacks,
+    queryFn: PackService.getCommissionPacks,
   });
   
   // Récupérer la commission actuelle de l'agent
   const { data: agentCommission, isLoading: isLoadingCommission } = useQuery({
     queryKey: ['agentCommission', agent.id],
-    queryFn: () => CommissionService.getAgentCommission(agent.id),
+    queryFn: () => PackService.getAgentCommission(agent.id),
   });
   
   // Mettre à jour le selectedPackId quand les données sont chargées
@@ -45,7 +45,7 @@ const CommissionPackSelector: React.FC<CommissionPackSelectorProps> = ({ agent, 
   
   // Mutation pour mettre à jour le pack de l'agent
   const updatePackMutation = useMutation({
-    mutationFn: (packId: string) => CommissionService.updateAgentPack(agent.id, packId),
+    mutationFn: (packId: string) => PackService.updateAgentPack(agent.id, packId),
     onSuccess: () => {
       toast.success("Pack de commission mis à jour avec succès");
       queryClient.invalidateQueries({ queryKey: ['agentCommission', agent.id] });
