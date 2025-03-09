@@ -41,8 +41,8 @@ const MonthlyRevenueChart = () => {
   }
 
   return (
-    <Card className="w-full h-full">
-      <CardHeader>
+    <Card className="w-full h-full flex flex-col">
+      <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2">
           <Euro className="h-5 w-5" />
           Évolution
@@ -51,15 +51,15 @@ const MonthlyRevenueChart = () => {
           Valeur honoraires et valeur commissions HT
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="line">
-          <TabsList className="mb-4">
+      <CardContent className="flex-1 pb-4">
+        <Tabs defaultValue="line" className="h-full flex flex-col">
+          <TabsList className="mb-2">
             <TabsTrigger value="line" className="text-xs sm:text-sm">Évolution mensuelle</TabsTrigger>
             <TabsTrigger value="bar" className="text-xs sm:text-sm">Évolution cumulée annuelle</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="line" className="h-[250px]">
-            <div className="h-[220px]">
+          <TabsContent value="line" className="flex-1 flex flex-col">
+            <div className="flex-1 min-h-[200px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                   data={monthlyRevenue}
@@ -104,8 +104,8 @@ const MonthlyRevenueChart = () => {
             </div>
           </TabsContent>
           
-          <TabsContent value="bar" className="h-[250px]">
-            <div className="h-[220px]">
+          <TabsContent value="bar" className="flex-1 flex flex-col">
+            <div className="flex-1 min-h-[200px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={monthlyRevenue}
