@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { PlusCircle, Upload, FileText } from 'lucide-react';
+import { PlusCircle, FileText } from 'lucide-react';
 import { Document, Folder, Category } from '@/components/documents/types';
 import DocumentSearch from '@/components/documents/DocumentSearch';
 import DocumentList from '@/components/documents/DocumentList';
@@ -48,6 +48,27 @@ const AgentDocumentsTab: React.FC<AgentDocumentsTabProps> = ({
     // et l'ajouter à la liste des documents
   };
   
+  const openContractFormInNewWindow = () => {
+    // Ouvrir une nouvelle fenêtre pour le formulaire d'avant-contrat
+    const width = 800;
+    const height = 800;
+    const left = (window.innerWidth - width) / 2;
+    const top = (window.innerHeight - height) / 2;
+    
+    const contractWindow = window.open(
+      '/contract-form', 
+      'avant_contrat',
+      `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+    );
+    
+    // Si la fenêtre est bloquée par le navigateur
+    if (!contractWindow || contractWindow.closed || typeof contractWindow.closed === 'undefined') {
+      toast.error("Le navigateur a bloqué l'ouverture de la fenêtre. Veuillez autoriser les pop-ups pour ce site.");
+      // Alternative: ouvrir le dialogue dans la même fenêtre
+      setContractFormOpen(true);
+    }
+  };
+  
   return (
     <div className="flex flex-col md:flex-row gap-6">
       <div className="hidden md:block w-64 shrink-0">
@@ -72,7 +93,7 @@ const AgentDocumentsTab: React.FC<AgentDocumentsTabProps> = ({
           <div className="flex gap-2 w-full sm:w-auto">
             <Button 
               variant="outline" 
-              className="flex items-center gap-2 w-1/3 sm:w-auto"
+              className="flex items-center gap-2 w-1/2 sm:w-auto"
               onClick={onScanClick}
             >
               <PlusCircle size={16} />
@@ -80,20 +101,12 @@ const AgentDocumentsTab: React.FC<AgentDocumentsTabProps> = ({
             </Button>
             
             <Button 
-              variant="outline"
-              className="flex items-center gap-2 w-1/3 sm:w-auto"
-              onClick={() => setContractFormOpen(true)}
+              variant="default"
+              className="flex items-center gap-2 w-1/2 sm:w-auto bg-noovimo-500 hover:bg-noovimo-600"
+              onClick={openContractFormInNewWindow}
             >
               <FileText size={16} />
               <span>Avant-contrat</span>
-            </Button>
-            
-            <Button 
-              variant="default" 
-              className="flex items-center gap-2 w-1/3 sm:w-auto bg-noovimo-500 hover:bg-noovimo-600"
-            >
-              <Upload size={16} />
-              <span>Importer</span>
             </Button>
           </div>
         </div>
@@ -110,7 +123,7 @@ const AgentDocumentsTab: React.FC<AgentDocumentsTabProps> = ({
         </div>
       </div>
       
-      {/* Formulaire pour les informations d'avant-contrat */}
+      {/* Formulaire pour les informations d'avant-contrat (si popup bloquée) */}
       <ContractFormDialog 
         open={contractFormOpen}
         onOpenChange={setContractFormOpen}

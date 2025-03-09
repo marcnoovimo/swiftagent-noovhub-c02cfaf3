@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -49,6 +49,20 @@ const DocumentScanDialog: React.FC<DocumentScanDialogProps> = ({
   const isCompromis = scanOptions.category === 'Compromis' || 
                       (scanOptions.autoClassify && scanOptions.documentName.toLowerCase().includes('compromis'));
 
+  // Écouter les messages venant des fenêtres d'avant-contrat
+  useEffect(() => {
+    const handleContractFormMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'CONTRACT_FORM_DATA' && event.data?.data) {
+        handleContractFormSuccess(event.data.data);
+      }
+    };
+    
+    window.addEventListener('message', handleContractFormMessage);
+    return () => {
+      window.removeEventListener('message', handleContractFormMessage);
+    };
+  }, [capturedImage, scanOptions]);
+
   const handleStartScan = () => {
     if (!scanOptions.documentName) {
       toast.error('Veuillez donner un nom au document');
@@ -74,7 +88,7 @@ const DocumentScanDialog: React.FC<DocumentScanDialogProps> = ({
       
       // Si c'est un compromis, ouvrir le formulaire pour les détails du contrat
       if (category === 'Compromis') {
-        setContractFormOpen(true);
+        openContractFormInNewWindow();
       } else {
         // Pour les autres types de documents, procéder à l'enregistrement direct
         await saveScannedDocument(imageData, options, category);
@@ -82,6 +96,27 @@ const DocumentScanDialog: React.FC<DocumentScanDialogProps> = ({
     } catch (error) {
       console.error('Error processing scanned document:', error);
       toast.error('Erreur lors du traitement du document scanné');
+    }
+  };
+
+  const openContractFormInNewWindow = () => {
+    // Ouvrir une nouvelle fenêtre pour le formulaire d'avant-contrat
+    const width = 800;
+    const height = 800;
+    const left = (window.innerWidth - width) / 2;
+    const top = (window.innerHeight - height) / 2;
+    
+    const contractWindow = window.open(
+      '/contract-form', 
+      'avant_contrat',
+      `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+    );
+    
+    // Si la fenêtre est bloquée par le navigateur
+    if (!contractWindow || contractWindow.closed || typeof contractWindow.closed === 'undefined') {
+      toast.error("Le navigateur a bloqué l'ouverture de la fenêtre. Veuillez autoriser les pop-ups pour ce site.");
+      // Alternative: ouvrir le dialogue dans la même fenêtre
+      setContractFormOpen(true);
     }
   };
 
@@ -256,14 +291,13 @@ const DocumentScanDialog: React.FC<DocumentScanDialogProps> = ({
         </DialogContent>
       </Dialog>
       
-      {/* Formulaire pour les informations du compromis */}
+      {/* Formulaire pour les informations du compromis (fallback si popup bloquée) */}
       <ContractFormDialog 
         open={contractFormOpen}
         onOpenChange={setContractFormOpen}
         onSuccess={handleContractFormSuccess}
         fromScannedDocument={true}
         initialData={{
-          // On peut extraire des données du nom du document si nécessaire
           propertyAddress: scanOptions.documentName.includes('-') 
             ? scanOptions.documentName.split('-')[1].trim() 
             : ''
