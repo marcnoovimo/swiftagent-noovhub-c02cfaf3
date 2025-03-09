@@ -4,7 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from '@/context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 import { 
@@ -28,6 +28,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen = true }) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const iconSize = 20;
 
@@ -41,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true }) => {
     { name: 'Documents', path: '/documents', icon: <FileText size={iconSize} /> },
     { name: 'Contacts', path: '/contacts', icon: <Users size={iconSize} /> },
     { name: 'Agenda', path: '/calendar', icon: <Calendar size={iconSize} /> },
-    { name: 'Messages', path: '/messages', icon: <MessageSquare size={iconSize} /> },
+    { name: 'Communication', path: '/messages', icon: <MessageSquare size={iconSize} /> },
     { name: 'Statistiques', path: '/stats', icon: <BarChart3 size={iconSize} /> },
     { name: 'Support', path: '/support', icon: <Headphones size={iconSize} /> },
     { name: 'Paramètres', path: '/settings', icon: <Settings size={iconSize} /> },
@@ -59,8 +60,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true }) => {
           <div className="flex flex-col h-full">
             <div className="px-4 py-6 text-center border-b">
               <Link to="/" className="flex items-center justify-center gap-2 font-bold">
-                <PanelLeft className="h-6 w-6" />
-                <span className="text-xl">SwiftAgent</span>
+                <img 
+                  src="/lovable-uploads/95557113-347d-4013-8965-a832356ec898.png" 
+                  alt="Noovimo Logo" 
+                  className="h-8 w-auto"
+                />
+                <div className="flex flex-col items-start">
+                  <span className="text-xl">Noov'Hub</span>
+                  <span className="text-xs text-muted-foreground">Votre couteau suisse digital</span>
+                </div>
               </Link>
             </div>
             
@@ -68,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true }) => {
               {menuItems.map((item) => (
                 <Button
                   key={item.name}
-                  variant="ghost"
+                  variant={location.pathname === item.path ? "secondary" : "ghost"}
                   asChild
                   className="justify-start font-normal"
                 >
@@ -104,8 +112,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true }) => {
       <aside className={`${isOpen ? 'flex' : 'hidden'} md:flex flex-col w-64 border-r h-screen sticky top-0 overflow-y-auto animate-in fade-in-0 duration-75`}>
         <div className="px-4 py-6 text-center border-b">
           <Link to="/" className="flex items-center justify-center gap-2 font-bold">
-            <PanelLeft className="h-6 w-6" />
-            <span className="text-xl">SwiftAgent</span>
+            <img 
+              src="/lovable-uploads/95557113-347d-4013-8965-a832356ec898.png" 
+              alt="Noovimo Logo" 
+              className="h-8 w-auto"
+            />
+            <div className="flex flex-col items-start">
+              <span className="text-xl">Noov'Hub</span>
+              <span className="text-xs text-muted-foreground">Votre couteau suisse digital</span>
+            </div>
           </Link>
         </div>
         
@@ -113,7 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true }) => {
           {menuItems.map((item) => (
             <Button
               key={item.name}
-              variant="ghost"
+              variant={location.pathname === item.path ? "secondary" : "ghost"}
               asChild
               className="justify-start font-normal"
             >
