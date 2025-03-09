@@ -38,7 +38,7 @@ const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
     }
   };
 
-  // Define sub-categories for Compromis
+  // Define sub-categories for Compromis - simplified to just the main types
   const compromisSubs = [
     { name: 'Compromis de vente', count: 2 },
     { name: 'Promesse de vente', count: 1 },
