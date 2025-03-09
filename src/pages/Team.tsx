@@ -16,9 +16,11 @@ const Team = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
 
-  const { data: agents, isLoading } = useQuery({
+  const { data: agents, isLoading, error } = useQuery({
     queryKey: ['agents'],
     queryFn: fetchAgents,
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    refetchOnWindowFocus: false,
   });
 
   const filteredAgents = agents?.filter((agent) => {
@@ -32,6 +34,17 @@ const Team = () => {
     );
   });
 
+  useEffect(() => {
+    // Log agents data for debugging
+    if (agents) {
+      console.log("Agents loaded:", agents.length);
+      console.log("Sample agent data:", agents[0]);
+    }
+    if (error) {
+      console.error("Error loading agents:", error);
+    }
+  }, [agents, error]);
+
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -42,6 +55,22 @@ const Team = () => {
           <div className="animate-pulse text-noovimo-500 font-bold text-xl">
             Chargement de l'équipe...
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <Helmet>
+          <title>Equipe Noovimo | Intranet Noovimo</title>
+        </Helmet>
+        <div className="flex justify-center items-center h-64 flex-col">
+          <div className="text-destructive font-bold text-xl mb-4">
+            Erreur lors du chargement de l'équipe
+          </div>
+          <Button onClick={() => window.location.reload()}>Réessayer</Button>
         </div>
       </div>
     );
@@ -83,7 +112,23 @@ const Team = () => {
       <Tabs defaultValue="map" value={viewMode} className="w-full">
         <TabsContent value="map" className="mt-0">
           <div className="glass-card rounded-xl overflow-hidden p-0 shadow-md border border-gray-100 dark:border-gray-800">
-            <AgentMap agents={filteredAgents || []} />
+            {filteredAgents && filteredAgents.length > 0 ? (
+              <AgentMap agents={filteredAgents} />
+            ) : (
+              <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
+                <MapPin className="h-12 w-12 mb-4 text-muted-foreground/50" />
+                <p>Aucun agent trouvé pour cette recherche</p>
+                {searchQuery && (
+                  <Button 
+                    variant="outline" 
+                    className="mt-4"
+                    onClick={() => setSearchQuery('')}
+                  >
+                    Effacer la recherche
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </TabsContent>
         
