@@ -9,6 +9,9 @@ export const useGuide = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Guide[]>([]);
 
+  // Memoized guide categories to prevent unnecessary re-renders
+  const memoizedGuideCategories = useMemo(() => guideCategories, []);
+
   // Set first guide as active initially or on reset
   useEffect(() => {
     if (guides.length > 0 && !activeGuide) {
@@ -16,7 +19,7 @@ export const useGuide = () => {
     }
   }, [guides, activeGuide]);
 
-  // Optimized search functionality with useCallback
+  // Optimized search with useCallback to prevent unnecessary function recreations
   const searchGuides = useCallback((query: string) => {
     if (!query.trim()) {
       setSearchResults([]);
@@ -24,11 +27,38 @@ export const useGuide = () => {
     }
 
     const normalizedQuery = query.toLowerCase();
-    const results = guides.filter(guide => 
-      guide.title.toLowerCase().includes(normalizedQuery) || 
-      guide.content.toLowerCase().includes(normalizedQuery) ||
-      guide.tags.some(tag => tag.toLowerCase().includes(normalizedQuery))
-    );
+    
+    // Optimized search with improved relevance scoring
+    const results = guides
+      .map(guide => {
+        // Calculate relevance score based on different match types
+        let score = 0;
+        
+        // Title match (highest weight)
+        if (guide.title.toLowerCase().includes(normalizedQuery)) {
+          score += 10;
+          // Exact title match gets higher score
+          if (guide.title.toLowerCase() === normalizedQuery) {
+            score += 5;
+          }
+        }
+        
+        // Content match
+        if (guide.content.toLowerCase().includes(normalizedQuery)) {
+          score += 5;
+        }
+        
+        // Tag match
+        const tagMatches = guide.tags.filter(tag => 
+          tag.toLowerCase().includes(normalizedQuery)
+        ).length;
+        score += tagMatches * 3;
+        
+        return { guide, score };
+      })
+      .filter(item => item.score > 0) // Only include items with matches
+      .sort((a, b) => b.score - a.score) // Sort by relevance score
+      .map(item => item.guide); // Extract just the guide objects
 
     setSearchResults(results);
 
@@ -49,13 +79,15 @@ export const useGuide = () => {
     }
   }, [guides, setActiveGuide]);
 
-  // Function to find a guide by ID
+  // Function to find a guide by ID - optimized with useCallback
   const findGuideById = useCallback((id: string): Guide | undefined => {
     return guides.find(guide => guide.id === id);
   }, [guides]);
 
-  // Memoized guideCategories to prevent re-renders
-  const memoizedGuideCategories = useMemo(() => guideCategories, []);
+  // Function to get guides by category
+  const getGuidesByCategory = useCallback((categoryId: string): Guide[] => {
+    return guides.filter(guide => guide.categoryId === categoryId);
+  }, [guides]);
 
   return {
     guides,
@@ -67,6 +99,7 @@ export const useGuide = () => {
     searchQuery,
     setSearchQuery,
     clearSearch,
-    findGuideById
+    findGuideById,
+    getGuidesByCategory
   };
 };

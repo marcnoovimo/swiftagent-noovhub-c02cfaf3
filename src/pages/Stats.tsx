@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { 
   Building2, 
@@ -38,6 +38,34 @@ const Stats = () => {
       maximumFractionDigits: 0
     }).format(value);
   }, []);
+
+  // Memoize card data to prevent unnecessary re-renders
+  const cardData = useMemo(() => {
+    if (!stats) return [];
+    
+    return [
+      {
+        title: "Ventes réalisées",
+        value: stats.totalSales,
+        icon: <Home size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      },
+      {
+        title: "Compromis signés",
+        value: stats.totalCompromis,
+        icon: <Building2 size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      },
+      {
+        title: "Volume de transactions",
+        value: formatCurrency(stats.totalVolume),
+        icon: <BarChart3 size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      },
+      {
+        title: "Commissions totales",
+        value: formatCurrency(stats.totalCommission),
+        icon: <CreditCard size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      }
+    ];
+  }, [stats, formatCurrency, isMobile]);
 
   if (isLoading || !stats) {
     return (
@@ -78,26 +106,14 @@ const Stats = () => {
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
-        <StatCard
-          title="Ventes réalisées"
-          value={stats.totalSales}
-          icon={<Home size={isMobile ? 14 : 16} className="text-noovimo-500" />}
-        />
-        <StatCard
-          title="Compromis signés"
-          value={stats.totalCompromis}
-          icon={<Building2 size={isMobile ? 14 : 16} className="text-noovimo-500" />}
-        />
-        <StatCard
-          title="Volume de transactions"
-          value={formatCurrency(stats.totalVolume)}
-          icon={<BarChart3 size={isMobile ? 14 : 16} className="text-noovimo-500" />}
-        />
-        <StatCard
-          title="Commissions totales"
-          value={formatCurrency(stats.totalCommission)}
-          icon={<CreditCard size={isMobile ? 14 : 16} className="text-noovimo-500" />}
-        />
+        {cardData.map((card, index) => (
+          <StatCard
+            key={index}
+            title={card.title}
+            value={card.value}
+            icon={card.icon}
+          />
+        ))}
       </div>
       
       <div className="mb-4 sm:mb-6">

@@ -53,9 +53,9 @@ const DocumentList: React.FC<DocumentListProps> = ({
         const comparison = a.name.localeCompare(b.name);
         return sortDirection === 'asc' ? comparison : -comparison;
       } else {
-        // Assuming there's a updatedAt field, otherwise fallback to name
-        const dateA = (a as Document).updatedAt || '';
-        const dateB = (b as Document).updatedAt || '';
+        // Utilisez la date de creation qui existe déjà dans le Document type
+        const dateA = (a as Document).createdAt || '';
+        const dateB = (b as Document).createdAt || '';
         const comparison = dateA.localeCompare(dateB);
         return sortDirection === 'asc' ? comparison : -comparison;
       }

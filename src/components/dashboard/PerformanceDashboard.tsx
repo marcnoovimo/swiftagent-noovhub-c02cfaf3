@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { usePerformanceData } from './hooks/usePerformanceData';
 import { getPercentChange } from './utils/performanceUtils';
 import MonthlyActivity from './sections/MonthlyActivity';
@@ -16,9 +16,15 @@ const PerformanceDashboard: React.FC = () => {
     isLoading 
   } = usePerformanceData();
 
+  // Memoizing the percentage change to avoid recalculation on re-renders
+  const percentChange = useMemo(() => 
+    getPercentChange(monthlyStats.sales, previousMonthSales),
+    [monthlyStats.sales, previousMonthSales]
+  );
+
   if (isLoading) {
     return (
-      <div className="space-y-6 w-full">
+      <div className="space-y-6 w-full animate-pulse">
         <Skeleton className="h-[120px] w-full rounded-xl" />
         <Skeleton className="h-[120px] w-full rounded-xl" />
         <Skeleton className="h-[250px] w-full rounded-xl" />
@@ -34,7 +40,7 @@ const PerformanceDashboard: React.FC = () => {
         commission={monthlyStats.commission}
         conversionRate={monthlyStats.conversionRate}
         previousMonthSales={previousMonthSales}
-        percentChange={getPercentChange(monthlyStats.sales, previousMonthSales)}
+        percentChange={percentChange}
       />
 
       <AnnualCumulative
