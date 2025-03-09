@@ -48,7 +48,7 @@ const MonthlyRevenueChart = () => {
           Évolution
         </CardTitle>
         <CardDescription>
-          Valeur honoraires et valeurs commissions HT
+          Valeur honoraires et valeur commissions HT
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -151,7 +151,7 @@ const Index = () => {
                         <p className="text-xs text-muted-foreground">Acte prévu: 15/06/2023</p>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right whitespace-nowrap">
                       <p className="font-bold">7 500 €</p>
                       <p className="text-xs text-muted-foreground">Honoraires</p>
                     </div>
@@ -168,7 +168,7 @@ const Index = () => {
                         <p className="text-xs text-muted-foreground">Acte prévu: 02/07/2023</p>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right whitespace-nowrap">
                       <p className="font-bold">12 300 €</p>
                       <p className="text-xs text-muted-foreground">Honoraires</p>
                     </div>
@@ -188,7 +188,7 @@ const Index = () => {
                         <p className="text-xs text-muted-foreground">Acte final: 01/04/2023</p>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right whitespace-nowrap">
                       <p className="font-bold">8 400 €</p>
                       <p className="text-xs text-muted-foreground">Honoraires</p>
                     </div>
@@ -201,7 +201,7 @@ const Index = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Mes commissions</CardTitle>
+            <CardTitle className="text-base">Mes honoraires cumulés € HT</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
