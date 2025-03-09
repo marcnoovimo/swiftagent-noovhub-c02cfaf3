@@ -88,14 +88,14 @@ const DocumentUploadButton = ({ onClick }: DocumentUploadButtonProps) => {
   return (
     <>
       <div className="flex flex-wrap gap-2">
-        <Button className="flex items-center gap-2" onClick={handleButtonClick}>
+        <Button className="flex items-center gap-2 bg-noovimo-500 hover:bg-noovimo-600" onClick={handleButtonClick}>
           <FileUp size={16} />
           <span>Ajouter un document</span>
         </Button>
         
         <Button 
           variant="outline" 
-          className="flex items-center gap-2 border-noovimo-500 text-noovimo-500 hover:bg-noovimo-50" 
+          className="flex items-center gap-2 border-noovimo-500 text-noovimo-500 hover:bg-noovimo-50 bg-white" 
           onClick={handleDirectScan}
         >
           <Camera size={16} />

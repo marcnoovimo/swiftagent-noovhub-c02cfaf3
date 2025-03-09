@@ -5,12 +5,31 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Helmet } from 'react-helmet';
 import DocumentsTabContent from '@/components/documents/DocumentsTabContent';
 
+type TransactionType = 'compromis' | 'mandat' | 'vente' | 'autre';
+
+// Define specific document type
+interface DocumentType {
+  id: string;
+  name: string;
+  type: string;
+  category: string;
+  starred: boolean;
+  buyerName?: string;
+  sellerName?: string;
+  propertyAddress?: string;
+  propertyType?: string;
+  propertyValue?: number;
+  commissionAmount?: number;
+  transactionType: TransactionType;
+  agentFees?: string;
+}
+
 const Documents = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeDocType, setActiveDocType] = useState<'agent' | 'noovimo'>('agent');
 
   // Mock document items with additional metadata for scanned documents
-  const agentDocuments = [
+  const agentDocuments: DocumentType[] = [
     { 
       id: '1', 
       name: 'Compromis Villa Marseille', 
@@ -53,12 +72,12 @@ const Documents = () => {
     },
   ];
 
-  const handleDocumentClick = (doc) => {
+  const handleDocumentClick = (doc: DocumentType) => {
     console.log('Document clicked:', doc);
     // In a real implementation, this would open the document preview
   };
 
-  const handleFolderClick = (folderId, folderName) => {
+  const handleFolderClick = (folderId: string, folderName: string) => {
     console.log('Folder clicked:', folderId, folderName);
     // In a real implementation, this would navigate to the folder
   };

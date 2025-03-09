@@ -84,4 +84,12 @@
   .scan-preview {
     @apply border-2 border-dashed border-gray-300 rounded-md p-4 mb-4 flex items-center justify-center bg-gray-50;
   }
+
+  /* Fix for Dialog, Sheet, Popover components */
+  .radix-dialog-content,
+  .radix-popover-content,
+  .radix-sheet-content {
+    background-color: hsl(var(--background)) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+  }
 }
