@@ -56,11 +56,11 @@ const config = {
           '200': '#f9d0d8',
           '300': '#f4a9b8',
           '400': '#ed7591',
-          '500': '#d72345', // Modifié ici pour utiliser la nouvelle couleur
-          '600': '#c01f3c', // Teinte légèrement plus foncée
-          '700': '#a11933',
-          '800': '#851731',
-          '900': '#6f172d',
+          '500': '#b32842', // Mise à jour de la couleur Noovimo ici
+          '600': '#a1233a', // Teinte légèrement plus foncée
+          '700': '#8c1f32',
+          '800': '#721929',
+          '900': '#5f1522',
           '950': '#400918',
         },
       },

@@ -9,7 +9,7 @@
   
   /* Button variants */
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+    @apply bg-noovimo-500 text-white hover:bg-noovimo-600;
   }
   
   .btn-secondary {
@@ -25,7 +25,7 @@
   }
   
   .btn-link {
-    @apply text-primary underline-offset-4 hover:underline;
+    @apply text-noovimo-500 underline-offset-4 hover:underline;
   }
   
   .btn-destructive {

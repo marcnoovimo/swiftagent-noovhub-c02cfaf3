@@ -1,10 +1,9 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { Contact } from '@/types/contact';
 import { 
   Select,
@@ -22,6 +21,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { format } from 'date-fns';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface ContactFormProps {
   open: boolean;
@@ -58,12 +58,12 @@ const ContactForm = ({ open, onOpenChange, onSave, initialData }: ContactFormPro
     onOpenChange(false);
   });
 
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-background p-6 rounded-lg max-w-xl w-full max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-bold mb-4">Nouveau contact</h2>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-bold">Nouveau contact</DialogTitle>
+        </DialogHeader>
         
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -292,8 +292,8 @@ const ContactForm = ({ open, onOpenChange, onSave, initialData }: ContactFormPro
             </div>
           </form>
         </Form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

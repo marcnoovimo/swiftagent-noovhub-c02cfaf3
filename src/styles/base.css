@@ -7,7 +7,7 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 340 82% 40%;
+    --primary: 343 71% 37%;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -28,11 +28,11 @@
     --noovimo-200: 340 90% 88%;
     --noovimo-300: 340 85% 80%;
     --noovimo-400: 340 85% 65%;
-    --noovimo-500: 340 82% 45%;
-    --noovimo-600: 340 82% 40%;
-    --noovimo-700: 340 82% 35%;
-    --noovimo-800: 340 82% 30%;
-    --noovimo-900: 340 82% 25%;
+    --noovimo-500: 343 71% 37%;
+    --noovimo-600: 343 71% 32%;
+    --noovimo-700: 343 71% 28%;
+    --noovimo-800: 343 71% 23%;
+    --noovimo-900: 343 71% 19%;
     --noovimo-950: 340 85% 15%;
   }
 
@@ -43,7 +43,7 @@
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 340 82% 45%;
+    --primary: 343 71% 37%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
