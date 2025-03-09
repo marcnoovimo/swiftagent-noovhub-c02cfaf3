@@ -19,7 +19,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-background">
         <DialogHeader>
           <DialogTitle>Ajouter un document</DialogTitle>
           <DialogDescription>
@@ -30,7 +30,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
         <div className="grid grid-cols-1 gap-4 py-4">
           <Button 
             variant="outline" 
-            className="w-full justify-start gap-2 p-4 h-auto"
+            className="w-full justify-start gap-2 p-4 h-auto bg-background"
             onClick={() => {
               onOpenChange(false);
               onScanClick();
@@ -45,7 +45,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
           
           <Button 
             variant="outline" 
-            className="w-full justify-start gap-2 p-4 h-auto"
+            className="w-full justify-start gap-2 p-4 h-auto bg-background"
             onClick={() => {
               onOpenChange(false);
               onImportClick();

@@ -3,6 +3,7 @@
 .dropdown-content {
   z-index: 50 !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  background-color: hsl(var(--background)) !important;
 }
 
 .dialog-content {
@@ -17,6 +18,7 @@
 
 .popover-content {
   z-index: 40 !important;
+  background-color: hsl(var(--background)) !important;
 }
 
 .toast-viewport {
@@ -137,4 +139,16 @@ input:focus,
 textarea:focus, 
 select:focus {
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Fix for radix components */
+[role="dialog"],
+[data-radix-popper-content-wrapper] {
+  background-color: transparent !important;
+}
+
+[role="dialog"] > div,
+[data-radix-popper-content-wrapper] > div {
+  background-color: hsl(var(--background)) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
