@@ -90,13 +90,13 @@ const Index = () => {
 
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <PerformanceCard
-          title="Chiffre d'affaires"
+          title="Honoraires € HT"
           value={statsData?.totalRevenue || "0 €"}
           description="Cumul annuel"
           icon={<Euro className="h-4 w-4" />}
         />
         <PerformanceCard
-          title="Ventes"
+          title="Unités de ventes"
           value={statsData?.salesCount || "0"}
           description="Transactions cette année"
           icon={<TrendingUp className="h-4 w-4" />}
@@ -108,7 +108,7 @@ const Index = () => {
           icon={<Users className="h-4 w-4" />}
         />
         <PerformanceCard
-          title="Taux de commission"
+          title="Tx de commission"
           value={statsData?.currentCommissionRate || "72%"}
           description="Palier actuel"
           icon={<BarChart className="h-4 w-4" />}
@@ -117,10 +117,7 @@ const Index = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-base">Évolution du CA</CardTitle>
-          </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             <div className="h-[300px] w-full">
               <MonthlyRevenueChart />
             </div>

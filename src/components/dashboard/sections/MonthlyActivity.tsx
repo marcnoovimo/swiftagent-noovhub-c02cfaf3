@@ -34,7 +34,7 @@ const MonthlyActivity: React.FC<MonthlyActivityProps> = ({
       <h2 className="text-lg sm:text-xl font-semibold mb-2">Activité du mois</h2>
       <div className="card-grid">
         <PerformanceCard
-          title="Ventes"
+          title="Unités de ventes"
           value={sales.toString()}
           change={percentChange}
           positive={sales >= previousMonthSales}
@@ -51,7 +51,7 @@ const MonthlyActivity: React.FC<MonthlyActivityProps> = ({
           icon={<Euro size={14} className="text-noovimo-500" />}
         />
         <PerformanceCard
-          title="Taux de transformation"
+          title="Tx de transformation"
           value={`${(conversionRate * 100).toFixed(0)}%`}
           icon={<TrendingUp size={14} className="text-noovimo-500" />}
         />

@@ -33,7 +33,7 @@ const MonthlyRevenueChart = () => {
     return (
       <Card className="w-full h-full">
         <CardHeader>
-          <CardTitle>Chiffre d'affaires mensuel</CardTitle>
+          <CardTitle>Évolution</CardTitle>
           <CardDescription>Chargement...</CardDescription>
         </CardHeader>
       </Card>
@@ -45,17 +45,17 @@ const MonthlyRevenueChart = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Euro className="h-5 w-5" />
-          Évolution mensuelle
+          Évolution
         </CardTitle>
         <CardDescription>
-          Votre chiffre d'affaires cumulé mois par mois
+          Valeur honoraires et valeurs commissions HT
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="line">
           <TabsList className="mb-4">
-            <TabsTrigger value="line" className="text-xs sm:text-sm">Courbe</TabsTrigger>
-            <TabsTrigger value="bar" className="text-xs sm:text-sm">Barres</TabsTrigger>
+            <TabsTrigger value="line" className="text-xs sm:text-sm">Évolution mensuelle</TabsTrigger>
+            <TabsTrigger value="bar" className="text-xs sm:text-sm">Évolution cumulée annuelle</TabsTrigger>
           </TabsList>
           
           <TabsContent value="line" className="h-[250px]">
@@ -115,12 +115,12 @@ const MonthlyRevenueChart = () => {
                 <Legend wrapperStyle={{ fontSize: '10px' }} />
                 <Bar
                   dataKey="revenue"
-                  name="Honoraires"
+                  name="Honoraires cumulés"
                   fill="#8884d8"
                 />
                 <Bar
                   dataKey="commission"
-                  name="Commission"
+                  name="Commission cumulés"
                   fill="#82ca9d"
                 />
               </BarChart>
