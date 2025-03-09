@@ -1,9 +1,10 @@
 
 import { Document } from '@/components/documents/types';
-import { DocumentReference } from '@/types/chatbot';
+import { DocumentReference, OpenAIConfig } from '@/types/chatbot';
 import { agentDocuments, noovimoFolders } from '@/data/documentsData';
 import { detectDocumentType } from '@/lib/utils';
 import { findFolderAndContents, searchInFolder } from '@/utils/documentUtils';
+import { getOpenAIResponse } from './openaiService';
 
 /**
  * Search for documents related to a user query
@@ -80,12 +81,20 @@ export const searchDocumentsForQuery = (query: string): DocumentReference[] => {
  */
 export const generateChatbotResponse = async (
   query: string,
-  documentSuggestions: DocumentReference[]
+  documentSuggestions: DocumentReference[],
+  openaiConfig?: OpenAIConfig
 ): Promise<string> => {
-  // In a real implementation, this would call an AI model API
-  // For now, we'll use a mock response based on the query and document context
+  // If OpenAI config is provided, use the OpenAI API
+  if (openaiConfig?.apiKey) {
+    // Extract document information to provide context
+    const documentContexts = documentSuggestions.map(doc => 
+      `Document: ${doc.name}, Type: ${doc.type}, Catégorie: ${doc.category}`
+    );
+    
+    return await getOpenAIResponse(query, documentContexts, openaiConfig);
+  }
   
-  // Simple response patterns
+  // Fallback to the mock response logic when no API key is configured
   if (query.toLowerCase().includes('formation') || query.toLowerCase().includes('apprendre')) {
     return "Voici quelques documents de formation pertinents pour votre demande. Vous pouvez y accéder directement depuis les suggestions ci-dessous.";
   }

@@ -15,3 +15,11 @@ export interface DocumentReference {
   url?: string;
   confidenceScore?: number;
 }
+
+// Add OpenAI API configuration type
+export interface OpenAIConfig {
+  apiKey: string;
+  model: string;
+  maxTokens?: number;
+  temperature?: number;
+}

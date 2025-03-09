@@ -9,6 +9,7 @@ interface ChatMessageItemProps {
 
 const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => {
   const isBot = message.sender === 'bot';
+  const isLoading = message.isLoading;
 
   return (
     <div className={cn(
@@ -17,7 +18,8 @@ const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => {
     )}>
       <div className={cn(
         "rounded-lg p-3 max-w-[80%]",
-        isBot ? "bg-secondary/70" : "bg-noovimo-500 text-white"
+        isBot ? "bg-secondary/70" : "bg-noovimo-500 text-white",
+        isLoading && "animate-pulse"
       )}>
         <p className="text-sm whitespace-pre-wrap">{message.content}</p>
         <p className="text-[10px] opacity-70 text-right mt-1">

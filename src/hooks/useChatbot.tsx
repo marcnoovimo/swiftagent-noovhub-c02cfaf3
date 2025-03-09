@@ -1,9 +1,17 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { ChatMessage, DocumentReference } from '@/types/chatbot';
+import { ChatMessage, DocumentReference, OpenAIConfig } from '@/types/chatbot';
 import { searchDocumentsForQuery, generateChatbotResponse } from '@/services/chatbotService';
 import { useToast } from "@/hooks/use-toast";
+
+// Add speech recognition type
+declare global {
+  interface Window {
+    SpeechRecognition: typeof SpeechRecognition;
+    webkitSpeechRecognition: typeof SpeechRecognition;
+  }
+}
 
 export const useChatbot = () => {
   const { toast } = useToast();
@@ -11,7 +19,7 @@ export const useChatbot = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: uuidv4(),
-      content: "Bonjour, je suis Noovi, votre assistant IA. Comment puis-je vous aider aujourd'hui ?",
+      content: "Bonjour, je suis Arthur, votre assistant IA. Comment puis-je vous aider aujourd'hui ?",
       timestamp: new Date(),
       sender: 'bot'
     }
@@ -21,6 +29,18 @@ export const useChatbot = () => {
   const [documentSuggestions, setDocumentSuggestions] = useState<DocumentReference[]>([]);
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  
+  // New state for OpenAI configuration
+  const [openaiConfig, setOpenaiConfig] = useState<OpenAIConfig | undefined>(() => {
+    // Try to get API key from localStorage
+    const savedConfig = localStorage.getItem('arthur_openai_config');
+    return savedConfig ? JSON.parse(savedConfig) : {
+      apiKey: '',
+      model: 'gpt-4o',
+      maxTokens: 500,
+      temperature: 0.7
+    };
+  });
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -40,13 +60,26 @@ export const useChatbot = () => {
     setInput('');
     setIsLoading(true);
     
+    // Add loading message
+    const loadingMessageId = uuidv4();
+    setMessages(prev => [...prev, {
+      id: loadingMessageId,
+      content: "Je réfléchis...",
+      timestamp: new Date(),
+      sender: 'bot',
+      isLoading: true
+    }]);
+    
     // Search for relevant documents
     const documents = searchDocumentsForQuery(input);
     setDocumentSuggestions(documents);
     
     try {
-      // Generate response
-      const botResponse = await generateChatbotResponse(input, documents);
+      // Generate response with OpenAI if configured
+      const botResponse = await generateChatbotResponse(input, documents, openaiConfig);
+      
+      // Remove loading message and add real response
+      setMessages(prev => prev.filter(msg => msg.id !== loadingMessageId));
       
       const botMessage: ChatMessage = {
         id: uuidv4(),
@@ -58,6 +91,9 @@ export const useChatbot = () => {
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('Error generating response:', error);
+      
+      // Remove loading message and add error message
+      setMessages(prev => prev.filter(msg => msg.id !== loadingMessageId));
       
       const errorMessage: ChatMessage = {
         id: uuidv4(),
@@ -71,6 +107,13 @@ export const useChatbot = () => {
       setIsLoading(false);
     }
   };
+
+  // Save OpenAI config to localStorage whenever it changes
+  useEffect(() => {
+    if (openaiConfig) {
+      localStorage.setItem('arthur_openai_config', JSON.stringify(openaiConfig));
+    }
+  }, [openaiConfig]);
 
   const toggleListening = () => {
     if (isListening) {
@@ -146,6 +189,11 @@ export const useChatbot = () => {
     }
   };
 
+  // New function to update OpenAI configuration
+  const updateOpenAIConfig = (config: Partial<OpenAIConfig>) => {
+    setOpenaiConfig(prev => prev ? { ...prev, ...config } : config);
+  };
+
   useEffect(() => {
     return () => {
       if (recognitionRef.current) {
@@ -164,14 +212,8 @@ export const useChatbot = () => {
     isLoading,
     documentSuggestions,
     isListening,
-    toggleListening
+    toggleListening,
+    openaiConfig,
+    updateOpenAIConfig
   };
 };
-
-// Add missing TypeScript declaration for browser Speech Recognition
-declare global {
-  interface Window {
-    SpeechRecognition: typeof SpeechRecognition;
-    webkitSpeechRecognition: typeof SpeechRecognition;
-  }
-}
