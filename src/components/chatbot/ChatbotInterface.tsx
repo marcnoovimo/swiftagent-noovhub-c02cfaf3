@@ -1,13 +1,14 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MessageSquare, Send, Settings, Key } from 'lucide-react';
+import { MessageSquare, Send, Settings, Key, Mic } from 'lucide-react';
 import { useChatbot } from '@/hooks/useChatbot';
 import ChatMessageItem from './ChatMessageItem';
 import DocumentReferenceCard from './DocumentReferenceCard';
 import ChatbotButton from './ChatbotButton';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
 
 const ChatbotInterface: React.FC = () => {
   const {
@@ -149,13 +150,25 @@ const ChatbotInterface: React.FC = () => {
                     }
                   }}
                 />
-                <button 
-                  type="submit"
-                  className="absolute right-3 bottom-3 text-muted-foreground hover:text-primary"
-                  disabled={isLoading || input.trim() === ''}
-                >
-                  <Send size={18} className={isLoading ? "opacity-50" : ""} />
-                </button>
+                <div className="absolute right-3 bottom-3 flex items-center gap-2">
+                  <button 
+                    type="button"
+                    className={cn(
+                      "text-muted-foreground hover:text-primary p-1 rounded-full",
+                      isListening && "bg-red-100 text-red-500"
+                    )}
+                    onClick={toggleListening}
+                  >
+                    <Mic size={18} className={isListening ? "animate-pulse" : ""} />
+                  </button>
+                  <button 
+                    type="submit"
+                    className="text-muted-foreground hover:text-primary"
+                    disabled={isLoading || input.trim() === ''}
+                  >
+                    <Send size={18} className={isLoading ? "opacity-50" : ""} />
+                  </button>
+                </div>
               </form>
             </div>
           </motion.div>
@@ -165,8 +178,6 @@ const ChatbotInterface: React.FC = () => {
       <ChatbotButton 
         isOpen={isOpen} 
         toggleOpen={toggleOpen} 
-        onStartVoiceRecognition={toggleListening} 
-        isListening={isListening} 
       />
     </>
   );

@@ -5,11 +5,34 @@ import { ChatMessage, DocumentReference, OpenAIConfig } from '@/types/chatbot';
 import { searchDocumentsForQuery, generateChatbotResponse } from '@/services/chatbotService';
 import { useToast } from "@/hooks/use-toast";
 
+// Define SpeechRecognition interface
+interface SpeechRecognitionEvent extends Event {
+  results: {
+    [index: number]: {
+      [index: number]: {
+        transcript: string;
+      }
+    }
+  }
+}
+
+interface SpeechRecognition extends EventTarget {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  start(): void;
+  stop(): void;
+  onstart: (event: Event) => void;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: { error: string }) => void;
+  onend: (event: Event) => void;
+}
+
 // Add speech recognition type
 declare global {
   interface Window {
-    SpeechRecognition: typeof SpeechRecognition;
-    webkitSpeechRecognition: typeof SpeechRecognition;
+    SpeechRecognition: new () => SpeechRecognition;
+    webkitSpeechRecognition: new () => SpeechRecognition;
   }
 }
 
@@ -31,7 +54,7 @@ export const useChatbot = () => {
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   
   // New state for OpenAI configuration
-  const [openaiConfig, setOpenaiConfig] = useState<OpenAIConfig | undefined>(() => {
+  const [openaiConfig, setOpenaiConfig] = useState<OpenAIConfig>(() => {
     // Try to get API key from localStorage
     const savedConfig = localStorage.getItem('arthur_openai_config');
     return savedConfig ? JSON.parse(savedConfig) : {
@@ -189,9 +212,9 @@ export const useChatbot = () => {
     }
   };
 
-  // New function to update OpenAI configuration
+  // New function to update OpenAI configuration - fixed type issue
   const updateOpenAIConfig = (config: Partial<OpenAIConfig>) => {
-    setOpenaiConfig(prev => prev ? { ...prev, ...config } : config);
+    setOpenaiConfig(prev => ({ ...prev, ...config }));
   };
 
   useEffect(() => {

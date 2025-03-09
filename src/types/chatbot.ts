@@ -16,7 +16,7 @@ export interface DocumentReference {
   confidenceScore?: number;
 }
 
-// Add OpenAI API configuration type
+// Update OpenAI API configuration type
 export interface OpenAIConfig {
   apiKey: string;
   model: string;
