@@ -1,10 +1,10 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Guide, GuideCategory } from '@/components/support/types';
 import { supportGuides, guideCategories } from '@/data/guideData';
 
 export const useGuide = () => {
-  const [guides, setGuides] = useState<Guide[]>(supportGuides);
+  const [guides] = useState<Guide[]>(supportGuides);
   const [activeGuide, setActiveGuide] = useState<Guide | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Guide[]>([]);
@@ -16,8 +16,8 @@ export const useGuide = () => {
     }
   }, [guides, activeGuide]);
 
-  // Search functionality
-  const searchGuides = (query: string) => {
+  // Optimized search functionality with useCallback
+  const searchGuides = useCallback((query: string) => {
     if (!query.trim()) {
       setSearchResults([]);
       return;
@@ -33,14 +33,17 @@ export const useGuide = () => {
     setSearchResults(results);
 
     // If we have results and no active guide is selected from the results, select the first one
-    if (results.length > 0 && !results.includes(activeGuide as Guide)) {
+    if (results.length > 0 && (!activeGuide || !results.includes(activeGuide))) {
       setActiveGuide(results[0]);
     }
-  };
+  }, [guides, activeGuide]);
+
+  // Memoized guideCategories to prevent re-renders
+  const memoizedGuideCategories = useMemo(() => guideCategories, []);
 
   return {
     guides,
-    guideCategories,
+    guideCategories: memoizedGuideCategories,
     activeGuide,
     setActiveGuide,
     searchGuides,

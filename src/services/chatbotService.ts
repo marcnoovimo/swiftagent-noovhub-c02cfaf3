@@ -29,7 +29,16 @@ export const generateChatbotResponse = async (
   documentSuggestions: any[],
   openaiConfig?: OpenAIConfig
 ): Promise<string> => {
-  // Check if this is a price/pack question first
+  // Check if this is a guide-related question first
+  const relevantGuides = searchSupportGuides(query);
+  if (relevantGuides.length > 0) {
+    const mainGuide = relevantGuides[0];
+    const guideLinks = relevantGuides.map(guide => `- ${guide.title}`).join('\n');
+    
+    return `J'ai trouvé quelques guides dans notre documentation qui pourraient vous aider:\n\n${guideLinks}\n\nVoici un extrait du guide principal:\n"${mainGuide.title}": ${mainGuide.content.replace(/<[^>]*>/g, '').substring(0, 200)}...\n\nJe vous recommande de consulter la section Support pour plus de détails.`;
+  }
+  
+  // Check if this is a price/pack question 
   const priceQuery = isPriceQuery(query);
   if (priceQuery.isPriceQuestion && priceQuery.packName) {
     try {
@@ -43,15 +52,6 @@ export const generateChatbotResponse = async (
     } catch (error) {
       console.error("Error fetching commission pack data:", error);
     }
-  }
-  
-  // Search for relevant support guides
-  const relevantGuides = searchSupportGuides(query);
-  if (relevantGuides.length > 0) {
-    const mainGuide = relevantGuides[0];
-    const guideLinks = relevantGuides.map(guide => `- ${guide.title}`).join('\n');
-    
-    return `J'ai trouvé quelques guides dans notre documentation qui pourraient vous aider:\n\n${guideLinks}\n\nVoici un extrait du guide principal:\n"${mainGuide.title}": ${mainGuide.content.replace(/<[^>]*>/g, '').substring(0, 200)}...\n\nJe vous recommande de consulter la section Support pour plus de détails.`;
   }
   
   // If OpenAI config is provided, use the OpenAI API

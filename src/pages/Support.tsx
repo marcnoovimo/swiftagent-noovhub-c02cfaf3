@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -7,8 +7,10 @@ import GuideCategories from "@/components/support/GuideCategories";
 import GuideContent from "@/components/support/GuideContent";
 import PopularGuides from "@/components/support/PopularGuides";
 import { useGuide } from '@/hooks/useGuide';
+import { useLocation } from 'react-router-dom';
 
 const Support = () => {
+  const location = useLocation();
   const { 
     guideCategories, 
     guides, 
@@ -19,6 +21,17 @@ const Support = () => {
     searchQuery,
     setSearchQuery
   } = useGuide();
+
+  // Check URL for search query parameters
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const queryParam = searchParams.get('q');
+    
+    if (queryParam) {
+      setSearchQuery(queryParam);
+      searchGuides(queryParam);
+    }
+  }, [location, searchGuides, setSearchQuery]);
 
   return (
     <div className="container mx-auto py-6 max-w-7xl">

@@ -1,15 +1,28 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { supportGuides } from '@/data/guideData';
+import { useChatbot } from '@/hooks/useChatbot';
 
 const SearchBar: React.FC = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
   const [query, setQuery] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
+  const { toggleOpen, setInput, handleSendMessage } = useChatbot();
+
+  // Check URL for search query parameters on mount and when location changes
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const queryParam = searchParams.get('q');
+    
+    if (queryParam && location.pathname === '/support') {
+      setQuery(queryParam);
+    }
+  }, [location]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +40,14 @@ const SearchBar: React.FC = () => {
         // Redirect to support page with search query
         navigate(`/support?q=${encodeURIComponent(query)}`);
       } else {
-        // Show toast for general search
+        // Open chatbot with query if no guide matches
+        setInput(query);
+        toggleOpen();
+        setTimeout(() => {
+          handleSendMessage();
+        }, 300);
+        
+        // Show toast for search
         toast({
           title: "Recherche",
           description: `Recherche de "${query}" en cours...`,
