@@ -71,14 +71,14 @@ const ActivityFeed: React.FC<ActivityFeedProps> = ({ activities }) => {
       </CardHeader>
       <CardContent className="p-0">
         <Tabs defaultValue="all">
-          <TabsList className="w-full justify-start px-6 pt-2">
-            <TabsTrigger value="all" className="text-xs">Tout</TabsTrigger>
-            <TabsTrigger value="sales" className="text-xs">Ventes</TabsTrigger>
-            <TabsTrigger value="invoices" className="text-xs">Factures</TabsTrigger>
-            <TabsTrigger value="messages" className="text-xs">Messages</TabsTrigger>
+          <TabsList className="w-full flex-wrap px-4 sm:px-6 pt-2 border-b overflow-x-hidden">
+            <TabsTrigger value="all" className="text-xs whitespace-nowrap">Tout</TabsTrigger>
+            <TabsTrigger value="sales" className="text-xs whitespace-nowrap">Ventes</TabsTrigger>
+            <TabsTrigger value="invoices" className="text-xs whitespace-nowrap">Factures</TabsTrigger>
+            <TabsTrigger value="messages" className="text-xs whitespace-nowrap">Messages</TabsTrigger>
           </TabsList>
           <ScrollArea className="h-[300px]">
-            <div className="px-6 py-4">
+            <div className="px-4 sm:px-6 py-4">
               <TabsContent value="all" className="m-0">
                 {renderActivities(safeActivities)}
               </TabsContent>

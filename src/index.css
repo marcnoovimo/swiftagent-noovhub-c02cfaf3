@@ -202,6 +202,92 @@
       transform: translateY(10px);
     }
   }
+  
+  /* Tab responsiveness improvements */
+  .TabsList {
+    @apply flex-wrap overflow-hidden;
+  }
+  
+  .TabsTrigger {
+    @apply whitespace-nowrap text-ellipsis overflow-hidden max-w-[120px];
+  }
+  
+  /* Improved text truncation for all screen sizes */
+  .truncate-dynamic {
+    @apply truncate max-w-full;
+  }
+  
+  .max-w-dynamic {
+    @apply max-w-[calc(100%-2rem)];
+  }
+  
+  /* Better handling of long text in small containers */
+  .text-container {
+    @apply min-w-0 overflow-hidden;
+  }
+  
+  /* More sidebar responsive adjustments */
+  .sidebar-container {
+    @apply h-full transition-all duration-300 z-30;
+  }
+  
+  .sidebar-open {
+    @apply basis-64 min-w-64;
+    transform: translateX(0);
+  }
+  
+  .sidebar-closed {
+    @apply basis-0 min-w-0 md:basis-16 md:min-w-16;
+    transform: translateX(-100%);
+  }
+  
+  @media (min-width: 768px) {
+    .sidebar-closed {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes scale-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slide-in {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slide-out {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
 }
 
 /* Custom scrollbar */
@@ -283,6 +369,7 @@
   overflow: hidden;
 }
 
+/* Enhanced text handling */
 .break-all {
   word-break: break-all;
 }
@@ -297,8 +384,17 @@
   white-space: nowrap;
 }
 
-/* Better form fields on mobile devices */
+/* Better tab navigation on small screens */
 @media (max-width: 640px) {
+  .TabsTrigger {
+    @apply px-2 py-1.5 text-xs;
+    max-width: 80px;
+  }
+  
+  .TabsList {
+    @apply px-2 py-1 gap-1;
+  }
+  
   input, select, textarea {
     font-size: 16px !important; /* Prevents iOS zoom on focus */
   }
