@@ -104,8 +104,8 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
             <SelectValue placeholder="Sélectionner un niveau d'accès" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="agent">Personnel</SelectItem>
-            <SelectItem value="shared">Siège social</SelectItem>
+            <SelectItem value="agent">Agent uniquement</SelectItem>
+            <SelectItem value="shared">Partagé avec le siège</SelectItem>
           </SelectContent>
         </Select>
       </div>
