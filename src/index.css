@@ -1,6 +1,8 @@
 
-/* Import the new CSS files */
+/* Import base styles with Tailwind directives first */
 @import './styles/base.css';
+
+/* Import component styles */
 @import './styles/components.css';
 @import './styles/animations.css';
 @import './styles/responsive.css';
