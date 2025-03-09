@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import ContractFormDialog from './ContractFormDialog';
+import { ContractFormValues } from './contract-form/schema';
 
 interface ContractFormIntegrationProps {
   contractFormOpen: boolean;
