@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { FolderOpen, Star, Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import { FolderOpen, Star, Plus, ChevronDown, ChevronRight } from 'lucide-react';
 import { Folder, Category } from './types';
 
 interface DocumentSidebarProps {
@@ -28,6 +28,23 @@ const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
   showAddCategory = false,
   onAddCategory
 }) => {
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(['Compromis']);
+
+  const toggleCategory = (categoryName: string) => {
+    if (expandedCategories.includes(categoryName)) {
+      setExpandedCategories(expandedCategories.filter(cat => cat !== categoryName));
+    } else {
+      setExpandedCategories([...expandedCategories, categoryName]);
+    }
+  };
+
+  // Define sub-categories for Compromis
+  const compromisSubs = [
+    { name: 'Compromis de vente', count: 2 },
+    { name: 'Promesse de vente', count: 1 },
+    { name: 'Location', count: 1 },
+  ];
+
   return (
     <div className="bg-secondary/30 rounded-xl p-4">
       <h3 className="font-medium mb-4">{title}</h3>
@@ -60,17 +77,46 @@ const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
         
         {categories.map(category => {
           const IconComponent = category.icon;
+          const hasSubMenu = category.name === 'Compromis';
+          const isExpanded = expandedCategories.includes(category.name);
+          
           return (
-            <div 
-              key={category.name}
-              className="flex items-center justify-between p-2 rounded-lg hover:bg-secondary cursor-pointer"
-              onClick={() => onCategoryClick && onCategoryClick(category.name)}
-            >
-              <div className="flex items-center gap-2">
-                <IconComponent size={18} className="text-noovimo-500" />
-                <span className="text-sm">{category.name}</span>
+            <div key={category.name}>
+              <div 
+                className="flex items-center justify-between p-2 rounded-lg hover:bg-secondary cursor-pointer"
+                onClick={() => {
+                  if (hasSubMenu) {
+                    toggleCategory(category.name);
+                  } else if (onCategoryClick) {
+                    onCategoryClick(category.name);
+                  }
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  {hasSubMenu ? (
+                    isExpanded ? <ChevronDown size={16} className="text-noovimo-500" /> : <ChevronRight size={16} className="text-noovimo-500" />
+                  ) : null}
+                  <IconComponent size={18} className="text-noovimo-500" />
+                  <span className="text-sm">{category.name}</span>
+                </div>
+                <span className="text-xs text-muted-foreground">{category.count}</span>
               </div>
-              <span className="text-xs text-muted-foreground">{category.count}</span>
+              
+              {/* Sub-menu items for Compromis */}
+              {hasSubMenu && isExpanded && (
+                <div className="pl-8 space-y-1 mt-1">
+                  {compromisSubs.map(sub => (
+                    <div 
+                      key={sub.name}
+                      className="flex items-center justify-between p-1 rounded-lg hover:bg-secondary cursor-pointer"
+                      onClick={() => onCategoryClick && onCategoryClick(sub.name)}
+                    >
+                      <span className="text-xs">{sub.name}</span>
+                      <span className="text-xs text-muted-foreground">{sub.count}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           );
         })}

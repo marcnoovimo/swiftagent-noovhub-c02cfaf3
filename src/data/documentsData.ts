@@ -1,3 +1,4 @@
+
 import { Document, Folder, Category } from '@/components/documents/types';
 import { FileText, File, Image, FileArchive, FileCheck } from 'lucide-react';
 
@@ -7,8 +8,24 @@ export const agentDocuments: Document[] = [
     id: '1',
     name: 'Compromis - 23 Rue des Lilas',
     type: 'pdf',
-    category: 'Compromis',
+    category: 'Compromis de vente',
     starred: true,
+    documentType: 'agent'
+  },
+  {
+    id: '1-1',
+    name: 'Promesse - 45 Avenue Victor Hugo',
+    type: 'pdf',
+    category: 'Promesse de vente',
+    starred: false,
+    documentType: 'agent'
+  },
+  {
+    id: '1-2',
+    name: 'Bail - Studio Centre Ville',
+    type: 'pdf',
+    category: 'Location',
+    starred: false,
     documentType: 'agent'
   },
   {
