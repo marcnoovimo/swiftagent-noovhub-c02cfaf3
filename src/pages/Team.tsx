@@ -47,7 +47,7 @@ const Team = () => {
     <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">L'équipe Noovimo</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Equipe Noovimo</h1>
           <p className="text-muted-foreground text-xs sm:text-sm mt-1">
             Découvrez les agents Noovimo près de chez vous
           </p>

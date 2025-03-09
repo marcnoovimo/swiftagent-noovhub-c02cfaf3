@@ -24,8 +24,11 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    // Utiliser le token fourni
+    // Utiliser le token Mapbox
     mapboxgl.accessToken = "pk.eyJ1IjoibWFyY2dhbGxvbm5vb3ZpbW8iLCJhIjoiY204MGVxZGp2MHQwaDJpc2E4N3hqb2lscCJ9.0xzWL6xP3sdy__klOQWCdg";
+    
+    // Afficher un message pour le debug
+    console.log("Initializing map with token:", mapboxgl.accessToken);
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -47,6 +50,15 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
       'bottom-right'
     );
 
+    // Ajouter un gestionnaire d'événements pour détecter si la carte se charge correctement
+    map.current.on('load', () => {
+      console.log("Map loaded successfully");
+    });
+
+    map.current.on('error', (e) => {
+      console.error("Map error:", e);
+    });
+
     // Cleanup
     return () => {
       map.current?.remove();
@@ -62,6 +74,8 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
   useEffect(() => {
     if (!map.current || agents.length === 0) return;
 
+    console.log("Adding markers for", agents.length, "agents");
+
     // S'assurer que la carte est chargée
     const onMapLoad = () => {
       if (!map.current) return;
@@ -73,6 +87,8 @@ const AgentMap: React.FC<AgentMapProps> = ({ agents }) => {
       // Ajouter les nouveaux marqueurs
       agents.forEach(agent => {
         if (!map.current) return;
+        
+        console.log(`Adding marker for ${agent.name} at [${agent.longitude}, ${agent.latitude}]`);
         
         const markerElement = document.createElement('div');
         markerElement.className = 'agent-marker flex items-center justify-center rounded-full bg-noovimo-500 text-white border-2 border-white shadow-md w-10 h-10 cursor-pointer overflow-hidden';
