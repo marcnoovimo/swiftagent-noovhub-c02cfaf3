@@ -6,7 +6,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { ScanOptions, AccessLevel } from './types';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ScanConfigFormProps {
   scanOptions: ScanOptions;
@@ -105,8 +104,8 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
             <SelectValue placeholder="Sélectionner un niveau d'accès" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="agent">Personnel (Agent uniquement)</SelectItem>
-            <SelectItem value="shared">Partagé (Tous les agents)</SelectItem>
+            <SelectItem value="agent">Personnel</SelectItem>
+            <SelectItem value="shared">Siège social</SelectItem>
           </SelectContent>
         </Select>
       </div>
