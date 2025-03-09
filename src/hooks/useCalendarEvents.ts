@@ -22,6 +22,10 @@ export const useCalendarEvents = () => {
     try {
       await syncWithGoogleCalendar();
       refetch();
+      toast({
+        title: "Synchronisation réussie",
+        description: "Vos événements ont été synchronisés avec Google Calendar",
+      });
       return true;
     } catch (error) {
       console.error('Error syncing events:', error);

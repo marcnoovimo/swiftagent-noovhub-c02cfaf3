@@ -5,7 +5,7 @@ import { Mail, MessageCircle, Users } from 'lucide-react';
 import InstantMessages from '@/components/messages/InstantMessages';
 import GroupDiscussions from '@/components/messages/GroupDiscussions';
 import EmailClient from '@/components/messages/EmailClient';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth-hooks';
 import { Helmet } from 'react-helmet';
 
 const Messages = () => {

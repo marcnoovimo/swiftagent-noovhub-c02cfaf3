@@ -9,6 +9,7 @@ import { useCalendarEvents } from '@/hooks/useCalendarEvents';
 import { useToast } from '@/hooks/use-toast';
 import GoogleCalendarSync from '@/components/calendar/GoogleCalendarSync';
 import EventTypeLegend from '@/components/calendar/EventTypeLegend';
+import { Helmet } from 'react-helmet';
 
 const Calendar = () => {
   const [newEventOpen, setNewEventOpen] = useState(false);
@@ -19,11 +20,8 @@ const Calendar = () => {
   const handleSyncClick = async () => {
     try {
       await syncEvents();
-      toast({
-        title: "Synchronisation réussie",
-        description: "Votre agenda a été synchronisé avec Google Calendar",
-      });
     } catch (error) {
+      console.error("Erreur de synchronisation:", error);
       toast({
         title: "Erreur de synchronisation",
         description: "Impossible de synchroniser avec Google Calendar",
@@ -38,6 +36,10 @@ const Calendar = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
+      <Helmet>
+        <title>Agenda | Intranet Noovimo</title>
+      </Helmet>
+      
       <div className="flex flex-col md:flex-row justify-between items-start mb-6 gap-4">
         <div>
           <h1 className="text-3xl font-bold">Agenda</h1>
@@ -109,6 +111,10 @@ const Calendar = () => {
             />
           </TabsContent>
         </Tabs>
+      </div>
+      
+      <div className="mt-4">
+        <EventTypeLegend />
       </div>
       
       <GoogleCalendarSync />
