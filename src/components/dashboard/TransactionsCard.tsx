@@ -1,16 +1,20 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-const TransactionItem = ({ propertyType, location, seller, buyer, dates, fees }: {
+type Transaction = {
   propertyType: string;
   location: string;
   seller: string;
   buyer: string;
   dates: { contract: string; completion: string };
   fees: string;
-}) => (
+};
+
+const TransactionItem = ({ propertyType, location, seller, buyer, dates, fees }: Transaction) => (
   <div className="rounded-lg border">
     <div className="p-4 flex justify-between items-start">
       <div className="space-y-1">
@@ -33,8 +37,11 @@ const TransactionItem = ({ propertyType, location, seller, buyer, dates, fees }:
 );
 
 const TransactionsCard: React.FC = () => {
-  // These would ideally come from an API or props in a real application
-  const pendingTransactions = [
+  const [showMorePending, setShowMorePending] = useState(false);
+  const [showMoreCompleted, setShowMoreCompleted] = useState(false);
+  
+  // Ces données viendraient idéalement d'une API dans une application réelle
+  const pendingTransactions: Transaction[] = [
     {
       propertyType: 'Appartement',
       location: 'Nantes',
@@ -42,7 +49,7 @@ const TransactionsCard: React.FC = () => {
       buyer: 'Martin Sophie',
       dates: {
         contract: '15/03/2023',
-        completion: '15/06/2023',
+        completion: '15/06/2023 prévu',
       },
       fees: '7 500 €',
     },
@@ -53,13 +60,13 @@ const TransactionsCard: React.FC = () => {
       buyer: 'Petit Laura',
       dates: {
         contract: '02/04/2023',
-        completion: '02/07/2023',
+        completion: '02/07/2023 prévu',
       },
       fees: '12 300 €',
     },
   ];
 
-  const completedTransactions = [
+  const completedTransactions: Transaction[] = [
     {
       propertyType: 'Appartement',
       location: 'Nantes',
@@ -86,15 +93,59 @@ const TransactionsCard: React.FC = () => {
           </TabsList>
 
           <TabsContent value="pending" className="space-y-4">
-            {pendingTransactions.map((transaction, index) => (
-              <TransactionItem key={index} {...transaction} />
-            ))}
+            {pendingTransactions.length > 0 && (
+              <TransactionItem {...pendingTransactions[0]} />
+            )}
+            
+            {pendingTransactions.length > 1 && showMorePending && (
+              <div className="space-y-4 mt-4">
+                {pendingTransactions.slice(1).map((transaction, index) => (
+                  <TransactionItem key={index} {...transaction} />
+                ))}
+              </div>
+            )}
+            
+            {pendingTransactions.length > 1 && (
+              <Button 
+                variant="ghost" 
+                className="w-full text-sm flex items-center justify-center" 
+                onClick={() => setShowMorePending(!showMorePending)}
+              >
+                {showMorePending ? (
+                  <>Voir moins <ChevronUp className="ml-2 h-4 w-4" /></>
+                ) : (
+                  <>Voir plus ({pendingTransactions.length - 1}) <ChevronDown className="ml-2 h-4 w-4" /></>
+                )}
+              </Button>
+            )}
           </TabsContent>
 
           <TabsContent value="completed" className="space-y-4">
-            {completedTransactions.map((transaction, index) => (
-              <TransactionItem key={index} {...transaction} />
-            ))}
+            {completedTransactions.length > 0 && (
+              <TransactionItem {...completedTransactions[0]} />
+            )}
+            
+            {completedTransactions.length > 1 && showMoreCompleted && (
+              <div className="space-y-4 mt-4">
+                {completedTransactions.slice(1).map((transaction, index) => (
+                  <TransactionItem key={index} {...transaction} />
+                ))}
+              </div>
+            )}
+            
+            {completedTransactions.length > 1 && (
+              <Button 
+                variant="ghost" 
+                className="w-full text-sm flex items-center justify-center" 
+                onClick={() => setShowMoreCompleted(!showMoreCompleted)}
+              >
+                {showMoreCompleted ? (
+                  <>Voir moins <ChevronUp className="ml-2 h-4 w-4" /></>
+                ) : (
+                  <>Voir plus ({completedTransactions.length - 1}) <ChevronDown className="ml-2 h-4 w-4" /></>
+                )}
+              </Button>
+            )}
           </TabsContent>
         </Tabs>
       </CardContent>

@@ -22,6 +22,14 @@ const CommissionRateCard: React.FC<CommissionRateCardProps> = ({
   const percentProgress = (amountReached / tierTarget) * 100;
   const amountRemaining = tierTarget - amountReached;
 
+  // Fonction pour formater les nombres avec maximum 2 décimales
+  const formatAmount = (amount: number) => {
+    return amount.toLocaleString('fr-FR', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    });
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -48,8 +56,8 @@ const CommissionRateCard: React.FC<CommissionRateCardProps> = ({
           </div>
           
           <div className="text-sm text-muted-foreground text-center">
-            <p>{amountReached.toLocaleString('fr-FR')} € atteints sur {tierTarget.toLocaleString('fr-FR')} € pour le prochain palier ({nextRate})</p>
-            <p className="font-medium text-foreground mt-1">{amountRemaining.toLocaleString('fr-FR')} € restants</p>
+            <p>{formatAmount(amountReached)} € atteints sur {formatAmount(tierTarget)} € pour le prochain palier ({nextRate})</p>
+            <p className="font-medium text-foreground mt-1">{formatAmount(amountRemaining)} € restants</p>
           </div>
         </div>
       </CardContent>

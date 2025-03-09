@@ -94,11 +94,7 @@ const Index = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <Card className="lg:col-span-2">
-          <CardContent className="pt-6">
-            <div className="h-[300px] w-full">
-              <MonthlyRevenueChart />
-            </div>
-          </CardContent>
+          <MonthlyRevenueChart />
         </Card>
 
         <ActivityFeed activities={demoActivities} />

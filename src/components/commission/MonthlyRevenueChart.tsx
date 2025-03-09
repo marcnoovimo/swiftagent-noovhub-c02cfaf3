@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Euro, TrendingUp } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
@@ -31,17 +31,17 @@ const MonthlyRevenueChart = () => {
 
   if (isLoading || !monthlyRevenue) {
     return (
-      <Card className="w-full h-full">
+      <div className="w-full h-full">
         <CardHeader>
           <CardTitle>Évolution</CardTitle>
           <CardDescription>Chargement...</CardDescription>
         </CardHeader>
-      </Card>
+      </div>
     );
   }
 
   return (
-    <Card className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2">
           <Euro className="h-5 w-5" />
@@ -51,7 +51,7 @@ const MonthlyRevenueChart = () => {
           Valeur honoraires et valeur commissions HT
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-4">
+      <div className="flex-1 pb-4 px-6">
         <Tabs defaultValue="line" className="h-full flex flex-col">
           <TabsList className="mb-2">
             <TabsTrigger value="line" className="text-xs sm:text-sm">Évolution mensuelle</TabsTrigger>
@@ -145,8 +145,8 @@ const MonthlyRevenueChart = () => {
             </div>
           </TabsContent>
         </Tabs>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
