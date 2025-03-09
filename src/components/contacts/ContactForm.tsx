@@ -1,8 +1,11 @@
 
-import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import React, { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
 import { Contact } from '@/types/contact';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface ContactFormProps {
   open: boolean;
@@ -12,17 +15,25 @@ interface ContactFormProps {
 }
 
 const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) => {
+  const [formData, setFormData] = useState({
+    firstName: contact?.firstName || '',
+    lastName: contact?.lastName || '',
+    email: contact?.email || '',
+    category: contact?.category || 'client',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setFormData(prev => ({ ...prev, category: value as any }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Exemple de données de contact (à remplacer par les données réelles du formulaire)
-    const newContact = {
-      firstName: "Nouveau",
-      lastName: "Contact",
-      email: "nouveau@example.com",
-      category: 'client' as const,
-    };
-    
-    onSave(newContact);
+    onSave(formData as any);
     onOpenChange(false);
   };
 
@@ -37,63 +48,67 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          {/* Formulaire simplifié pour l'exemple */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label htmlFor="firstName" className="text-sm font-medium">Prénom</label>
-              <input 
+              <Label htmlFor="firstName">Prénom</Label>
+              <Input 
                 id="firstName"
-                type="text" 
-                className="w-full p-2 border rounded-md"
-                defaultValue={contact?.firstName}
+                value={formData.firstName}
+                onChange={handleChange}
+                placeholder="Prénom du contact"
               />
             </div>
             
             <div className="space-y-2">
-              <label htmlFor="lastName" className="text-sm font-medium">Nom</label>
-              <input 
+              <Label htmlFor="lastName">Nom</Label>
+              <Input 
                 id="lastName"
-                type="text" 
-                className="w-full p-2 border rounded-md"
-                defaultValue={contact?.lastName}
+                value={formData.lastName}
+                onChange={handleChange}
+                placeholder="Nom du contact"
               />
             </div>
             
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">Email</label>
-              <input 
+              <Label htmlFor="email">Email</Label>
+              <Input 
                 id="email"
                 type="email" 
-                className="w-full p-2 border rounded-md"
-                defaultValue={contact?.email}
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="email@exemple.com"
               />
             </div>
             
             <div className="space-y-2">
-              <label htmlFor="category" className="text-sm font-medium">Catégorie</label>
-              <select 
-                id="category"
-                className="w-full p-2 border rounded-md"
-                defaultValue={contact?.category || 'client'}
+              <Label htmlFor="category">Catégorie</Label>
+              <Select 
+                value={formData.category} 
+                onValueChange={handleCategoryChange}
               >
-                <option value="client">Client</option>
-                <option value="prospect">Prospect</option>
-                <option value="partner">Partenaire</option>
-                <option value="notary">Notaire</option>
-                <option value="agent">Agent</option>
-                <option value="other">Autre</option>
-              </select>
+                <SelectTrigger id="category">
+                  <SelectValue placeholder="Sélectionnez une catégorie" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="client">Client</SelectItem>
+                  <SelectItem value="prospect">Prospect</SelectItem>
+                  <SelectItem value="partner">Partenaire</SelectItem>
+                  <SelectItem value="notary">Notaire</SelectItem>
+                  <SelectItem value="agent">Agent</SelectItem>
+                  <SelectItem value="other">Autre</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           
-          <div className="flex justify-end gap-2 pt-4">
+          <DialogFooter className="mt-6">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Annuler
             </Button>
-            <Button type="submit">
+            <Button type="submit" className="bg-noovimo-500 hover:bg-noovimo-600">
               Enregistrer
             </Button>
-          </div>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

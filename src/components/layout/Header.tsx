@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Bell, Menu, X, LogOut } from 'lucide-react';
+import { Bell, LogOut, Menu as MenuIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from '../ui/SearchBar';
 import { useAuth } from '@/context/AuthContext';
@@ -32,14 +32,10 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {
         <div className="flex items-center gap-4">
           <button 
             onClick={toggleSidebar} 
-            className="icon-button text-muted-foreground flex items-center justify-center h-10 w-10 rounded-md"
+            className="text-muted-foreground flex items-center justify-center h-10 w-10 rounded-md hover:bg-muted/50"
             aria-label={isSidebarOpen ? "Fermer le menu" : "Ouvrir le menu"}
           >
-            {isSidebarOpen ? (
-              <X size={20} />
-            ) : (
-              <Menu size={20} strokeWidth={2} className="transition-all" />
-            )}
+            <MenuIcon size={24} strokeWidth={1.5} />
           </button>
           
           <Link to="/" className="flex items-center gap-2">
@@ -60,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {
         </div>
         
         <div className="flex items-center gap-4">
-          <button className="icon-button relative" aria-label="Notifications">
+          <button className="relative" aria-label="Notifications">
             <Bell size={20} className="text-muted-foreground" />
             {notifications > 0 && (
               <span className="absolute -top-1 -right-1 bg-noovimo-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
@@ -84,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {
           
           <button 
             onClick={handleSignOut}
-            className="icon-button text-muted-foreground hover:text-red-500"
+            className="text-muted-foreground hover:text-red-500"
             aria-label="Déconnexion"
           >
             <LogOut size={20} />

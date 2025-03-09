@@ -51,17 +51,17 @@ const config = {
         },
         // Couleur Noovimo
         noovimo: {
-          '50': '#fdf2f4',
-          '100': '#fce8eb',
-          '200': '#f9d0d8',
-          '300': '#f4a9b8',
-          '400': '#ed7591',
+          '50': '#fdf3f5',
+          '100': '#fce5ea',
+          '200': '#f9cfd9',
+          '300': '#f4adbf',
+          '400': '#ed7c9a',
           '500': '#b32842', // #b32842 - couleur Noovimo principale
-          '600': '#a1233a', // Teinte légèrement plus foncée
-          '700': '#8c1f32',
-          '800': '#721929',
-          '900': '#5f1522',
-          '950': '#400918',
+          '600': '#a0243a', // Teinte légèrement plus foncée
+          '700': '#8a2032',
+          '800': '#731d2b',
+          '900': '#611a25',
+          '950': '#400a15',
         },
       },
       borderRadius: {
