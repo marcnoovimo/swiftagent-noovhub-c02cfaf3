@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { PlusCircle, FileText } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { Document, Folder, Category } from '@/components/documents/types';
 import DocumentSearch from '@/components/documents/DocumentSearch';
 import DocumentList from '@/components/documents/DocumentList';
@@ -90,25 +90,14 @@ const AgentDocumentsTab: React.FC<AgentDocumentsTabProps> = ({
             placeholder="Rechercher dans mes documents..."
           />
           
-          <div className="flex gap-2 w-full sm:w-auto">
-            <Button 
-              variant="outline" 
-              className="flex items-center gap-2 w-1/2 sm:w-auto"
-              onClick={onScanClick}
-            >
-              <PlusCircle size={16} />
-              <span>Numériser</span>
-            </Button>
-            
-            <Button 
-              variant="default"
-              className="flex items-center gap-2 w-1/2 sm:w-auto bg-noovimo-500 hover:bg-noovimo-600"
-              onClick={openContractFormInNewWindow}
-            >
-              <FileText size={16} />
-              <span>Avant-contrat</span>
-            </Button>
-          </div>
+          <Button 
+            variant="default"
+            className="flex items-center gap-2 w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white"
+            onClick={onScanClick}
+          >
+            <FileText size={16} />
+            <span>Numériser mon avant-contrat</span>
+          </Button>
         </div>
         
         <Separator className="mb-6" />
