@@ -9,12 +9,13 @@ import Layout from './components/layout/Layout';
 // Eager load critical components
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
+import Index from './pages/Index';
+import Documents from './pages/Documents';
+import Contacts from './pages/Contacts';
+
 // Lazy load non-critical components
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
-const Index = lazy(() => import('./pages/Index'));
-const Documents = lazy(() => import('./pages/Documents'));
-const Contacts = lazy(() => import('./pages/Contacts'));
 const Messages = lazy(() => import('./pages/Messages'));
 const Stats = lazy(() => import('./pages/Stats'));
 const MonthlyReport = lazy(() => import('./pages/MonthlyReport'));
