@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
+import { Upload } from 'lucide-react';
 import { ScanOptions, AccessLevel } from './types';
 
 interface ScanConfigFormProps {
@@ -13,6 +14,7 @@ interface ScanConfigFormProps {
   availableCategories: string[];
   isCompromis: boolean;
   onStartScan: () => void;
+  onFileImport?: (file: File) => void;
 }
 
 const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
@@ -20,9 +22,11 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
   setScanOptions,
   availableCategories,
   isCompromis,
-  onStartScan
+  onStartScan,
+  onFileImport
 }) => {
   const [showSubCategories, setShowSubCategories] = useState(scanOptions.category === 'Avant-contrat');
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Sous-catégories spécifiques pour les avant-contrats
   const avantContratSubs = [
@@ -38,6 +42,16 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
 
   const handleSubCategoryChange = (value: string) => {
     setScanOptions({...scanOptions, category: value});
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0 && onFileImport) {
+      onFileImport(e.target.files[0]);
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
   };
 
   return (
@@ -124,7 +138,20 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
         </div>
       )}
       
-      <div className="flex justify-end pt-4">
+      {/* Hidden file input */}
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        onChange={handleFileSelect} 
+        className="hidden" 
+        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+      />
+      
+      <div className="flex justify-end gap-3 pt-4">
+        <Button variant="outline" onClick={triggerFileInput}>
+          <Upload size={16} className="mr-2" />
+          Importer
+        </Button>
         <Button onClick={onStartScan}>
           Commencer le scan
         </Button>

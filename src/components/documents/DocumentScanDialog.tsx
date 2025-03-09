@@ -29,6 +29,7 @@ const DocumentScanDialog: React.FC<DocumentScanDialogProps> = ({
     handleStartScan,
     handleCaptureComplete,
     handleContractFormSuccess,
+    handleFileImport,
     resetScanState
   } = useScanDialog({ onSuccess, onOpenChange });
 
@@ -56,6 +57,7 @@ const DocumentScanDialog: React.FC<DocumentScanDialogProps> = ({
                 availableCategories={availableCategories}
                 isCompromis={isCompromis}
                 onStartScan={handleStartScan}
+                onFileImport={handleFileImport}
               />
             ) : (
               <DocumentScanner 
