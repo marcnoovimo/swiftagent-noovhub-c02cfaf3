@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { ChatMessage, DocumentReference, OpenAIConfig } from '@/types/chatbot';
@@ -42,7 +41,7 @@ export const useChatbot = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: uuidv4(),
-      content: "Bonjour, je suis Arthur, votre assistant IA. Comment puis-je vous aider aujourd'hui ?",
+      content: "Bonjour, je suis Arthur, votre assistant IA expert en immobilier et sur l'intranet Noovimo. Je peux répondre à vos questions sur la plateforme ou sur les transactions immobilières en France. Comment puis-je vous aider aujourd'hui ?",
       timestamp: new Date(),
       sender: 'bot'
     }
