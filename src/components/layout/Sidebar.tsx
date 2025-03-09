@@ -52,7 +52,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true }) => {
       <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon" className="md:hidden absolute top-4 left-4 z-50">
-            <Menu />
+            <Menu strokeWidth={2} />
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0">

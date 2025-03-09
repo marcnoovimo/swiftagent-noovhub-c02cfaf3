@@ -9,13 +9,28 @@ export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
 
   React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
+    const checkMobile = () => {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
     }
-    mql.addEventListener("change", onChange)
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    return () => mql.removeEventListener("change", onChange)
+    
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
+    if (mql.addEventListener) {
+      mql.addEventListener("change", checkMobile)
+    } else {
+      // Fallback pour les anciens navigateurs
+      window.addEventListener('resize', checkMobile)
+    }
+    
+    // Vérification initiale
+    checkMobile()
+    
+    return () => {
+      if (mql.removeEventListener) {
+        mql.removeEventListener("change", checkMobile)
+      } else {
+        window.removeEventListener('resize', checkMobile)
+      }
+    }
   }, [])
 
   return !!isMobile
@@ -25,13 +40,28 @@ export function useIsTablet() {
   const [isTablet, setIsTablet] = React.useState<boolean | undefined>(undefined)
 
   React.useEffect(() => {
-    const mql = window.matchMedia(`(min-width: ${MOBILE_BREAKPOINT}px) and (max-width: ${TABLET_BREAKPOINT - 1}px)`)
-    const onChange = () => {
+    const checkTablet = () => {
       setIsTablet(window.innerWidth >= MOBILE_BREAKPOINT && window.innerWidth < TABLET_BREAKPOINT)
     }
-    mql.addEventListener("change", onChange)
-    setIsTablet(window.innerWidth >= MOBILE_BREAKPOINT && window.innerWidth < TABLET_BREAKPOINT)
-    return () => mql.removeEventListener("change", onChange)
+    
+    const mql = window.matchMedia(`(min-width: ${MOBILE_BREAKPOINT}px) and (max-width: ${TABLET_BREAKPOINT - 1}px)`)
+    if (mql.addEventListener) {
+      mql.addEventListener("change", checkTablet)
+    } else {
+      // Fallback pour les anciens navigateurs
+      window.addEventListener('resize', checkTablet)
+    }
+    
+    // Vérification initiale
+    checkTablet()
+    
+    return () => {
+      if (mql.removeEventListener) {
+        mql.removeEventListener("change", checkTablet)
+      } else {
+        window.removeEventListener('resize', checkTablet)
+      }
+    }
   }, [])
 
   return !!isTablet
@@ -48,15 +78,29 @@ export function useMediaQuery(query: string): boolean {
 
   React.useEffect(() => {
     const media = window.matchMedia(query)
-    if (media.matches !== matches) {
+    const updateMatches = () => {
       setMatches(media.matches)
     }
     
-    const listener = () => setMatches(media.matches)
-    media.addEventListener("change", listener)
+    // Définition initiale
+    updateMatches()
     
-    return () => media.removeEventListener("change", listener)
-  }, [matches, query])
+    // Ajout des écouteurs d'événements avec support pour les anciens navigateurs
+    if (media.addEventListener) {
+      media.addEventListener("change", updateMatches)
+    } else {
+      // Fallback pour Safari < 14 et les anciens navigateurs
+      media.addListener(updateMatches)
+    }
+    
+    return () => {
+      if (media.removeEventListener) {
+        media.removeEventListener("change", updateMatches)
+      } else {
+        media.removeListener(updateMatches)
+      }
+    }
+  }, [query])
 
   return matches
 }
