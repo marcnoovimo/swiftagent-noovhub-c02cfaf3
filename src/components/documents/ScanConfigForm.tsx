@@ -25,7 +25,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
 }) => {
   const [showSubCategories, setShowSubCategories] = useState(scanOptions.category === 'Compromis');
   
-  // Define sub-categories for Compromis
+  // Sous-catégories spécifiques pour Compromis
   const compromisSubs = [
     'Compromis de vente',
     'Promesse de vente',
@@ -73,7 +73,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
         </Select>
       </div>
       
-      {/* Sub-category selection for Compromis */}
+      {/* Affichage des sous-catégories uniquement pour Compromis */}
       {showSubCategories && (
         <div className="space-y-2 pl-4 border-l-2 border-noovimo-100">
           <Label htmlFor="subCategory">Type d'avant-contrat</Label>
@@ -85,13 +85,11 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
               <SelectValue placeholder="Sélectionner un type" />
             </SelectTrigger>
             <SelectContent>
-              <ScrollArea className="h-[200px]">
-                {compromisSubs.map((subCategory) => (
-                  <SelectItem key={subCategory} value={subCategory}>
-                    {subCategory}
-                  </SelectItem>
-                ))}
-              </ScrollArea>
+              {compromisSubs.map((subCategory) => (
+                <SelectItem key={subCategory} value={subCategory}>
+                  {subCategory}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { ScanOptions, AccessLevel } from '@/components/documents/types';
 import { useAuth } from '@/context/AuthContext';
@@ -14,7 +15,7 @@ export const useScanDialog = ({ onSuccess, onOpenChange }: UseScanDialogProps) =
   const { user } = useAuth();
   const [scanMode, setScanMode] = useState<'config' | 'scan'>('config');
   const [scanOptions, setScanOptions] = useState<ScanOptions>({
-    category: 'Compromis de vente',
+    category: 'Compromis',
     accessLevel: 'agent',
     documentName: '',
     autoClassify: true
@@ -176,6 +177,12 @@ export const useScanDialog = ({ onSuccess, onOpenChange }: UseScanDialogProps) =
     setScanMode('config');
     setCapturedImage(null);
     setContractData(null);
+    setScanOptions({
+      category: 'Compromis',
+      accessLevel: 'agent',
+      documentName: '',
+      autoClassify: true
+    });
   };
 
   return {
