@@ -1,3 +1,4 @@
+
 export interface Document {
   id: string;
   name: string;
@@ -26,6 +27,13 @@ export interface Document {
   propertyAddress?: string; // Address of the property
   propertyType?: string; // Type of property (apartment, house, etc.)
   analyzed?: boolean; // Flag to indicate if document has been analyzed for stats
+  // Nouvelles propriétés pour les avant-contrats
+  sellerName?: string; // Nom du vendeur
+  buyerName?: string; // Nom de l'acquéreur
+  agentFees?: string; // Honoraires agent
+  preliminaryContractDate?: Date | string; // Date de l'avant-contrat
+  finalActDate?: Date | string; // Date prévue de l'acte
+  contractData?: any; // Données complètes du contrat
 }
 
 export interface Folder {
@@ -61,6 +69,7 @@ export interface ScanOptions {
   documentName: string;
   autoClassify: boolean;
   analyzeText?: boolean; // Option pour analyser le texte du document scanné
+  contractData?: any; // Données du contrat si c'est un avant-contrat
 }
 
 // New types for statistics tracking
