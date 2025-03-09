@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {
         <div className="flex items-center gap-4">
           <button 
             onClick={toggleSidebar} 
-            className="icon-button text-muted-foreground lg:hidden"
+            className="icon-button text-muted-foreground"
             aria-label={isSidebarOpen ? "Fermer le menu" : "Ouvrir le menu"}
           >
             {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}

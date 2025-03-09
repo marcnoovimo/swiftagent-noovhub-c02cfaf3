@@ -22,9 +22,10 @@ import {
 
 interface SidebarProps {
   className?: string;
+  isOpen?: boolean;
 }
 
-const Sidebar = () => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen = true }) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,7 +51,7 @@ const Sidebar = () => {
     <>
       <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
         <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden">
+          <Button variant="ghost" size="icon" className="md:hidden absolute top-4 left-4 z-50">
             <Menu />
           </Button>
         </SheetTrigger>
@@ -100,7 +101,7 @@ const Sidebar = () => {
         </SheetContent>
       </Sheet>
 
-      <aside className="hidden md:flex flex-col w-64 border-r h-screen sticky top-0 overflow-y-auto animate-in fade-in-0 duration-75">
+      <aside className={`${isOpen ? 'flex' : 'hidden'} md:flex flex-col w-64 border-r h-screen sticky top-0 overflow-y-auto animate-in fade-in-0 duration-75`}>
         <div className="px-4 py-6 text-center border-b">
           <Link to="/" className="flex items-center justify-center gap-2 font-bold">
             <PanelLeft className="h-6 w-6" />
