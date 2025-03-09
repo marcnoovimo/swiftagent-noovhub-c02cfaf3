@@ -10,6 +10,7 @@ export const useDocumentCapture = (onSuccess?: () => void, onOpenChange?: (open:
   const { user } = useAuth();
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [contractData, setContractData] = useState<any>(null);
+  const [options, setOptions] = useState<ScanOptions | null>(null);
 
   const saveScannedDocument = async (imageData: string, options: ScanOptions, category: string) => {
     try {
@@ -62,14 +63,15 @@ export const useDocumentCapture = (onSuccess?: () => void, onOpenChange?: (open:
     }
   };
 
-  const handleCaptureComplete = async (imageData: string, options: ScanOptions) => {
+  const handleCaptureComplete = async (imageData: string, scanOptions: ScanOptions) => {
     try {
       setCapturedImage(imageData);
+      setOptions(scanOptions);
       
       // Get document type from name or category if auto-classify is enabled
-      let category = options.category;
-      if (options.autoClassify) {
-        const lowerName = options.documentName.toLowerCase();
+      let category = scanOptions.category;
+      if (scanOptions.autoClassify) {
+        const lowerName = scanOptions.documentName.toLowerCase();
         if (lowerName.includes('compromis')) category = 'Compromis de vente';
         else if (lowerName.includes('promesse')) category = 'Promesse de vente';
         else if (lowerName.includes('location')) category = 'Location';
@@ -84,7 +86,7 @@ export const useDocumentCapture = (onSuccess?: () => void, onOpenChange?: (open:
         openContractFormInNewWindow();
       } else {
         // Pour les autres types de documents, procéder à l'enregistrement direct
-        await saveScannedDocument(imageData, options, category);
+        await saveScannedDocument(imageData, scanOptions, category);
       }
     } catch (error) {
       console.error('Error processing scanned document:', error);
@@ -128,7 +130,6 @@ export const useDocumentCapture = (onSuccess?: () => void, onOpenChange?: (open:
   };
 
   const [contractFormOpen, setContractFormOpen] = useState(false);
-  const [options, setOptions] = useState<ScanOptions | null>(null);
 
   return {
     capturedImage,
@@ -137,6 +138,7 @@ export const useDocumentCapture = (onSuccess?: () => void, onOpenChange?: (open:
     setContractFormOpen,
     contractData,
     setContractData,
+    options,
     setOptions,
     handleCaptureComplete,
     handleContractFormSuccess,
