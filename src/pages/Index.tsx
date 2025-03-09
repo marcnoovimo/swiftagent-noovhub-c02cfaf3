@@ -2,28 +2,17 @@
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Helmet } from 'react-helmet';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import PerformanceCard from '@/components/dashboard/PerformanceCard';
+import { Card, CardContent } from '@/components/ui/card';
 import ActivityFeed, { Activity } from '@/components/dashboard/ActivityFeed';
 import MonthlyRevenueChart from '@/components/commission/MonthlyRevenueChart';
 import { useQuery } from '@tanstack/react-query';
 import { statsService } from '@/services/statsService';
-import { Euro, Users, TrendingUp, BarChart } from 'lucide-react';
-
-// Configuration de base pour tous les graphiques
-const chartConfig = {
-  colors: ['#8B5CF6', '#EC4899', '#10B981', '#F59E0B'],
-  fontFamily: '"Inter", sans-serif',
-  tooltip: {
-    style: {
-      fontSize: '12px',
-    },
-  },
-};
+import DashboardStats from '@/components/dashboard/DashboardStats';
+import TransactionsCard from '@/components/dashboard/TransactionsCard';
+import CommissionRateCard from '@/components/commission/CommissionRateCard';
 
 const Index = () => {
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
   
   // Requête pour obtenir les statistiques
   const { data: statsData } = useQuery({
@@ -88,32 +77,12 @@ const Index = () => {
         </div>
       </div>
 
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        <PerformanceCard
-          title="Honoraires HT"
-          value={statsData?.totalRevenue || "0 €"}
-          description="Cumul annuel"
-          icon={<Euro className="h-4 w-4" />}
-        />
-        <PerformanceCard
-          title="Unités de ventes"
-          value={statsData?.salesCount || "0"}
-          description="Cumul annuel"
-          icon={<TrendingUp className="h-4 w-4" />}
-        />
-        <PerformanceCard
-          title="Contacts"
-          value={statsData?.contactsCount || "0"}
-          description="Dans votre réseau"
-          icon={<Users className="h-4 w-4" />}
-        />
-        <PerformanceCard
-          title="Tx de commission"
-          value={statsData?.currentCommissionRate || "72%"}
-          description="Palier actuel"
-          icon={<BarChart className="h-4 w-4" />}
-        />
-      </div>
+      <DashboardStats 
+        totalRevenue={statsData?.totalRevenue || "0 €"}
+        salesCount={statsData?.salesCount || "0"}
+        contactsCount={statsData?.contactsCount || "0"}
+        currentCommissionRate={statsData?.currentCommissionRate || "72%"}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <Card className="lg:col-span-2">
@@ -128,105 +97,8 @@ const Index = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Transactions récentes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="pending">
-              <TabsList className="mb-4">
-                <TabsTrigger value="pending">En cours</TabsTrigger>
-                <TabsTrigger value="completed">Finalisées</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="pending" className="space-y-4">
-                <div className="rounded-lg border">
-                  <div className="p-4 flex justify-between items-start">
-                    <div className="space-y-1">
-                      <p className="font-medium">Appartement à Nantes</p>
-                      <p className="text-sm text-muted-foreground">Vendeur: Dupont Jean</p>
-                      <p className="text-sm text-muted-foreground">Acquéreur: Martin Sophie</p>
-                      <div className="flex gap-4 mt-1">
-                        <p className="text-xs text-muted-foreground">Avant-contrat: 15/03/2023</p>
-                        <p className="text-xs text-muted-foreground">Acte prévu: 15/06/2023</p>
-                      </div>
-                    </div>
-                    <div className="text-right whitespace-nowrap">
-                      <p className="font-bold">7 500 €</p>
-                      <p className="text-xs text-muted-foreground">Honoraires</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded-lg border">
-                  <div className="p-4 flex justify-between items-start">
-                    <div className="space-y-1">
-                      <p className="font-medium">Maison à Saint-Herblain</p>
-                      <p className="text-sm text-muted-foreground">Vendeur: Leroy Michel</p>
-                      <p className="text-sm text-muted-foreground">Acquéreur: Petit Laura</p>
-                      <div className="flex gap-4 mt-1">
-                        <p className="text-xs text-muted-foreground">Avant-contrat: 02/04/2023</p>
-                        <p className="text-xs text-muted-foreground">Acte prévu: 02/07/2023</p>
-                      </div>
-                    </div>
-                    <div className="text-right whitespace-nowrap">
-                      <p className="font-bold">12 300 €</p>
-                      <p className="text-xs text-muted-foreground">Honoraires</p>
-                    </div>
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="completed" className="space-y-4">
-                <div className="rounded-lg border">
-                  <div className="p-4 flex justify-between items-start">
-                    <div className="space-y-1">
-                      <p className="font-medium">Appartement à Nantes</p>
-                      <p className="text-sm text-muted-foreground">Vendeur: Moreau Philippe</p>
-                      <p className="text-sm text-muted-foreground">Acquéreur: Thomas Pierre</p>
-                      <div className="flex gap-4 mt-1">
-                        <p className="text-xs text-muted-foreground">Avant-contrat: 01/02/2023</p>
-                        <p className="text-xs text-muted-foreground">Acte final: 01/04/2023</p>
-                      </div>
-                    </div>
-                    <div className="text-right whitespace-nowrap">
-                      <p className="font-bold">8 400 €</p>
-                      <p className="text-xs text-muted-foreground">Honoraires</p>
-                    </div>
-                  </div>
-                </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Mes honoraires cumulés € HT</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <div>
-                  <p className="font-medium">Palier actuel</p>
-                  <p className="text-sm text-muted-foreground">0 € - 35 000 €</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-bold">72%</p>
-                  <p className="text-sm text-muted-foreground">de commission</p>
-                </div>
-              </div>
-              
-              <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                <div className="bg-primary h-full rounded-full" style={{ width: '25%' }}></div>
-              </div>
-              
-              <div className="text-sm text-muted-foreground text-center">
-                <p>8 750 € atteints sur 35 000 € pour le prochain palier (76%)</p>
-                <p className="font-medium text-foreground mt-1">26 250 € restants</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <TransactionsCard />
+        <CommissionRateCard />
       </div>
     </div>
   );
