@@ -44,19 +44,19 @@ const ActivityFeed: React.FC<ActivityFeedProps> = ({ activities }) => {
 
     return items.map((activity) => (
       <div key={activity.id} className="mb-4 last:mb-0">
-        <div className="flex items-start gap-3">
-          <Avatar className="h-8 w-8 border border-border">
+        <div className="flex items-start gap-3 w-full">
+          <Avatar className="h-8 w-8 border border-border flex-shrink-0">
             <AvatarImage src={activity.user.avatar} alt={activity.user.name} />
             <AvatarFallback>{activity.user.name.charAt(0)}</AvatarFallback>
           </Avatar>
-          <div className="flex-1 space-y-1.5">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-medium leading-none">{activity.title}</p>
-              <p className="text-xs text-muted-foreground">
+          <div className="flex-1 min-w-0 overflow-hidden">
+            <div className="flex items-center justify-between w-full">
+              <p className="text-sm font-medium leading-none truncate max-w-[70%]">{activity.title}</p>
+              <p className="text-xs text-muted-foreground flex-shrink-0">
                 {format(new Date(activity.date), 'PP', { locale: fr })}
               </p>
             </div>
-            <p className="text-xs text-muted-foreground">{activity.description}</p>
+            <p className="text-xs text-muted-foreground mt-1 line-clamp-2 break-words">{activity.description}</p>
           </div>
         </div>
       </div>
