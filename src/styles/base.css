@@ -68,6 +68,29 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   
+  /* Menu icon fixes */
+  .lucide-menu {
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Make sure dialogs and popovers have solid backgrounds */
+  .radix-dialog-content,
+  .radix-popover-content,
+  .radix-sheet-content {
+    background-color: hsl(var(--background)) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+  }
+  
+  /* Fix for Dialog, Sheet, Popover components */
+  [data-radix-popper-content-wrapper],
+  [data-state] {
+    /* Ensure solid backgrounds, not transparent */
+    background-color: hsl(var(--background)) !important;
+    backdrop-filter: none !important;
+  }
+  
   /* Improved forms for the document scanning interface */
   .scan-form-field {
     @apply mb-4;
@@ -83,13 +106,5 @@
   
   .scan-preview {
     @apply border-2 border-dashed border-gray-300 rounded-md p-4 mb-4 flex items-center justify-center bg-gray-50;
-  }
-
-  /* Fix for Dialog, Sheet, Popover components */
-  .radix-dialog-content,
-  .radix-popover-content,
-  .radix-sheet-content {
-    background-color: hsl(var(--background)) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
   }
 }

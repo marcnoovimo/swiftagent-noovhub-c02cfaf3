@@ -40,6 +40,16 @@
   z-index: 300;
 }
 
+/* Clean menu icon fix */
+.clean-icon {
+  stroke-width: 1.5;
+  stroke: currentColor;
+}
+
+.clean-icon path {
+  vector-effect: non-scaling-stroke;
+}
+
 /* App layout */
 #root {
   width: 100%;

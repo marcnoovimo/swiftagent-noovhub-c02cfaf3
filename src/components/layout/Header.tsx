@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {
             className="text-muted-foreground flex items-center justify-center h-10 w-10 rounded-md hover:bg-muted/50"
             aria-label={isSidebarOpen ? "Fermer le menu" : "Ouvrir le menu"}
           >
-            <MenuIcon size={24} strokeWidth={1.5} />
+            <MenuIcon size={24} strokeWidth={1.5} className="clean-icon" />
           </button>
           
           <Link to="/" className="flex items-center gap-2">

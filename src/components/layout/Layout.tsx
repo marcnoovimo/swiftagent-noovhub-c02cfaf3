@@ -49,6 +49,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       
       {/* Chatbot Interface for global access */}
       <ChatbotInterface />
+      
+      {/* Overlay for mobile when sidebar is open */}
+      {isMobile && sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-20" 
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
     </div>
   );
 };
