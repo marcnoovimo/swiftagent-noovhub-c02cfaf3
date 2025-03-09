@@ -41,6 +41,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true }) => {
     { name: 'Tableau de bord', path: '/', icon: <Home size={iconSize} /> },
     { name: 'Documents', path: '/documents', icon: <FileText size={iconSize} /> },
     { name: 'Contacts', path: '/contacts', icon: <Users size={iconSize} /> },
+    { name: 'Équipe', path: '/team', icon: <Users size={iconSize} /> },
     { name: 'Agenda', path: '/calendar', icon: <Calendar size={iconSize} /> },
     { name: 'Communication', path: '/messages', icon: <MessageSquare size={iconSize} /> },
     { name: 'Statistiques', path: '/stats', icon: <BarChart3 size={iconSize} /> },
