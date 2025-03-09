@@ -9,11 +9,48 @@ const Documents = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeDocType, setActiveDocType] = useState<'agent' | 'noovimo'>('agent');
 
-  // Mock document items
+  // Mock document items with additional metadata for scanned documents
   const agentDocuments = [
-    { id: '1', name: 'Compromis Villa Marseille', type: 'pdf', category: 'Compromis', starred: true },
-    { id: '2', name: 'Mandat de vente - Appartement Lyon', type: 'pdf', category: 'Mandats', starred: false },
-    { id: '3', name: 'Facture Honoraires Vente Dupont', type: 'pdf', category: 'Factures', starred: false },
+    { 
+      id: '1', 
+      name: 'Compromis Villa Marseille', 
+      type: 'pdf', 
+      category: 'Compromis', 
+      starred: true,
+      buyerName: 'Martin Dupont',
+      sellerName: 'Marie Laurent',
+      propertyAddress: '15 Avenue de la Plage, 13008 Marseille',
+      propertyType: 'Villa',
+      propertyValue: 520000,
+      commissionAmount: 15600,
+      transactionType: 'compromis',
+      agentFees: '15600€'
+    },
+    { 
+      id: '2', 
+      name: 'Mandat de vente - Appartement Lyon', 
+      type: 'pdf', 
+      category: 'Mandats', 
+      starred: false,
+      sellerName: 'Philippe Blanc',
+      propertyAddress: '8 Rue de la République, 69002 Lyon',
+      propertyType: 'Appartement',
+      propertyValue: 320000,
+      commissionAmount: 9600,
+      transactionType: 'mandat',
+      agentFees: '9600€'
+    },
+    { 
+      id: '3', 
+      name: 'Facture Honoraires Vente Dupont', 
+      type: 'pdf', 
+      category: 'Factures', 
+      starred: false,
+      buyerName: 'Thomas Dupont',
+      sellerName: 'Carole Moreau',
+      transactionType: 'vente',
+      agentFees: '12500€'
+    },
   ];
 
   const handleDocumentClick = (doc) => {

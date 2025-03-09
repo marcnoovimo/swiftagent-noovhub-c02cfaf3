@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { FileUp } from 'lucide-react';
+import { FileUp, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import DocumentUploadDialog from './DocumentUploadDialog';
 import DocumentScanForm from './DocumentScanForm';
@@ -19,7 +19,7 @@ const DocumentUploadButton = ({ onClick }: DocumentUploadButtonProps) => {
   const { toast } = useToast();
 
   const handleScanClick = () => {
-    // Close the upload dialog and open the scan interface
+    // Close the upload dialog and open the scan interface directly
     setUploadDialogOpen(false);
     setScanFormOpen(true);
     console.log('Scan document clicked');
@@ -58,6 +58,11 @@ const DocumentUploadButton = ({ onClick }: DocumentUploadButtonProps) => {
     }
   };
 
+  // Direct scan button without dialog
+  const handleDirectScan = () => {
+    setScanFormOpen(true);
+  };
+
   const handleButtonClick = () => {
     setUploadDialogOpen(true);
     if (onClick) onClick();
@@ -82,10 +87,21 @@ const DocumentUploadButton = ({ onClick }: DocumentUploadButtonProps) => {
 
   return (
     <>
-      <Button className="flex items-center gap-2" onClick={handleButtonClick}>
-        <FileUp size={16} />
-        <span>Ajouter un document</span>
-      </Button>
+      <div className="flex flex-wrap gap-2">
+        <Button className="flex items-center gap-2" onClick={handleButtonClick}>
+          <FileUp size={16} />
+          <span>Ajouter un document</span>
+        </Button>
+        
+        <Button 
+          variant="outline" 
+          className="flex items-center gap-2 border-noovimo-500 text-noovimo-500 hover:bg-noovimo-50" 
+          onClick={handleDirectScan}
+        >
+          <Camera size={16} />
+          <span>Numériser</span>
+        </Button>
+      </div>
       
       <DocumentUploadDialog
         open={uploadDialogOpen}

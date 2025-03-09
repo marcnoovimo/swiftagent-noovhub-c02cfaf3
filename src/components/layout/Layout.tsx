@@ -33,12 +33,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar isOpen={sidebarOpen} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
         <Header toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         
-        <main className="flex-1 p-4 md:p-6" onClick={isMobile ? () => setSidebarOpen(false) : undefined}>
+        <main 
+          className="flex-1 p-4 md:p-6" 
+          onClick={isMobile && sidebarOpen ? () => setSidebarOpen(false) : undefined}
+        >
           <Outlet />
           {children}
         </main>
