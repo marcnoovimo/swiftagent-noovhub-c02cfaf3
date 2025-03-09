@@ -8,7 +8,12 @@ import { useToast } from '@/hooks/use-toast';
 export const useCalendarEvents = () => {
   const { toast } = useToast();
   
-  const { data: events, isLoading, error, refetch } = useQuery({
+  const { 
+    data: events, 
+    isLoading, 
+    error, 
+    refetch 
+  } = useQuery({
     queryKey: ['calendar-events'],
     queryFn: fetchEvents,
   });

@@ -167,3 +167,26 @@ export const generateShareableLink = async (eventId: string): Promise<string> =>
   
   return `https://swiftagent.app/calendar/shared/${eventId}`;
 };
+
+/**
+ * Share event via email with a contact
+ */
+export const shareEventWithContact = async (
+  eventId: string, 
+  contactId: string
+): Promise<boolean> => {
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  // This is a mock function - in a real application,
+  // this would send an email to the contact
+  
+  const event = eventsData.find(e => e.id === eventId);
+  if (!event) {
+    throw new Error(`Event with ID ${eventId} not found`);
+  }
+  
+  console.log(`Event ${event.title} shared with contact ID ${contactId}`);
+  
+  return true;
+};

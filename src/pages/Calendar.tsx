@@ -8,11 +8,12 @@ import EventForm from '@/components/calendar/EventForm';
 import { useCalendarEvents } from '@/hooks/useCalendarEvents';
 import { useToast } from '@/hooks/use-toast';
 import GoogleCalendarSync from '@/components/calendar/GoogleCalendarSync';
+import EventTypeLegend from '@/components/calendar/EventTypeLegend';
 
 const Calendar = () => {
   const [newEventOpen, setNewEventOpen] = useState(false);
   const [selectedView, setSelectedView] = useState<'month' | 'week' | 'day'>('month');
-  const { events, isLoading, syncEvents } = useCalendarEvents();
+  const { events, isLoading, syncEvents, refetch } = useCalendarEvents();
   const { toast } = useToast();
   
   const handleSyncClick = async () => {
@@ -29,6 +30,10 @@ const Calendar = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const handleEventChange = () => {
+    refetch();
   };
 
   return (
@@ -78,15 +83,30 @@ const Calendar = () => {
           </div>
           
           <TabsContent value="month">
-            <CalendarView view="month" events={events || []} isLoading={isLoading} />
+            <CalendarView 
+              view="month" 
+              events={events || []} 
+              isLoading={isLoading} 
+              onEventChange={handleEventChange}
+            />
           </TabsContent>
           
           <TabsContent value="week">
-            <CalendarView view="week" events={events || []} isLoading={isLoading} />
+            <CalendarView 
+              view="week" 
+              events={events || []} 
+              isLoading={isLoading} 
+              onEventChange={handleEventChange}
+            />
           </TabsContent>
           
           <TabsContent value="day">
-            <CalendarView view="day" events={events || []} isLoading={isLoading} />
+            <CalendarView 
+              view="day" 
+              events={events || []} 
+              isLoading={isLoading} 
+              onEventChange={handleEventChange}
+            />
           </TabsContent>
         </Tabs>
       </div>
@@ -96,6 +116,7 @@ const Calendar = () => {
       <EventForm 
         open={newEventOpen} 
         onOpenChange={setNewEventOpen}
+        onEventCreated={handleEventChange}
       />
     </div>
   );
