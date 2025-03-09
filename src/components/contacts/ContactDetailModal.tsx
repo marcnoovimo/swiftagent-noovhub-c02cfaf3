@@ -27,7 +27,7 @@ const ContactDetailModal = ({ contact, open, onOpenChange }: ContactDetailModalP
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-md">
+      <SheetContent className="sm:max-w-md bg-background">
         <SheetHeader className="mb-6">
           <SheetTitle className="text-xl flex items-center gap-2">
             Détails du contact
@@ -153,7 +153,7 @@ const ContactDetailModal = ({ contact, open, onOpenChange }: ContactDetailModalP
           {contact.communicationHistory && contact.communicationHistory.length > 0 && (
             <div className="mt-6">
               <h4 className="font-medium mb-2">Historique de communication</h4>
-              <div className="space-y-3">
+              <div className="space-y-3 bg-background">
                 {contact.communicationHistory.map((comm, index) => (
                   <div key={index} className="bg-muted p-3 rounded-md">
                     <div className="flex justify-between">

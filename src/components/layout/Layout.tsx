@@ -39,7 +39,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Header toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         
         <main 
-          className="flex-1 p-4 md:p-6" 
+          className="flex-1 p-4 md:p-6 bg-background" 
           onClick={isMobile && sidebarOpen ? () => setSidebarOpen(false) : undefined}
         >
           <Outlet />

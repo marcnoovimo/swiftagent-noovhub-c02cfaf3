@@ -39,7 +39,7 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] bg-background">
         <DialogHeader>
           <DialogTitle>{contact ? 'Modifier le contact' : 'Nouveau contact'}</DialogTitle>
           <DialogDescription>
@@ -56,6 +56,7 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
                 value={formData.firstName}
                 onChange={handleChange}
                 placeholder="Prénom du contact"
+                className="bg-background"
               />
             </div>
             
@@ -66,6 +67,7 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
                 value={formData.lastName}
                 onChange={handleChange}
                 placeholder="Nom du contact"
+                className="bg-background"
               />
             </div>
             
@@ -77,6 +79,7 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="email@exemple.com"
+                className="bg-background"
               />
             </div>
             
@@ -86,10 +89,10 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
                 value={formData.category} 
                 onValueChange={handleCategoryChange}
               >
-                <SelectTrigger id="category">
+                <SelectTrigger id="category" className="bg-background">
                   <SelectValue placeholder="Sélectionnez une catégorie" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-background">
                   <SelectItem value="client">Client</SelectItem>
                   <SelectItem value="prospect">Prospect</SelectItem>
                   <SelectItem value="partner">Partenaire</SelectItem>
@@ -102,7 +105,7 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
           </div>
           
           <DialogFooter className="mt-6">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="bg-background">
               Annuler
             </Button>
             <Button type="submit" className="bg-noovimo-500 hover:bg-noovimo-600">
