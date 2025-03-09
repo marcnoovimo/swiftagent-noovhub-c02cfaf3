@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import DocumentScanner from './DocumentScanner';
 import { useScanDialog } from './hooks/useScanDialog';
@@ -42,14 +42,17 @@ const DocumentScanDialog: React.FC<DocumentScanDialogProps> = ({
         }
         onOpenChange(newOpen);
       }}>
-        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-hidden">
-          <DialogHeader>
-            <DialogTitle>
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-hidden p-4 sm:p-6">
+          <DialogHeader className="pb-2">
+            <DialogTitle className="text-center text-lg sm:text-xl">
               {scanMode === 'config' ? 'Scanner un document' : 'Capturer le document'}
             </DialogTitle>
+            <DialogDescription className="sr-only">
+              Configurez les options de scan ou capturez votre document
+            </DialogDescription>
           </DialogHeader>
           
-          <ScrollArea className="max-h-[calc(90vh-120px)] overflow-y-auto pr-4">
+          <ScrollArea className="max-h-[calc(90vh-120px)] overflow-y-auto px-0 sm:pr-4">
             {scanMode === 'config' ? (
               <ScanConfigForm 
                 scanOptions={scanOptions}

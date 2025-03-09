@@ -55,7 +55,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
   };
 
   return (
-    <div className="space-y-4 py-4">
+    <div className="space-y-4 py-2 sm:py-4">
       <div className="space-y-2">
         <Label htmlFor="documentName">Nom du document</Label>
         <Input 
@@ -63,6 +63,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
           value={scanOptions.documentName}
           onChange={(e) => setScanOptions({...scanOptions, documentName: e.target.value})}
           placeholder="Ex: Compromis - 23 Rue des Lilas"
+          className="w-full"
         />
       </div>
       
@@ -72,7 +73,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
           value={scanOptions.category}
           onValueChange={handleCategoryChange}
         >
-          <SelectTrigger id="category">
+          <SelectTrigger id="category" className="w-full">
             <SelectValue placeholder="Sélectionner une catégorie" />
           </SelectTrigger>
           <SelectContent>
@@ -93,7 +94,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
             value={scanOptions.category}
             onValueChange={handleSubCategoryChange}
           >
-            <SelectTrigger id="subCategory">
+            <SelectTrigger id="subCategory" className="w-full">
               <SelectValue placeholder="Sélectionner un type" />
             </SelectTrigger>
             <SelectContent>
@@ -113,7 +114,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
           value={scanOptions.accessLevel}
           onValueChange={(value) => setScanOptions({...scanOptions, accessLevel: value as AccessLevel})}
         >
-          <SelectTrigger id="accessLevel">
+          <SelectTrigger id="accessLevel" className="w-full">
             <SelectValue placeholder="Sélectionner un niveau d'accès" />
           </SelectTrigger>
           <SelectContent>
@@ -124,7 +125,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
       </div>
       
       <div className="flex items-center justify-between space-x-2">
-        <Label htmlFor="autoClassify">Classification automatique</Label>
+        <Label htmlFor="autoClassify" className="text-sm sm:text-base">Classification automatique</Label>
         <Switch 
           id="autoClassify" 
           checked={scanOptions.autoClassify}
@@ -148,11 +149,18 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
       />
       
       <div className="flex justify-end gap-3 pt-4">
-        <Button variant="outline" onClick={triggerFileInput}>
+        <Button 
+          variant="outline" 
+          onClick={triggerFileInput}
+          className="flex-1 sm:flex-none"
+        >
           <Upload size={16} className="mr-2" />
           Importer
         </Button>
-        <Button onClick={onStartScan}>
+        <Button 
+          onClick={onStartScan}
+          className="flex-1 sm:flex-none"
+        >
           Commencer le scan
         </Button>
       </div>
