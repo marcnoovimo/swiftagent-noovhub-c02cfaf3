@@ -1,3 +1,4 @@
+
 #root {
   width: 100%;
   margin: 0 auto;
@@ -102,20 +103,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
   border-radius: var(--radius);
 }
 
-/* Fix for charts on small screens */
-.recharts-wrapper {
-  max-width: 100%;
-}
-
-.recharts-surface {
-  overflow: visible;
-}
-
-.recharts-legend-wrapper {
-  max-width: 100%;
-  overflow-x: auto;
-}
-
 /* Ensure no horizontal overflow for all containers */
 .container {
   max-width: 100%;
@@ -150,7 +137,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
   bottom: 1rem;
   right: 1rem;
   z-index: 100;
-  max-width: 90vw;
+  max-width: 95vw;
   width: 380px;
 }
 
@@ -161,106 +148,49 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
   z-index: 10;
 }
 
-/* Further responsive improvements for very small screens */
-@media (max-width: 350px) {
-  .container {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
-  }
-  
-  .glass-card {
-    padding: 0.75rem !important;
-    margin-bottom: 0.5rem;
-  }
-  
-  h3 {
-    font-size: 0.9rem !important;
-  }
-  
-  .text-xl {
-    font-size: 1rem !important;
-  }
-  
-  .text-2xl {
-    font-size: 1.25rem !important;
-  }
-}
-
-/* Better mobile spacing for stat cards and settings */
+/* Fix button touch target size on mobile */
 @media (max-width: 640px) {
-  .TabsList, .TabsTrigger {
-    font-size: 0.75rem !important;
+  button, 
+  .button,
+  [role="button"],
+  a.button {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .icon-button {
+    min-height: 36px;
+    min-width: 36px;
+  }
+  
+  .btn-sm {
+    min-height: 36px;
+  }
+  
+  .btn-xs {
+    min-height: 32px;
+  }
+  
+  .TabsList {
+    width: 100%;
   }
   
   .TabsTrigger {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
-  }
-  
-  /* Improved card-grid for better mobile alignment */
-  .card-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 90%; 
-    margin: 0 auto;
-  }
-  
-  .card-grid > div {
-    width: 100%;
-  }
-
-  /* Narrower container for performance card sections */
-  .performance-section {
-    width: 90%;
-    margin: 0 auto;
-  }
-  
-  /* Improved table display on mobile */
-  table {
-    font-size: 0.75rem;
-  }
-  
-  /* Settings page specific mobile improvements */
-  .settings-card-header {
-    padding: 1rem 0.75rem !important;
-  }
-  
-  .settings-card-content {
-    padding: 0.75rem !important;
+    flex: 1;
+    font-size: 0.75rem !important;
   }
 }
 
-/* Custom table styles for better mobile experience */
-.responsive-table {
+/* Improved card-grid for better mobile alignment */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.5rem;
   width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.responsive-table table {
-  min-width: 100%;
-}
-
-.responsive-table th, 
-.responsive-table td {
-  white-space: nowrap;
-  padding: 0.5rem 0.75rem;
-}
-
-/* Extra small screens */
-@screen xs {
-  .xs\:inline {
-    display: inline;
-  }
-  
-  .xs\:hidden {
-    display: none;
-  }
-  
-  .xs\:text-left {
-    text-align: left;
-  }
+  margin: 0 auto;
 }
 
 /* Messages and chat components responsive fixes */
@@ -283,31 +213,93 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
   }
 }
 
-/* Agent map marker styles */
-.agent-marker {
-  font-size: 0.7rem;
-  font-weight: bold;
-  transition: transform 0.2s, box-shadow 0.2s;
+/* Fix for dropdown menus to ensure they're always visible */
+.dropdown-content {
+  z-index: 50 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
-.agent-marker:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+/* Fix for dialogs */
+.dialog-content {
+  max-width: 90vw !important;
+  max-height: 85vh !important;
+  overflow-y: auto !important;
 }
 
-.agent-marker img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* Fix for popover positioning */
+.popover-content {
+  z-index: 40 !important;
 }
 
-/* Customize mapbox popup */
-.mapboxgl-popup-content {
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+/* Provide better tap targets for touch devices */
+@media (pointer: coarse) {
+  .nav-item,
+  .icon-button,
+  .card-action,
+  .table td,
+  .table th {
+    padding: 0.625rem !important;
+  }
+  
+  select, input[type="checkbox"], input[type="radio"] {
+    min-height: 24px;
+    min-width: 24px;
+  }
 }
 
-.mapboxgl-popup-close-button {
-  display: none;
+/* Fix for toast notifications */
+.toast-viewport {
+  z-index: 200 !important;
+}
+
+/* Improve form element spacing on mobile */
+@media (max-width: 640px) {
+  .form-group + .form-group,
+  .input-group + .input-group,
+  .form-field + .form-field,
+  .form-item + .form-item {
+    margin-top: 1rem !important;
+  }
+}
+
+/* Fix for charts and visualizations */
+.recharts-responsive-container {
+  width: 100% !important;
+  min-height: 200px !important;
+}
+
+.recharts-tooltip-wrapper {
+  z-index: 20 !important;
+}
+
+/* Loading states and skeletons */
+.skeleton {
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, 
+    rgba(0, 0, 0, 0.06) 25%, 
+    rgba(0, 0, 0, 0.12) 50%, 
+    rgba(0, 0, 0, 0.06) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Improve focus states for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--primary) !important;
+  outline-offset: 2px !important;
+}
+
+/* Improve keyboard navigation */
+.focusable:focus-visible {
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--primary) !important;
 }

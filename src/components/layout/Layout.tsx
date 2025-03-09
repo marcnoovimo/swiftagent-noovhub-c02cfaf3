@@ -5,6 +5,7 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import { useMediaQuery } from '@/hooks/use-mobile';
 import NotificationCenter from '@/components/notification/NotificationCenter';
+import ChatbotInterface from '@/components/chatbot/ChatbotInterface';
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -22,6 +23,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [location.pathname, isMobile]);
 
+  // Set sidebar state based on screen size on initial load
+  useEffect(() => {
+    setSidebarOpen(!isMobile);
+  }, [isMobile]);
+
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -34,16 +40,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar />
+      <div className={`sidebar-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+        <Sidebar isOpen={sidebarOpen} closeSidebar={closeSidebar} />
+      </div>
       
       <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
         <Header toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
         
-        <main className="flex-1 p-4 md:p-6">
+        <main className="flex-1 p-2 sm:p-4 md:p-6" onClick={isMobile ? closeSidebar : undefined}>
           <Outlet />
           {children}
         </main>
       </div>
+      
+      {/* Always include ChatbotInterface for global access */}
+      <ChatbotInterface />
     </div>
   );
 };

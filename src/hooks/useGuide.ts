@@ -9,7 +9,7 @@ export const useGuide = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Guide[]>([]);
 
-  // Set first guide as active initially
+  // Set first guide as active initially or on reset
   useEffect(() => {
     if (guides.length > 0 && !activeGuide) {
       setActiveGuide(guides[0]);
@@ -36,7 +36,23 @@ export const useGuide = () => {
     if (results.length > 0 && (!activeGuide || !results.includes(activeGuide))) {
       setActiveGuide(results[0]);
     }
-  }, [guides, activeGuide]);
+  }, [guides, activeGuide, setActiveGuide]);
+
+  // Clear search function
+  const clearSearch = useCallback(() => {
+    setSearchQuery('');
+    setSearchResults([]);
+    
+    // Reset to first guide when clearing search
+    if (guides.length > 0) {
+      setActiveGuide(guides[0]);
+    }
+  }, [guides, setActiveGuide]);
+
+  // Function to find a guide by ID
+  const findGuideById = useCallback((id: string): Guide | undefined => {
+    return guides.find(guide => guide.id === id);
+  }, [guides]);
 
   // Memoized guideCategories to prevent re-renders
   const memoizedGuideCategories = useMemo(() => guideCategories, []);
@@ -49,6 +65,8 @@ export const useGuide = () => {
     searchGuides,
     searchResults,
     searchQuery,
-    setSearchQuery
+    setSearchQuery,
+    clearSearch,
+    findGuideById
   };
 };

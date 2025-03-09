@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Star, 
   Download, 
@@ -8,12 +8,22 @@ import {
   ChevronRight,
   Eye,
   Printer,
-  Bell
+  Search,
+  SortAsc,
+  SortDesc
 } from 'lucide-react';
 import { Document, Folder } from './types';
 import DocumentIcon from './DocumentIcon';
 import { motion } from 'framer-motion';
 import { Badge } from "@/components/ui/badge";
+import { Button } from '@/components/ui/button';
+import { useMediaQuery } from '@/hooks/use-mobile';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface DocumentListProps {
   items: (Document | Folder)[];
@@ -28,8 +38,37 @@ const DocumentList: React.FC<DocumentListProps> = ({
   onFileClick,
   isSearchResult = false
 }) => {
+  const isMobile = useMediaQuery('(max-width: 640px)');
+  const [sortBy, setSortBy] = useState<'name' | 'date'>('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
   const isFolder = (item: Document | Folder): item is Folder => {
     return 'documents' in item;
+  };
+
+  // Sort items function
+  const getSortedItems = () => {
+    return [...items].sort((a, b) => {
+      if (sortBy === 'name') {
+        const comparison = a.name.localeCompare(b.name);
+        return sortDirection === 'asc' ? comparison : -comparison;
+      } else {
+        // Assuming there's a updatedAt field, otherwise fallback to name
+        const dateA = (a as Document).updatedAt || '';
+        const dateB = (b as Document).updatedAt || '';
+        const comparison = dateA.localeCompare(dateB);
+        return sortDirection === 'asc' ? comparison : -comparison;
+      }
+    });
+  };
+
+  const toggleSort = (field: 'name' | 'date') => {
+    if (sortBy === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(field);
+      setSortDirection('asc');
+    }
   };
 
   // Animation variants
@@ -38,22 +77,51 @@ const DocumentList: React.FC<DocumentListProps> = ({
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
+        staggerChildren: 0.05
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     show: { opacity: 1, y: 0 }
   };
 
+  const sortedItems = getSortedItems();
+
   return (
     <div className="bg-white rounded-xl shadow-sm dark:bg-gray-800">
-      <div className="p-4 border-b border-border">
-        <div className="grid grid-cols-12 text-xs text-muted-foreground font-medium">
-          <div className="col-span-8">Nom</div>
-          <div className="col-span-4 text-right">Actions</div>
+      <div className="p-3 sm:p-4 border-b border-border">
+        <div className="flex justify-between items-center">
+          <div className="text-xs text-muted-foreground font-medium">
+            {items.length} élément{items.length !== 1 ? 's' : ''}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => toggleSort('name')}
+              className="h-8 px-2 text-xs"
+              aria-label="Trier par nom"
+            >
+              Nom {sortBy === 'name' && (
+                sortDirection === 'asc' ? <SortAsc className="ml-1 h-3 w-3" /> : <SortDesc className="ml-1 h-3 w-3" />
+              )}
+            </Button>
+            {!isMobile && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => toggleSort('date')}
+                className="h-8 px-2 text-xs"
+                aria-label="Trier par date"
+              >
+                Date {sortBy === 'date' && (
+                  sortDirection === 'asc' ? <SortAsc className="ml-1 h-3 w-3" /> : <SortDesc className="ml-1 h-3 w-3" />
+                )}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       
@@ -63,21 +131,21 @@ const DocumentList: React.FC<DocumentListProps> = ({
         initial="hidden"
         animate="show"
       >
-        {items.length > 0 ? (
-          items.map((item) => {
+        {sortedItems.length > 0 ? (
+          sortedItems.map((item) => {
             if (isFolder(item) && !isSearchResult) {
               // Folder item (not in search results)
               return (
                 <motion.div 
                   key={item.id}
-                  className="p-4 hover:bg-secondary/20 transition-colors cursor-pointer"
+                  className="p-3 sm:p-4 hover:bg-secondary/20 transition-colors cursor-pointer"
                   onClick={() => onFolderClick && onFolderClick(item.id, item.name)}
                   variants={itemVariants}
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                 >
-                  <div className="grid grid-cols-12 items-center">
-                    <div className="col-span-8 flex items-center">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center min-w-0">
                       <div className="mr-3 relative">
                         <DocumentIcon type="folder" />
                         {item.unreadCount && item.unreadCount > 0 && (
@@ -86,8 +154,8 @@ const DocumentList: React.FC<DocumentListProps> = ({
                           </Badge>
                         )}
                       </div>
-                      <div>
-                        <div className="font-medium text-sm flex items-center gap-1">
+                      <div className="min-w-0">
+                        <div className="font-medium text-sm truncate max-w-[200px] sm:max-w-none">
                           {item.name}
                         </div>
                         <div className="text-xs text-muted-foreground mt-1">
@@ -96,9 +164,7 @@ const DocumentList: React.FC<DocumentListProps> = ({
                       </div>
                     </div>
                     
-                    <div className="col-span-4 flex items-center justify-end">
-                      <ChevronRight size={16} className="text-muted-foreground" />
-                    </div>
+                    <ChevronRight size={16} className="text-muted-foreground flex-shrink-0" />
                   </div>
                 </motion.div>
               );
@@ -108,67 +174,93 @@ const DocumentList: React.FC<DocumentListProps> = ({
               return (
                 <motion.div 
                   key={document.id}
-                  className={`p-4 hover:bg-secondary/20 transition-colors cursor-pointer ${document.unread ? 'bg-noovimo-50' : ''}`}
+                  className={`p-3 sm:p-4 hover:bg-secondary/20 transition-colors cursor-pointer ${document.unread ? 'bg-noovimo-50' : ''}`}
                   onClick={() => onFileClick && onFileClick(document)}
                   variants={itemVariants}
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                 >
-                  <div className="grid grid-cols-12 items-center">
-                    <div className="col-span-8 flex items-center">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center min-w-0">
                       <div className="mr-3 relative">
                         <DocumentIcon type={document.type} />
                         {document.unread && (
                           <div className="absolute -top-1 -right-1 w-2 h-2 bg-noovimo-500 rounded-full"></div>
                         )}
                       </div>
-                      <div>
-                        <div className="font-medium text-sm flex items-center gap-1">
+                      <div className="min-w-0">
+                        <div className="font-medium text-sm flex items-center gap-1 truncate max-w-[160px] sm:max-w-none">
                           {document.name}
                           {document.unread && (
-                            <Badge variant="outline" className="ml-2 bg-noovimo-50 text-noovimo-500 text-xs border-noovimo-200">
+                            <Badge variant="outline" className="ml-2 bg-noovimo-50 text-noovimo-500 text-xs border-noovimo-200 whitespace-nowrap">
                               Nouveau
                             </Badge>
                           )}
                         </div>
-                        <div className="text-xs text-muted-foreground mt-1">
+                        <div className="text-xs text-muted-foreground mt-1 truncate max-w-[180px] sm:max-w-none">
                           {document.category}
                         </div>
                       </div>
                     </div>
                     
-                    <div className="col-span-4 flex items-center justify-end gap-2">
+                    <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                       {document.starred && (
-                        <Star size={16} className="text-yellow-500 fill-yellow-500" />
+                        <Star size={isMobile ? 14 : 16} className="text-yellow-500 fill-yellow-500" />
                       )}
                       
-                      {document.documentType === 'noovimo' ? (
-                        <>
-                          <button className="icon-button" aria-label="Visualiser" onClick={(e) => e.stopPropagation()}>
-                            <Eye size={16} className="text-muted-foreground" />
-                          </button>
-                          
-                          <button className="icon-button" aria-label="Télécharger" onClick={(e) => e.stopPropagation()}>
-                            <Download size={16} className="text-muted-foreground" />
-                          </button>
-                          
-                          <button className="icon-button" aria-label="Imprimer" onClick={(e) => e.stopPropagation()}>
-                            <Printer size={16} className="text-muted-foreground" />
-                          </button>
-                        </>
+                      {isMobile ? (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <MoreVertical size={16} />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>
+                              <Eye size={14} className="mr-2" />
+                              Visualiser
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Download size={14} className="mr-2" />
+                              Télécharger
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Share2 size={14} className="mr-2" />
+                              Partager
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       ) : (
                         <>
-                          <button className="icon-button" aria-label="Télécharger" onClick={(e) => e.stopPropagation()}>
-                            <Download size={16} className="text-muted-foreground" />
-                          </button>
-                          
-                          <button className="icon-button" aria-label="Partager" onClick={(e) => e.stopPropagation()}>
-                            <Share2 size={16} className="text-muted-foreground" />
-                          </button>
-                          
-                          <button className="icon-button" aria-label="Plus d'options" onClick={(e) => e.stopPropagation()}>
-                            <MoreVertical size={16} className="text-muted-foreground" />
-                          </button>
+                          {document.documentType === 'noovimo' ? (
+                            <>
+                              <button className="icon-button" aria-label="Visualiser" onClick={(e) => e.stopPropagation()}>
+                                <Eye size={16} className="text-muted-foreground" />
+                              </button>
+                              
+                              <button className="icon-button" aria-label="Télécharger" onClick={(e) => e.stopPropagation()}>
+                                <Download size={16} className="text-muted-foreground" />
+                              </button>
+                              
+                              <button className="icon-button" aria-label="Imprimer" onClick={(e) => e.stopPropagation()}>
+                                <Printer size={16} className="text-muted-foreground" />
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button className="icon-button" aria-label="Télécharger" onClick={(e) => e.stopPropagation()}>
+                                <Download size={16} className="text-muted-foreground" />
+                              </button>
+                              
+                              <button className="icon-button" aria-label="Partager" onClick={(e) => e.stopPropagation()}>
+                                <Share2 size={16} className="text-muted-foreground" />
+                              </button>
+                              
+                              <button className="icon-button" aria-label="Plus d'options" onClick={(e) => e.stopPropagation()}>
+                                <MoreVertical size={16} className="text-muted-foreground" />
+                              </button>
+                            </>
+                          )}
                         </>
                       )}
                     </div>

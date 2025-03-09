@@ -1,31 +1,48 @@
 
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { AuthProvider } from './context/AuthContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Login from './pages/Login';
-import ResetPassword from './pages/ResetPassword';
-import ForgotPassword from './pages/ForgotPassword';
+import { Toaster } from 'sonner';
 import Layout from './components/layout/Layout';
-import Index from './pages/Index';
-import Documents from './pages/Documents';
-import Contacts from './pages/Contacts';
-import Messages from './pages/Messages';
-import Stats from './pages/Stats';
-import MonthlyReport from './pages/MonthlyReport';
-import Team from './pages/Team';
-import AgentDetail from './pages/AgentDetail';
-import Profile from './pages/Profile';
-import AgentProfile from './pages/AgentProfile';
+// Eager load critical components
 import NotFound from './pages/NotFound';
-import Calendar from './pages/Calendar';
-import Settings from './pages/Settings';
-import Support from './pages/Support';
-import ChatbotInterface from './components/chatbot/ChatbotInterface';
+import Login from './pages/Login';
+// Lazy load non-critical components
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const Index = lazy(() => import('./pages/Index'));
+const Documents = lazy(() => import('./pages/Documents'));
+const Contacts = lazy(() => import('./pages/Contacts'));
+const Messages = lazy(() => import('./pages/Messages'));
+const Stats = lazy(() => import('./pages/Stats'));
+const MonthlyReport = lazy(() => import('./pages/MonthlyReport'));
+const Team = lazy(() => import('./pages/Team'));
+const AgentDetail = lazy(() => import('./pages/AgentDetail'));
+const Profile = lazy(() => import('./pages/Profile'));
+const AgentProfile = lazy(() => import('./pages/AgentProfile'));
+const Calendar = lazy(() => import('./pages/Calendar'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Support = lazy(() => import('./pages/Support'));
 
-// Create a client
-const queryClient = new QueryClient();
+// Loading fallback
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+  </div>
+);
+
+// Create a client with default options
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    },
+  },
+});
 
 function App() {
   return (
@@ -33,28 +50,30 @@ function App() {
       <ThemeProvider defaultTheme="light" storageKey="noovimo-theme">
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route element={<Layout />}>
-                <Route path="/" element={<Index />} />
-                <Route path="/documents" element={<Documents />} />
-                <Route path="/contacts" element={<Contacts />} />
-                <Route path="/calendar" element={<Calendar />} />
-                <Route path="/messages" element={<Messages />} />
-                <Route path="/stats" element={<Stats />} />
-                <Route path="/monthly-report" element={<MonthlyReport />} />
-                <Route path="/team" element={<Team />} />
-                <Route path="/team/:id" element={<AgentDetail />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/agent-profile" element={<AgentProfile />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/support" element={<Support />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
-            <ChatbotInterface />
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/documents" element={<Documents />} />
+                  <Route path="/contacts" element={<Contacts />} />
+                  <Route path="/calendar" element={<Calendar />} />
+                  <Route path="/messages" element={<Messages />} />
+                  <Route path="/stats" element={<Stats />} />
+                  <Route path="/monthly-report" element={<MonthlyReport />} />
+                  <Route path="/team" element={<Team />} />
+                  <Route path="/team/:id" element={<AgentDetail />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/agent-profile" element={<AgentProfile />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/support" element={<Support />} />
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+              </Routes>
+            </Suspense>
+            <Toaster position="top-right" richColors closeButton />
           </AuthProvider>
         </QueryClientProvider>
       </ThemeProvider>

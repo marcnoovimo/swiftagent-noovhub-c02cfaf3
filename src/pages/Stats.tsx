@@ -1,21 +1,13 @@
-import React, { useEffect, useState } from 'react';
+
+import React, { useEffect, useState, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { 
-  BarChart, 
-  Bar, 
-  LineChart, 
-  Line, 
-  PieChart, 
-  Pie, 
-  Cell, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  ResponsiveContainer 
-} from 'recharts';
-import { Building2, CreditCard, TrendingUp, Home, BarChart3 } from 'lucide-react';
+  Building2, 
+  CreditCard, 
+  TrendingUp, 
+  Home, 
+  BarChart3 
+} from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TimeFilter } from '@/types/stats';
 import { statsService } from '@/services/statsService';
@@ -23,11 +15,12 @@ import TimeFilterSelector from '@/components/stats/TimeFilterSelector';
 import StatCard from '@/components/stats/StatCard';
 import TransactionTable from '@/components/stats/TransactionTable';
 import PerformanceDashboard from '@/components/dashboard/PerformanceDashboard';
-
-const COLORS = ['#8B5CF6', '#EC4899', '#10B981', '#F59E0B', '#3B82F6'];
+import { useMediaQuery } from '@/hooks/use-mobile';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Stats = () => {
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('year');
+  const isMobile = useMediaQuery('(max-width: 640px)');
   
   const { data: stats, isLoading, refetch } = useQuery({
     queryKey: ['stats', timeFilter],
@@ -38,47 +31,38 @@ const Stats = () => {
     refetch();
   }, [timeFilter, refetch]);
   
-  const formatCurrency = (value: number) => {
+  const formatCurrency = useCallback((value: number) => {
     return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
       currency: 'EUR',
       maximumFractionDigits: 0
     }).format(value);
-  };
-  
-  const formatTooltipValue = (value: number, name: string) => {
-    if (name.includes('Commission')) {
-      return formatCurrency(value);
-    }
-    return value;
-  };
-
-  // Custom label for pie chart that works on mobile screens
-  const renderPieChartLabel = ({ name, percent }: { name: string; percent: number }) => {
-    // On small screens, only show the percentage
-    const screenWidth = window.innerWidth;
-    if (screenWidth < 400) {
-      return `${(percent * 100).toFixed(0)}%`;
-    }
-    // On larger screens, show name and percentage
-    return `${name}: ${(percent * 100).toFixed(0)}%`;
-  };
+  }, []);
 
   if (isLoading || !stats) {
     return (
-      <div className="container mx-auto px-4 py-8 animate-fade-in">
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-pulse text-noovimo-500 font-bold text-xl">
-            Chargement des statistiques...
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
+          <Skeleton className="h-12 w-64" />
+          <Skeleton className="h-10 w-40" />
+        </div>
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <Skeleton key={i} className="h-24 rounded-xl" />
+            ))}
           </div>
+          <Skeleton className="h-[300px] rounded-xl" />
+          <Skeleton className="h-[300px] rounded-xl" />
+          <Skeleton className="h-[200px] rounded-xl" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-1 sm:px-4 py-4 sm:py-8 animate-fade-in">
-      <div className="flex flex-col md:flex-row justify-between items-start mb-4 sm:mb-6 gap-2 sm:gap-4 px-2">
+    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 animate-fade-in">
+      <div className="flex flex-col md:flex-row justify-between items-start mb-4 sm:mb-6 gap-2 sm:gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Statistiques de performance</h1>
           <p className="text-muted-foreground text-xs sm:text-sm mt-1">
@@ -88,164 +72,42 @@ const Stats = () => {
         <TimeFilterSelector activeFilter={timeFilter} onChange={setTimeFilter} />
       </div>
       
-      {/* Performance Dashboard Component - Simplified for mobile */}
-      <div className="w-full overflow-visible">
+      {/* Performance Dashboard Component */}
+      <div className="w-full overflow-visible mb-6">
         <PerformanceDashboard />
       </div>
       
-      <div className="card-grid mb-4 sm:mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
         <StatCard
           title="Ventes réalisées"
           value={stats.totalSales}
-          icon={<Home size={16} className="text-noovimo-500" />}
+          icon={<Home size={isMobile ? 14 : 16} className="text-noovimo-500" />}
         />
         <StatCard
           title="Compromis signés"
           value={stats.totalCompromis}
-          icon={<Building2 size={16} className="text-noovimo-500" />}
+          icon={<Building2 size={isMobile ? 14 : 16} className="text-noovimo-500" />}
         />
         <StatCard
           title="Volume de transactions"
           value={formatCurrency(stats.totalVolume)}
-          icon={<BarChart3 size={16} className="text-noovimo-500" />}
+          icon={<BarChart3 size={isMobile ? 14 : 16} className="text-noovimo-500" />}
         />
         <StatCard
           title="Commissions totales"
           value={formatCurrency(stats.totalCommission)}
-          icon={<CreditCard size={16} className="text-noovimo-500" />}
+          icon={<CreditCard size={isMobile ? 14 : 16} className="text-noovimo-500" />}
         />
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-6 mb-4 sm:mb-8">
-        <div className="lg:col-span-2 glass-card rounded-xl p-2 sm:p-4 overflow-hidden">
-          <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Évolution des transactions</h3>
-          <Tabs defaultValue="bar" className="w-full">
-            <TabsList className="mb-2 sm:mb-4 flex w-full justify-start overflow-x-auto">
-              <TabsTrigger value="bar" className="text-xs sm:text-sm flex-none">Barres</TabsTrigger>
-              <TabsTrigger value="line" className="text-xs sm:text-sm flex-none">Courbe</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="bar" className="h-[200px] xs:h-[250px] sm:h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart 
-                  data={stats.monthlySales}
-                  margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="month" 
-                    tick={{fontSize: 9}}
-                    tickFormatter={(value) => value.substring(0, 3)} 
-                  />
-                  <YAxis tick={{fontSize: 9}} width={25} />
-                  <Tooltip 
-                    formatter={formatTooltipValue}
-                    contentStyle={{ fontSize: '11px' }}
-                  />
-                  <Legend wrapperStyle={{ fontSize: '9px' }} />
-                  <Bar name="Ventes" dataKey="value" fill="#8B5CF6" />
-                </BarChart>
-              </ResponsiveContainer>
-            </TabsContent>
-            
-            <TabsContent value="line" className="h-[200px] xs:h-[250px] sm:h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart 
-                  data={stats.monthlySales}
-                  margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="month" 
-                    tick={{fontSize: 9}}
-                    tickFormatter={(value) => value.substring(0, 3)} 
-                  />
-                  <YAxis tick={{fontSize: 9}} width={25} />
-                  <Tooltip 
-                    formatter={formatTooltipValue}
-                    contentStyle={{ fontSize: '11px' }}
-                  />
-                  <Legend wrapperStyle={{ fontSize: '9px' }} />
-                  <Line 
-                    type="monotone" 
-                    name="Ventes" 
-                    dataKey="value" 
-                    stroke="#8B5CF6" 
-                    activeDot={{ r: 4 }}
-                    strokeWidth={2} 
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </TabsContent>
-          </Tabs>
-        </div>
-        
-        <div className="glass-card rounded-xl p-2 sm:p-4 overflow-hidden">
-          <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Répartition des commissions</h3>
-          <div className="h-[200px] xs:h-[250px] sm:h-[300px] flex items-center justify-center w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
-                <Pie
-                  data={stats.commissionsByType}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={65}
-                  fill="#8884d8"
-                  dataKey="value"
-                  nameKey="name"
-                  label={renderPieChartLabel}
-                >
-                  {stats.commissionsByType.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  formatter={(value) => formatCurrency(value as number)}
-                  contentStyle={{ fontSize: '10px' }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
+      <div className="mb-4 sm:mb-6">
+        <div className="glass-card rounded-xl p-2 sm:p-4 overflow-x-auto">
+          <div className="flex items-center justify-between mb-2 sm:mb-4">
+            <h3 className="text-base sm:text-lg font-semibold">Transactions récentes</h3>
           </div>
-        </div>
-      </div>
-      
-      <div className="glass-card rounded-xl p-2 sm:p-4 mb-4 sm:mb-8 overflow-hidden">
-        <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-4">Évolution des commissions</h3>
-        <div className="h-[200px] xs:h-[250px] sm:h-[300px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart 
-              data={stats.monthlyCommissions}
-              margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis 
-                dataKey="month" 
-                tick={{fontSize: 9}}
-                tickFormatter={(value) => value.substring(0, 3)} 
-              />
-              <YAxis 
-                tickFormatter={(value) => `${(value / 1000).toFixed(0)}k€`} 
-                tick={{fontSize: 9}}
-                width={30}
-              />
-              <Tooltip 
-                formatter={(value) => formatCurrency(value as number)}
-                contentStyle={{ fontSize: '10px' }}
-              />
-              <Legend wrapperStyle={{ fontSize: '9px' }} />
-              <Bar name="Commissions" dataKey="value" fill="#EC4899" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-      
-      <div className="glass-card rounded-xl p-2 sm:p-4 overflow-x-auto">
-        <div className="flex items-center justify-between mb-2 sm:mb-4">
-          <h3 className="text-base sm:text-lg font-semibold">Transactions récentes</h3>
-        </div>
-        <div className="overflow-x-auto w-full">
-          <TransactionTable transactions={stats.transactions.slice(0, 5)} />
+          <div className="overflow-x-auto w-full">
+            <TransactionTable transactions={stats.transactions.slice(0, 5)} />
+          </div>
         </div>
       </div>
     </div>
