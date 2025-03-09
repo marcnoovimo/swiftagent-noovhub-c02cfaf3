@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { FolderOpen, Star, Plus, ChevronDown, ChevronRight } from 'lucide-react';
 import { Folder, Category } from './types';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface DocumentSidebarProps {
   title?: string;
@@ -38,11 +39,12 @@ const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
     }
   };
 
-  // Define sub-categories for Compromis - simplified to just the main types
+  // Sous-catégories pour les avant-contrats
   const compromisSubs = [
     { name: 'Compromis de vente', count: 2 },
     { name: 'Promesse de vente', count: 1 },
     { name: 'Location', count: 1 },
+    { name: 'Autres', count: 0 },
   ];
 
   return (
@@ -102,9 +104,9 @@ const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
                 <span className="text-xs text-muted-foreground">{category.count}</span>
               </div>
               
-              {/* Sub-menu items for Compromis */}
+              {/* Sous-menus pour la catégorie Compromis */}
               {hasSubMenu && isExpanded && (
-                <div className="pl-8 space-y-1 mt-1">
+                <ScrollArea className="h-auto max-h-[150px] pl-8 space-y-1 mt-1">
                   {compromisSubs.map(sub => (
                     <div 
                       key={sub.name}
@@ -115,7 +117,7 @@ const DocumentSidebar: React.FC<DocumentSidebarProps> = ({
                       <span className="text-xs text-muted-foreground">{sub.count}</span>
                     </div>
                   ))}
-                </div>
+                </ScrollArea>
               )}
             </div>
           );

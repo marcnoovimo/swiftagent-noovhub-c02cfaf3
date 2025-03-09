@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ScanOptions, AccessLevel } from '@/components/documents/types';
 import { useAuth } from '@/context/AuthContext';
@@ -15,7 +14,7 @@ export const useScanDialog = ({ onSuccess, onOpenChange }: UseScanDialogProps) =
   const { user } = useAuth();
   const [scanMode, setScanMode] = useState<'config' | 'scan'>('config');
   const [scanOptions, setScanOptions] = useState<ScanOptions>({
-    category: 'Compromis',
+    category: 'Compromis de vente',
     accessLevel: 'agent',
     documentName: '',
     autoClassify: true
@@ -33,8 +32,12 @@ export const useScanDialog = ({ onSuccess, onOpenChange }: UseScanDialogProps) =
     'Autres'
   ]);
 
-  const isCompromis = scanOptions.category === 'Compromis' || 
-                      (scanOptions.autoClassify && scanOptions.documentName.toLowerCase().includes('compromis'));
+  const isCompromis = 
+    scanOptions.category === 'Compromis' || 
+    scanOptions.category === 'Compromis de vente' || 
+    scanOptions.category === 'Promesse de vente' || 
+    scanOptions.category === 'Location' ||
+    (scanOptions.autoClassify && scanOptions.documentName.toLowerCase().includes('compromis'));
 
   const handleStartScan = () => {
     if (!scanOptions.documentName) {
@@ -52,15 +55,17 @@ export const useScanDialog = ({ onSuccess, onOpenChange }: UseScanDialogProps) =
       let category = options.category;
       if (options.autoClassify) {
         const lowerName = options.documentName.toLowerCase();
-        if (lowerName.includes('compromis')) category = 'Compromis';
+        if (lowerName.includes('compromis')) category = 'Compromis de vente';
+        else if (lowerName.includes('promesse')) category = 'Promesse de vente';
+        else if (lowerName.includes('location')) category = 'Location';
         else if (lowerName.includes('mandat')) category = 'Mandats';
         else if (lowerName.includes('facture') || lowerName.includes('honoraire')) category = 'Factures';
         else if (lowerName.includes('diagnostic') || lowerName.includes('dpe')) category = 'Diagnostics';
         else if (lowerName.includes('photo')) category = 'Photos';
       }
       
-      // Si c'est un compromis, ouvrir le formulaire pour les détails du contrat
-      if (category === 'Compromis') {
+      // Si c'est un avant-contrat, ouvrir le formulaire pour les détails du contrat
+      if (category === 'Compromis de vente' || category === 'Promesse de vente' || category === 'Location') {
         openContractFormInNewWindow();
       } else {
         // Pour les autres types de documents, procéder à l'enregistrement direct
@@ -73,7 +78,6 @@ export const useScanDialog = ({ onSuccess, onOpenChange }: UseScanDialogProps) =
   };
 
   const openContractFormInNewWindow = () => {
-    // Ouvrir une nouvelle fenêtre pour le formulaire d'avant-contrat
     const width = 800;
     const height = 800;
     const left = (window.innerWidth - width) / 2;
@@ -104,7 +108,7 @@ export const useScanDialog = ({ onSuccess, onOpenChange }: UseScanDialogProps) =
       };
       
       // Sauvegarder le document avec les données du contrat
-      await saveScannedDocument(capturedImage, enrichedOptions, 'Compromis');
+      await saveScannedDocument(capturedImage, enrichedOptions, scanOptions.category);
     }
   };
 
@@ -151,7 +155,7 @@ export const useScanDialog = ({ onSuccess, onOpenChange }: UseScanDialogProps) =
       setCapturedImage(null);
       setContractData(null);
       setScanOptions({
-        category: 'Compromis',
+        category: 'Compromis de vente',
         accessLevel: 'agent',
         documentName: '',
         autoClassify: true

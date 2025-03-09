@@ -1,11 +1,12 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { ScanOptions, AccessLevel } from './types';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ScanConfigFormProps {
   scanOptions: ScanOptions;
@@ -22,6 +23,25 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
   isCompromis,
   onStartScan
 }) => {
+  const [showSubCategories, setShowSubCategories] = useState(scanOptions.category === 'Compromis');
+  
+  // Define sub-categories for Compromis
+  const compromisSubs = [
+    'Compromis de vente',
+    'Promesse de vente',
+    'Location',
+    'Autres'
+  ];
+
+  const handleCategoryChange = (value: string) => {
+    setScanOptions({...scanOptions, category: value});
+    setShowSubCategories(value === 'Compromis');
+  };
+
+  const handleSubCategoryChange = (value: string) => {
+    setScanOptions({...scanOptions, category: value});
+  };
+
   return (
     <div className="space-y-4 py-4">
       <div className="space-y-2">
@@ -38,7 +58,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
         <Label htmlFor="category">Catégorie</Label>
         <Select 
           value={scanOptions.category}
-          onValueChange={(value) => setScanOptions({...scanOptions, category: value})}
+          onValueChange={handleCategoryChange}
         >
           <SelectTrigger id="category">
             <SelectValue placeholder="Sélectionner une catégorie" />
@@ -52,6 +72,30 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
           </SelectContent>
         </Select>
       </div>
+      
+      {/* Sub-category selection for Compromis */}
+      {showSubCategories && (
+        <div className="space-y-2 pl-4 border-l-2 border-noovimo-100">
+          <Label htmlFor="subCategory">Type d'avant-contrat</Label>
+          <Select 
+            value={scanOptions.category}
+            onValueChange={handleSubCategoryChange}
+          >
+            <SelectTrigger id="subCategory">
+              <SelectValue placeholder="Sélectionner un type" />
+            </SelectTrigger>
+            <SelectContent>
+              <ScrollArea className="h-[200px]">
+                {compromisSubs.map((subCategory) => (
+                  <SelectItem key={subCategory} value={subCategory}>
+                    {subCategory}
+                  </SelectItem>
+                ))}
+              </ScrollArea>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
       
       <div className="space-y-2">
         <Label htmlFor="accessLevel">Niveau d'accès</Label>
@@ -80,7 +124,7 @@ const ScanConfigForm: React.FC<ScanConfigFormProps> = ({
       
       {isCompromis && (
         <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-md text-sm">
-          <p>Pour un compromis, vous pourrez remplir les informations supplémentaires après la numérisation (vendeur, acquéreur, dates, etc.).</p>
+          <p>Pour un avant-contrat, vous pourrez remplir les informations supplémentaires après la numérisation (vendeur, acquéreur, dates, etc.).</p>
         </div>
       )}
       
