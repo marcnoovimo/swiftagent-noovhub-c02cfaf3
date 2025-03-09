@@ -1,0 +1,99 @@
+
+@layer components {
+  /* Form layout */
+  .form-layout {
+    @apply space-y-6;
+  }
+  
+  .form-section {
+    @apply space-y-4;
+  }
+  
+  .form-group {
+    @apply space-y-2;
+  }
+  
+  .form-row {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+  
+  /* Form elements */
+  .form-input {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm 
+    ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none 
+    focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
+    disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  .form-select {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm
+    ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none
+    focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+    disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  .form-textarea {
+    @apply flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm
+    ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none
+    focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+    disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  .form-checkbox {
+    @apply h-4 w-4 rounded border border-input bg-background text-primary
+    ring-offset-background focus-visible:outline-none focus-visible:ring-2
+    focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed
+    disabled:opacity-50;
+  }
+  
+  .form-radio {
+    @apply h-4 w-4 rounded-full border border-input bg-background text-primary
+    ring-offset-background focus-visible:outline-none focus-visible:ring-2
+    focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed
+    disabled:opacity-50;
+  }
+  
+  /* Form labels */
+  .form-label {
+    @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed
+    peer-disabled:opacity-70;
+  }
+  
+  /* Form validation */
+  .form-error {
+    @apply text-sm font-medium text-destructive mt-1;
+  }
+  
+  .form-hint {
+    @apply text-sm text-muted-foreground mt-1;
+  }
+  
+  /* Search input with icon */
+  .search-bar {
+    @apply bg-secondary/50 border border-border/30 px-2 sm:px-4 py-1.5 sm:py-2 rounded-xl 
+    transition-all duration-200 focus-within:border-primary/30 focus-within:bg-white 
+    focus-within:shadow-sm dark:focus-within:bg-black/60;
+  }
+  
+  /* Input states */
+  .form-input.error {
+    @apply border-destructive focus-visible:ring-destructive;
+  }
+  
+  .form-input.success {
+    @apply border-green-500 focus-visible:ring-green-500;
+  }
+  
+  /* Input with icon */
+  .input-with-icon {
+    @apply relative;
+  }
+  
+  .input-with-icon .form-input {
+    @apply pl-10;
+  }
+  
+  .input-with-icon .icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground;
+  }
+}

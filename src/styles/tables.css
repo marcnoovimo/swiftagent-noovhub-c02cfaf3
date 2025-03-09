@@ -1,0 +1,110 @@
+
+@layer components {
+  /* Table container */
+  .table-container {
+    @apply w-full overflow-x-auto -webkit-overflow-scrolling-touch mb-4 rounded-lg;
+  }
+  
+  /* Base table */
+  .table {
+    @apply w-full caption-bottom text-sm;
+  }
+  
+  /* Table header */
+  .table-header {
+    @apply [&_tr]:border-b;
+  }
+  
+  /* Table body */
+  .table-body {
+    @apply [&_tr:last-child]:border-0;
+  }
+  
+  /* Table footer */
+  .table-footer {
+    @apply border-t bg-muted/50 font-medium [&>tr]:last:border-b-0;
+  }
+  
+  /* Table row */
+  .table-row {
+    @apply border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted;
+  }
+  
+  /* Table head cell */
+  .table-head {
+    @apply h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0;
+  }
+  
+  /* Table cell */
+  .table-cell {
+    @apply p-4 align-middle [&:has([role=checkbox])]:pr-0;
+  }
+  
+  /* Table caption */
+  .table-caption {
+    @apply mt-4 text-sm text-muted-foreground;
+  }
+  
+  /* Table pagination */
+  .table-pagination {
+    @apply flex items-center justify-between py-4;
+  }
+  
+  /* Striped table */
+  .table-striped tbody tr:nth-child(odd) {
+    @apply bg-muted/30;
+  }
+  
+  /* Compact table */
+  .table-compact .table-head {
+    @apply h-9 px-3;
+  }
+  
+  .table-compact .table-cell {
+    @apply py-2 px-3;
+  }
+  
+  /* Bordered table */
+  .table-bordered {
+    @apply border;
+  }
+  
+  .table-bordered .table-head,
+  .table-bordered .table-cell {
+    @apply border;
+  }
+  
+  /* Hoverable table */
+  .table-hover .table-row:hover {
+    @apply bg-muted;
+  }
+  
+  /* Responsive table utilities */
+  .table-responsive {
+    @apply block w-full overflow-x-auto -webkit-overflow-scrolling-touch;
+  }
+  
+  /* Table sorting indicators */
+  .table-sort-indicator {
+    @apply ml-2 h-4 w-4 shrink-0;
+  }
+  
+  /* Mobile table adjustments */
+  @media (max-width: 640px) {
+    .table-responsive-stack {
+      @apply block;
+    }
+    
+    .table-responsive-stack thead {
+      @apply hidden;
+    }
+    
+    .table-responsive-stack tbody tr {
+      @apply block border-b py-2;
+    }
+    
+    .table-responsive-stack .table-cell {
+      @apply block text-right py-1 pl-[50%] relative before:content-[attr(data-label)] before:absolute before:left-4 before:top-1/2 before:-translate-y-1/2 before:text-left before:font-medium;
+    }
+  }
+}
