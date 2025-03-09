@@ -43,8 +43,15 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {
           </button>
           
           <Link to="/" className="flex items-center gap-2">
-            <span className="font-bold text-xl text-primary">Noovimo</span>
-            <span className="hidden md:inline-block text-sm font-medium text-muted-foreground">Intranet</span>
+            <img 
+              src="/lovable-uploads/95557113-347d-4013-8965-a832356ec898.png" 
+              alt="Noovimo Logo" 
+              className="h-8 w-auto"
+            />
+            <div className="flex flex-col items-start">
+              <span className="font-bold text-xl text-primary">Noov'Hub</span>
+              <span className="hidden md:inline-block text-xs font-medium text-muted-foreground">Votre couteau suisse digital</span>
+            </div>
           </Link>
         </div>
 
