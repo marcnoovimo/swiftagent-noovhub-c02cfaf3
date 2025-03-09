@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MessageSquare, Send } from 'lucide-react';
 import { useChatbot } from '@/hooks/useChatbot';
@@ -19,6 +20,18 @@ const ChatbotInterface: React.FC = () => {
     isListening,
     toggleListening
   } = useChatbot();
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [messages, isOpen]);
 
   return (
     <>
@@ -44,8 +57,8 @@ const ChatbotInterface: React.FC = () => {
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {messages.map((message, index) => (
-                <ChatMessageItem key={index} message={message} />
+              {messages.map((message) => (
+                <ChatMessageItem key={message.id} message={message} />
               ))}
               
               {isLoading && (
@@ -70,6 +83,8 @@ const ChatbotInterface: React.FC = () => {
                   </div>
                 </div>
               )}
+              
+              <div ref={messagesEndRef} />
             </div>
 
             <div className="p-4 border-t dark:border-gray-700">

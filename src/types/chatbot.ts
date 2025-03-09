@@ -2,7 +2,7 @@
 export interface ChatMessage {
   id: string;
   content: string;
-  timestamp: string;
+  timestamp: Date;
   sender: 'user' | 'bot';
   isLoading?: boolean;
 }
@@ -10,7 +10,8 @@ export interface ChatMessage {
 export interface DocumentReference {
   id: string;
   name: string;
+  type: string;
   category: string;
-  documentType: 'agent' | 'noovimo';
-  relevanceScore: number;
+  url?: string;
+  confidenceScore?: number;
 }

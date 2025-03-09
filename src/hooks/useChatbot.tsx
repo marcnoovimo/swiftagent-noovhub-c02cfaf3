@@ -1,139 +1,152 @@
-import { useState, useRef, useEffect } from 'react';
+
+import { useState, useEffect, useRef } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { ChatMessage, DocumentReference } from '@/types/chatbot';
+import { searchDocumentsForQuery, generateChatbotResponse } from '@/services/chatbotService';
 import { useToast } from "@/hooks/use-toast";
-import { DocumentReference } from '@/types';
 
-interface ChatMessage {
-  text: string;
-  isUser: boolean;
-}
-
-export function useChatbot() {
+export const useChatbot = () => {
+  const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      id: uuidv4(),
+      content: "Bonjour, je suis Noovi, votre assistant IA. Comment puis-je vous aider aujourd'hui ?",
+      timestamp: new Date(),
+      sender: 'bot'
+    }
+  ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [documentSuggestions, setDocumentSuggestions] = useState<DocumentReference[]>([]);
   const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
-  const { toast } = useToast();
-  
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+
   const toggleOpen = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (input.trim() === '') return;
-
-    const newMessage = { text: input, isUser: true };
-    setMessages(prevMessages => [...prevMessages, newMessage]);
+    
+    const userMessage: ChatMessage = {
+      id: uuidv4(),
+      content: input,
+      timestamp: new Date(),
+      sender: 'user'
+    };
+    
+    setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
-
-    // Simulate AI response and document suggestions after a delay
-    setTimeout(() => {
-      setIsLoading(false);
-      setMessages(prevMessages => [
-        ...prevMessages,
-        { text: `Réponse de l'IA pour : ${input}`, isUser: false }
-      ]);
-      setDocumentSuggestions([
-        { title: "Document 1", url: "#" },
-        { title: "Document 2", url: "#" }
-      ]);
-    }, 1500);
-  };
-  
-  const startVoiceRecognition = () => {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      toast({
-        title: "Reconnaissance vocale non supportée",
-        description: "Votre navigateur ne supporte pas cette fonctionnalité",
-        variant: "destructive",
-        duration: 3000,
-      });
-      return;
-    }
+    
+    // Search for relevant documents
+    const documents = searchDocumentsForQuery(input);
+    setDocumentSuggestions(documents);
     
     try {
-      // @ts-ignore - TypeScript doesn't know about webkitSpeechRecognition
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.lang = 'fr-FR';
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = true;
+      // Generate response
+      const botResponse = await generateChatbotResponse(input, documents);
       
-      recognitionRef.current.onstart = () => {
-        setIsListening(true);
-        toast({
-          title: "Écoute activée",
-          description: "Parlez maintenant...",
-          duration: 2000,
-        });
-        
-        // Ouvrir le chatbot automatiquement
-        if (!isOpen) {
-          setIsOpen(true);
-        }
+      const botMessage: ChatMessage = {
+        id: uuidv4(),
+        content: botResponse,
+        timestamp: new Date(),
+        sender: 'bot'
       };
       
-      recognitionRef.current.onresult = (event: any) => {
-        const transcript = Array.from(event.results)
-          .map((result: any) => result[0].transcript)
-          .join('');
-        
-        setInput(transcript);
-      };
-      
-      recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error', event.error);
-        stopVoiceRecognition();
-        toast({
-          title: "Erreur de reconnaissance vocale",
-          description: event.error,
-          variant: "destructive",
-          duration: 3000,
-        });
-      };
-      
-      recognitionRef.current.onend = () => {
-        setIsListening(false);
-        // Envoyer automatiquement le message après la fin de la dictée vocale
-        if (input.trim() !== '') {
-          setTimeout(() => {
-            handleSendMessage();
-          }, 500);
-        }
-      };
-      
-      recognitionRef.current.start();
+      setMessages(prev => [...prev, botMessage]);
     } catch (error) {
-      console.error('Speech recognition error:', error);
-      toast({
-        title: "Erreur d'initialisation vocale",
-        description: "Impossible de démarrer la reconnaissance vocale",
-        variant: "destructive",
-        duration: 3000,
-      });
+      console.error('Error generating response:', error);
+      
+      const errorMessage: ChatMessage = {
+        id: uuidv4(),
+        content: "Désolé, je n'ai pas pu traiter votre demande. Veuillez réessayer.",
+        timestamp: new Date(),
+        sender: 'bot'
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
     }
-  };
-  
-  const stopVoiceRecognition = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-    }
-    setIsListening(false);
   };
 
   const toggleListening = () => {
     if (isListening) {
-      stopVoiceRecognition();
-    } else {
-      startVoiceRecognition();
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      return;
+    }
+
+    try {
+      if (!isOpen) {
+        setIsOpen(true);
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        toast({
+          title: "Non supporté",
+          description: "La reconnaissance vocale n'est pas supportée par votre navigateur.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      recognitionRef.current = new SpeechRecognition();
+      const recognition = recognitionRef.current;
+      recognition.lang = 'fr-FR';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        setIsListening(true);
+        toast({
+          title: "Écoute en cours",
+          description: "Parlez maintenant...",
+        });
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInput(transcript);
+        
+        // Automatically send message after voice recognition
+        setTimeout(() => {
+          setInput(transcript);
+          handleSendMessage();
+        }, 500);
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error', event.error);
+        setIsListening(false);
+        toast({
+          title: "Erreur",
+          description: `Erreur de reconnaissance vocale: ${event.error}`,
+          variant: "destructive"
+        });
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognition.start();
+    } catch (error) {
+      console.error('Speech recognition error:', error);
+      setIsListening(false);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'initialisation de la reconnaissance vocale.",
+        variant: "destructive"
+      });
     }
   };
-  
+
   useEffect(() => {
-    // Nettoyer la reconnaissance vocale lors du démontage du composant
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
@@ -153,4 +166,12 @@ export function useChatbot() {
     isListening,
     toggleListening
   };
+};
+
+// Add missing TypeScript declaration for browser Speech Recognition
+declare global {
+  interface Window {
+    SpeechRecognition: typeof SpeechRecognition;
+    webkitSpeechRecognition: typeof SpeechRecognition;
+  }
 }

@@ -21,6 +21,7 @@ import AgentProfile from './pages/AgentProfile';
 import NotFound from './pages/NotFound';
 import Calendar from './pages/Calendar';
 import Settings from './pages/Settings';
+import ChatbotInterface from './components/chatbot/ChatbotInterface';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -51,6 +52,7 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
+            <ChatbotInterface />
           </AuthProvider>
         </QueryClientProvider>
       </ThemeProvider>
