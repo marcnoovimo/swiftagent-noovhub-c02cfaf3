@@ -10,6 +10,7 @@ import { statsService } from '@/services/statsService';
 import DashboardStats from '@/components/dashboard/DashboardStats';
 import TransactionsCard from '@/components/dashboard/TransactionsCard';
 import CommissionRateCard from '@/components/commission/CommissionRateCard';
+import { PackService } from '@/services/packService';
 
 const Index = () => {
   const { user } = useAuth();
@@ -19,6 +20,13 @@ const Index = () => {
     queryKey: ['dashboardStats'],
     queryFn: statsService.getDashboardStats,
     // Si l'utilisateur n'est pas connecté, on ne fait pas la requête
+    enabled: !!user
+  });
+
+  // Query to get commission data
+  const { data: commissionData } = useQuery({
+    queryKey: ['nextLevelProgress'],
+    queryFn: () => PackService.getNextLevelProgress(user?.id || ''),
     enabled: !!user
   });
 
@@ -98,7 +106,14 @@ const Index = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <TransactionsCard />
-        <CommissionRateCard />
+        <CommissionRateCard 
+          currentTier="0 € - 35 000 €"
+          nextTier="35 000 € - 70 000 €"
+          currentRate={`${commissionData?.currentPercentage || 72}%`}
+          nextRate={`${commissionData?.nextPercentage || 76}%`}
+          amountReached={commissionData?.progress || 8750}
+          tierTarget={commissionData?.amountNeeded || 35000}
+        />
       </div>
     </div>
   );
