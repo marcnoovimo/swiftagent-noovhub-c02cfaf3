@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from "@/components/ui/theme-provider";
@@ -59,12 +60,12 @@ function App() {
                   <Route path="/" element={<Index />} />
                   <Route path="/documents" element={<Documents />} />
                   <Route path="/contacts" element={<Contacts />} />
+                  <Route path="/team" element={<Team />} />
+                  <Route path="/agent/:id" element={<AgentDetail />} />
                   <Route path="/calendar" element={<Calendar />} />
                   <Route path="/messages" element={<Messages />} />
                   <Route path="/stats" element={<Stats />} />
                   <Route path="/monthly-report" element={<MonthlyReport />} />
-                  <Route path="/team" element={<Team />} />
-                  <Route path="/team/:id" element={<AgentDetail />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/agent-profile" element={<AgentProfile />} />
                   <Route path="/settings" element={<Settings />} />

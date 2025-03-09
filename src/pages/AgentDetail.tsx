@@ -1,23 +1,22 @@
 
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { 
-  ArrowLeft, Phone, Mail, Calendar, MapPin, Award, Heart, 
-  Sailboat, Users, Cake, MessageCircle, Share2, User
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Phone, Mail, MapPin, Calendar, Heart, Medal, ArrowLeft, Clock, Send } from 'lucide-react';
 import { fetchAgentById } from '@/services/teamService';
-import { Agent } from '@/types/agent';
 
 const AgentDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   
   const { data: agent, isLoading, error } = useQuery({
     queryKey: ['agent', id],
     queryFn: () => fetchAgentById(id || ''),
+    enabled: !!id,
   });
 
   if (isLoading) {
@@ -25,7 +24,7 @@ const AgentDetail = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-center items-center h-64">
           <div className="animate-pulse text-noovimo-500 font-bold text-xl">
-            Chargement du profil...
+            Chargement du profil de l'agent...
           </div>
         </div>
       </div>
@@ -35,11 +34,13 @@ const AgentDetail = () => {
   if (error || !agent) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="bg-destructive/10 text-destructive p-4 rounded-md">
-          <h2 className="font-bold">Agent non trouvé</h2>
-          <p>Impossible de charger les informations de cet agent.</p>
-          <Button asChild className="mt-4">
-            <Link to="/team">Retour à l'équipe</Link>
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Agent non trouvé</h2>
+          <p className="text-muted-foreground mb-6">
+            Nous n'avons pas pu trouver les informations de cet agent.
+          </p>
+          <Button onClick={() => navigate('/team')}>
+            Retour à l'équipe
           </Button>
         </div>
       </div>
@@ -47,215 +48,167 @@ const AgentDetail = () => {
   }
 
   return (
-    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 animate-fade-in">
-      <div className="flex items-center mb-6">
-        <Button variant="ghost" size="sm" asChild className="mr-2">
-          <Link to="/team">
-            <ArrowLeft className="mr-1 h-4 w-4" />
-            Retour
-          </Link>
-        </Button>
-        <h1 className="text-xl sm:text-2xl font-bold">Profil de l'agent</h1>
-      </div>
+    <div className="container mx-auto px-4 py-8 animate-fade-in">
+      <Button 
+        variant="ghost" 
+        className="mb-6" 
+        onClick={() => navigate('/team')}
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Retour à l'équipe
+      </Button>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left column - Agent info card */}
-        <div className="col-span-1">
-          <Card className="overflow-hidden">
-            <div className="aspect-square bg-muted relative">
-              <img
-                src={agent.photo || "/placeholder.svg"}
-                alt={agent.name}
-                className="w-full h-full object-cover"
-              />
-              <div className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium ${
-                agent.status === 'active' 
-                  ? 'bg-green-500 text-white' 
-                  : 'bg-gray-500 text-white'
-              }`}>
-                {agent.status === 'active' ? 'Actif' : 'Inactif'}
+        {/* Profil principal */}
+        <Card className="lg:col-span-1">
+          <CardContent className="p-6">
+            <div className="flex flex-col items-center text-center">
+              <Avatar className="h-32 w-32 mb-4">
+                <AvatarImage src={agent.photo} alt={agent.name} />
+                <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              
+              <h1 className="text-2xl font-bold mb-1">{agent.name}</h1>
+              <p className="text-muted-foreground mb-4 flex items-center">
+                <MapPin className="h-4 w-4 mr-1" /> 
+                {agent.city}, {agent.department}
+              </p>
+              
+              <div className="w-full space-y-3 mt-4">
+                <div className="flex items-center">
+                  <Phone className="h-5 w-5 mr-3 text-muted-foreground" />
+                  <div>
+                    <p className="text-sm font-medium">Téléphone</p>
+                    <a href={`tel:${agent.phone}`} className="text-sm text-primary hover:underline">
+                      {agent.phone}
+                    </a>
+                  </div>
+                </div>
+                
+                <div className="flex items-center">
+                  <Mail className="h-5 w-5 mr-3 text-muted-foreground" />
+                  <div>
+                    <p className="text-sm font-medium">Email</p>
+                    <a href={`mailto:${agent.email}`} className="text-sm text-primary hover:underline break-all">
+                      {agent.email}
+                    </a>
+                  </div>
+                </div>
+                
+                <div className="flex items-center">
+                  <Calendar className="h-5 w-5 mr-3 text-muted-foreground" />
+                  <div>
+                    <p className="text-sm font-medium">Chez Noovimo depuis</p>
+                    <p className="text-sm">{agent.joinDate}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 w-full mt-6">
+                <Button variant="default">
+                  <Phone className="mr-2 h-4 w-4" />
+                  Appeler
+                </Button>
+                <Button variant="outline">
+                  <Send className="mr-2 h-4 w-4" />
+                  Message
+                </Button>
               </div>
             </div>
-            
-            <CardContent className="p-4">
-              <h2 className="text-xl font-bold">{agent.name}</h2>
-              <div className="flex items-center text-sm text-muted-foreground mt-1 mb-4">
-                <MapPin className="h-4 w-4 mr-1" />
-                <span>{agent.city}, {agent.department}</span>
-              </div>
-              
-              <div className="grid gap-3 text-sm">
-                <div className="flex items-center">
-                  <Phone className="h-4 w-4 mr-2 text-noovimo-500" />
-                  <a href={`tel:${agent.phone}`} className="hover:text-primary">
-                    {agent.phone}
-                  </a>
-                </div>
-                <div className="flex items-center">
-                  <Mail className="h-4 w-4 mr-2 text-noovimo-500" />
-                  <a href={`mailto:${agent.email}`} className="hover:text-primary truncate">
-                    {agent.email}
-                  </a>
-                </div>
-                <div className="flex items-center">
-                  <Calendar className="h-4 w-4 mr-2 text-noovimo-500" />
-                  <span>Agent depuis {agent.joinDate}</span>
-                </div>
-              </div>
-              
-              <div className="mt-6 space-y-2">
-                <Button className="w-full" asChild>
-                  <a href={`tel:${agent.phone}`}>
-                    <Phone className="mr-2 h-4 w-4" />
-                    Appeler
-                  </a>
-                </Button>
-                <Button variant="outline" className="w-full" asChild>
-                  <a href={`mailto:${agent.email}`}>
-                    <Mail className="mr-2 h-4 w-4" />
-                    Envoyer un email
-                  </a>
-                </Button>
-                <Button variant="outline" className="w-full">
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Message interne
-                </Button>
-                <Button variant="outline" className="w-full">
-                  <Share2 className="mr-2 h-4 w-4" />
-                  Partager
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-          
-          {agent.specialties && agent.specialties.length > 0 && (
-            <Card className="mt-4">
-              <CardContent className="p-4">
-                <h3 className="font-semibold flex items-center mb-2">
-                  <Award className="h-4 w-4 mr-2 text-noovimo-500" />
-                  Spécialités
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {agent.specialties.map((specialty, index) => (
-                    <span 
-                      key={index} 
-                      className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-xs"
-                    >
-                      {specialty}
-                    </span>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+          </CardContent>
+        </Card>
         
-        {/* Right column - Bio and personal info */}
-        <div className="col-span-1 lg:col-span-2">
+        {/* Informations détaillées */}
+        <Card className="lg:col-span-2">
           <Tabs defaultValue="about">
-            <TabsList>
-              <TabsTrigger value="about">À propos</TabsTrigger>
-              <TabsTrigger value="personal">Personnel</TabsTrigger>
-            </TabsList>
+            <div className="border-b px-6 pt-6">
+              <TabsList className="w-full justify-start">
+                <TabsTrigger value="about">À propos</TabsTrigger>
+                <TabsTrigger value="expertise">Expertise</TabsTrigger>
+                <TabsTrigger value="personal">Personnel</TabsTrigger>
+              </TabsList>
+            </div>
             
-            <TabsContent value="about" className="mt-4">
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold text-lg mb-2">Biographie</h3>
-                  {agent.bio ? (
-                    <p className="text-muted-foreground">{agent.bio}</p>
-                  ) : (
-                    <p className="text-muted-foreground italic">Cet agent n'a pas encore ajouté de biographie.</p>
-                  )}
+            <CardContent className="p-6">
+              <TabsContent value="about" className="mt-0">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold mb-2">Biographie</h3>
+                  <p className="text-muted-foreground">{agent.bio || "Aucune biographie disponible pour cet agent."}</p>
                   
                   {agent.mantra && (
-                    <div className="mt-6 p-4 bg-secondary/50 rounded-lg italic text-center">
-                      <blockquote className="text-foreground">
+                    <div className="mt-6">
+                      <h3 className="text-lg font-semibold mb-2">Devise professionnelle</h3>
+                      <div className="bg-secondary p-4 rounded-lg italic">
                         "{agent.mantra}"
-                      </blockquote>
+                      </div>
                     </div>
                   )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="personal" className="mt-4">
-              <Card>
-                <CardContent className="p-4">
-                  <div className="grid gap-6">
-                    {agent.passions && agent.passions.length > 0 && (
-                      <div>
-                        <h3 className="font-semibold flex items-center mb-2">
-                          <Heart className="h-4 w-4 mr-2 text-noovimo-500" />
-                          Passions
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                          {agent.passions.map((passion, index) => (
-                            <span 
-                              key={index} 
-                              className="bg-secondary/60 px-2 py-1 rounded-md text-sm"
-                            >
-                              {passion}
-                            </span>
-                          ))}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="expertise" className="mt-0">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold mb-2">Spécialités</h3>
+                  {agent.specialties && agent.specialties.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {agent.specialties.map((specialty, index) => (
+                        <div key={index} className="bg-secondary px-3 py-1 rounded-full text-sm">
+                          {specialty}
                         </div>
-                      </div>
-                    )}
-                    
-                    {agent.favoriteSport && (
-                      <div className="flex items-start">
-                        <User className="h-4 w-4 mr-2 text-noovimo-500 mt-0.5" />
-                        <div>
-                          <h4 className="font-medium">Sport favori</h4>
-                          <p className="text-muted-foreground">{agent.favoriteSport}</p>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {agent.family && (
-                      <div className="flex items-start">
-                        <Users className="h-4 w-4 mr-2 text-noovimo-500 mt-0.5" />
-                        <div>
-                          <h4 className="font-medium">Famille</h4>
-                          <p className="text-muted-foreground">{agent.family}</p>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {agent.birthday && (
-                      <div className="flex items-start">
-                        <Cake className="h-4 w-4 mr-2 text-noovimo-500 mt-0.5" />
-                        <div>
-                          <h4 className="font-medium">Anniversaire</h4>
-                          <p className="text-muted-foreground">{agent.birthday}</p>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {agent.idealVacation && (
-                      <div className="flex items-start">
-                        <Sailboat className="h-4 w-4 mr-2 text-noovimo-500 mt-0.5" />
-                        <div>
-                          <h4 className="font-medium">Vacances idéales</h4>
-                          <p className="text-muted-foreground">{agent.idealVacation}</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground">Aucune spécialité définie.</p>
+                  )}
                   
-                  {!agent.passions && !agent.favoriteSport && !agent.family && 
-                   !agent.birthday && !agent.idealVacation && (
-                    <div className="text-center p-4">
-                      <p className="text-muted-foreground italic">
-                        Cet agent n'a pas encore partagé d'informations personnelles.
-                      </p>
+                  <h3 className="text-lg font-semibold mt-6 mb-2">Secteur géographique</h3>
+                  <p className="text-muted-foreground">{agent.city} et ses environs</p>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="personal" className="mt-0">
+                <div className="space-y-6">
+                  {agent.passions && agent.passions.length > 0 && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                        <Heart className="h-5 w-5 text-red-500" />
+                        Passions
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {agent.passions.map((passion, index) => (
+                          <div key={index} className="bg-secondary px-3 py-1 rounded-full text-sm">
+                            {passion}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
-                </CardContent>
-              </Card>
-            </TabsContent>
+                  
+                  {agent.favoriteSport && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2">Sport favori</h3>
+                      <p className="text-muted-foreground">{agent.favoriteSport}</p>
+                    </div>
+                  )}
+                  
+                  {agent.family && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2">Famille</h3>
+                      <p className="text-muted-foreground">{agent.family}</p>
+                    </div>
+                  )}
+                  
+                  {agent.idealVacation && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2">Vacances idéales</h3>
+                      <p className="text-muted-foreground">{agent.idealVacation}</p>
+                    </div>
+                  )}
+                </div>
+              </TabsContent>
+            </CardContent>
           </Tabs>
-        </div>
+        </Card>
       </div>
     </div>
   );
