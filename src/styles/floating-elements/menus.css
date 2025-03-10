@@ -1,0 +1,30 @@
+
+/* Menu item hover states */
+[data-radix-dropdown-menu-content] [role="menuitem"]:hover,
+[data-radix-context-menu-content] [role="menuitem"]:hover,
+[data-radix-select-content] [role="option"]:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Dark mode hover states */
+.dark [data-radix-dropdown-menu-content] [role="menuitem"]:hover,
+.dark [data-radix-context-menu-content] [role="menuitem"]:hover,
+.dark [data-radix-select-content] [role="option"]:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* More spacing for mobile */
+@media (max-width: 640px) {
+  [data-radix-dropdown-menu-content],
+  [data-radix-context-menu-content],
+  [data-radix-popper-content],
+  [data-radix-menubar-content],
+  [data-radix-select-content] {
+    padding: 8px !important;
+  }
+  
+  [role="menuitem"],
+  [role="option"] {
+    padding: 10px !important;
+  }
+}
