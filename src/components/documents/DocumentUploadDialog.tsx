@@ -24,11 +24,11 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
         style={{ 
           backgroundColor: "#FFFFFF", 
           backdropFilter: "none",
-          background: "#FFFFFF",
           opacity: "1",
           boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
           border: "1px solid hsl(var(--border))",
-          borderRadius: "16px"
+          borderRadius: "16px",
+          overflow: "visible" // Ajouté pour s'assurer que le contenu est visible
         }}
       >
         <DialogHeader className="border-b pb-4 mb-4">
