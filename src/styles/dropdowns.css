@@ -258,3 +258,31 @@ input[type="date"] {
 .rdp-footer button:hover {
   text-decoration: underline;
 }
+
+/* Calendar popover style */
+[data-radix-popover-content] .rdp {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+}
+
+.dark [data-radix-popover-content] .rdp {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Additional styles for the popover content when it contains a calendar */
+.PopoverContent-calendar {
+  width: auto !important;
+  padding: 0 !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+}
+
+.dark .PopoverContent-calendar {
+  background-color: hsl(var(--background)) !important;
+}

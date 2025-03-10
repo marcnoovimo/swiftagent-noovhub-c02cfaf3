@@ -173,6 +173,7 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
                         onSelect={handleDateOfBirthChange}
                         initialFocus
                         disabled={(date) => date > new Date()}
+                        className="bg-white dark:bg-gray-950 border border-solid border-border rounded-xl shadow-lg"
                       />
                     </PopoverContent>
                   </Popover>
