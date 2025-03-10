@@ -3,8 +3,52 @@
 input[type="time"] {
   background-color: #FFFFFF !important;
   border: 1px solid hsl(var(--border)) !important;
+  opacity: 1 !important;
 }
 
 .dark input[type="time"] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Date inputs */
+input[type="date"] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  opacity: 1 !important;
+}
+
+.dark input[type="date"] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Other temporal inputs */
+input.date-input,
+input.time-input,
+.temporal-input {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  opacity: 1 !important;
+}
+
+.dark input.date-input,
+.dark input.time-input,
+.dark .temporal-input {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Buttons that trigger date/time pickers */
+button.date-trigger,
+button.time-trigger,
+button[data-date-trigger],
+button[data-time-trigger] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  opacity: 1 !important;
+}
+
+.dark button.date-trigger,
+.dark button.time-trigger,
+.dark button[data-date-trigger],
+.dark button[data-time-trigger] {
   background-color: hsl(var(--background)) !important;
 }

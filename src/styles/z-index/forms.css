@@ -38,3 +38,31 @@
 .dark [data-radix-popper-content] {
   background-color: hsl(var(--background)) !important;
 }
+
+/* Date inputs across the application */
+input[type="date"],
+.date-input {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  opacity: 1 !important;
+}
+
+.dark input[type="date"],
+.dark .date-input {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Date selector buttons and triggers */
+button[aria-haspopup="dialog"],
+[role="button"][aria-haspopup="dialog"],
+.date-selector-trigger {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  opacity: 1 !important;
+}
+
+.dark button[aria-haspopup="dialog"],
+.dark [role="button"][aria-haspopup="dialog"],
+.dark .date-selector-trigger {
+  background-color: hsl(var(--background)) !important;
+}

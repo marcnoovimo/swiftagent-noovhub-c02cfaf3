@@ -50,7 +50,7 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
           </DialogDescription>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className={`space-y-4 ${isMobile ? 'mt-2' : 'mt-4'}`}>
+        <form onSubmit={handleSubmit} className={`space-y-4 ${isMobile ? 'mt-2' : 'mt-4'} contact-form`}>
           <ContactFormTabs 
             formData={formData}
             onChangeField={handleChange}

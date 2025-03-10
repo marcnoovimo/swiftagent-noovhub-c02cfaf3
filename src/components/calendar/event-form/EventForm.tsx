@@ -43,7 +43,16 @@ const EventForm: React.FC<EventFormProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent 
+        className="max-w-2xl max-h-[90vh] overflow-y-auto"
+        style={{ 
+          backgroundColor: "#FFFFFF", 
+          opacity: 1,
+          backdropFilter: "none",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+          border: "1px solid hsl(var(--border))"
+        }}
+      >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <CalendarIcon className="h-5 w-5" /> {event ? 'Modifier le rendez-vous' : 'Nouveau rendez-vous'}

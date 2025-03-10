@@ -1,3 +1,4 @@
+
 /* Calendar dropdown styling */
 .calendar-dropdown-content,
 .date-picker-dropdown,
@@ -87,7 +88,9 @@
 }
 
 /* Date picker input styles */
-input[type="date"] {
+input[type="date"],
+.date-input,
+.date-field {
   background-color: #FFFFFF !important;
   border: 1px solid hsl(var(--border)) !important;
   border-radius: 6px !important;
@@ -95,7 +98,21 @@ input[type="date"] {
   opacity: 1 !important;
 }
 
-.dark input[type="date"] {
+.dark input[type="date"],
+.dark .date-input,
+.dark .date-field {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Date picker trigger buttons */
+button[data-date-trigger],
+.date-picker-trigger {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.dark button[data-date-trigger],
+.dark .date-picker-trigger {
   background-color: hsl(var(--background)) !important;
 }
 
@@ -122,21 +139,6 @@ input[type="date"] {
   background-color: hsl(var(--background)) !important;
 }
 
-/* Ensure all calendar cells have proper background */
-.rdp-months,
-.rdp-month,
-.rdp-table,
-.rdp-tbody,
-.rdp-tfoot,
-.rdp-head,
-.rdp-head_row,
-.rdp-days,
-.rdp-day_selected,
-.rdp-day_today,
-.rdp-day {
-  background-color: transparent !important;
-}
-
 /* Calendar container background */
 .rdp {
   background-color: #FFFFFF !important;
@@ -146,7 +148,7 @@ input[type="date"] {
   background-color: hsl(var(--background)) !important;
 }
 
-/* IMPORTANT: Ensure all calendar elements have white background */
+/* Ensure all calendar elements have white background */
 .rdp *,
 .calendar * {
   background-color: transparent !important;
@@ -171,41 +173,48 @@ input[type="date"] {
   opacity: 1 !important;
 }
 
-/* Fix for calendar elements - ensure solid white background */
-.rdp *,
-.calendar *,
-[data-radix-popper-content] * {
-  background-color: transparent !important;
-  backdrop-filter: none !important;
-}
-
-/* Force solid background on date picker inputs */
-input[type="date"],
-.rdp-button,
-.rdp-day,
-.rdp-nav_button {
+/* Strong specificity for date trigger buttons */
+[role="button"][aria-haspopup="dialog"] {
   background-color: #FFFFFF !important;
   opacity: 1 !important;
 }
 
-.dark input[type="date"],
-.dark .rdp-button,
-.dark .rdp-day,
-.dark .rdp-nav_button {
+.dark [role="button"][aria-haspopup="dialog"] {
   background-color: hsl(var(--background)) !important;
 }
 
-/* Fix specifically for birthday selector and other date pickers */
-.contact-form [data-radix-popper-content],
-.event-form [data-radix-popper-content] {
+/* Force solid white background for calendar dropdowns */
+.rdp[data-radix-popper-content-wrapper],
+div[data-radix-popper-content-wrapper] {
   background-color: #FFFFFF !important;
   opacity: 1 !important;
-  backdrop-filter: none !important;
-  border: 1px solid hsl(var(--border)) !important;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  z-index: 99999 !important;
 }
 
-.dark .contact-form [data-radix-popper-content],
-.dark .event-form [data-radix-popper-content] {
+.dark .rdp[data-radix-popper-content-wrapper],
+.dark div[data-radix-popper-content-wrapper] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Calendar date buttons */
+button.rdp-button.rdp-day {
+  background-color: transparent !important;
+}
+
+button.rdp-button.rdp-day_selected {
+  background-color: hsl(var(--primary)) !important;
+}
+
+/* Date trigger buttons across the app */
+button[aria-haspopup="dialog"],
+button[aria-controls="radix-:r0:"],
+.date-selector-button {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.dark button[aria-haspopup="dialog"],
+.dark button[aria-controls="radix-:r0:"],
+.dark .date-selector-button {
   background-color: hsl(var(--background)) !important;
 }

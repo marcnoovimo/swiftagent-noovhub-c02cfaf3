@@ -7,17 +7,7 @@
 .rdp-head,
 .rdp-head_cell,
 .rdp-button {
-  background-color: #FFFFFF !important;
-}
-
-.dark .rdp-months,
-.dark .rdp-month,
-.dark .rdp-table,
-.dark .rdp-cell,
-.dark .rdp-head,
-.dark .rdp-head_cell,
-.dark .rdp-button {
-  background-color: hsl(var(--background)) !important;
+  background-color: transparent !important;
 }
 
 .rdp {
@@ -54,15 +44,10 @@
 /* Calendar selector month/year navigation */
 .rdp-nav_button,
 .rdp-caption_label {
-  background-color: #FFFFFF !important;
+  background-color: transparent !important;
   opacity: 1 !important;
   z-index: 1 !important;
   backdrop-filter: none !important;
-}
-
-.dark .rdp-nav_button,
-.dark .rdp-caption_label {
-  background-color: hsl(var(--background)) !important;
 }
 
 /* Force solid white background on all calendar elements inside popovers */
@@ -92,4 +77,27 @@
 .rdp-day_selected {
   background-color: hsl(var(--primary)) !important;
   color: white !important;
+}
+
+/* Any element containing a datepicker button */
+[role="button"][aria-haspopup="dialog"] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.dark [role="button"][aria-haspopup="dialog"] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Popover content containing calendars */
+.PopoverContent {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  opacity: 1 !important;
+  z-index: 50 !important;
+}
+
+.dark .PopoverContent {
+  background-color: hsl(var(--background)) !important;
 }

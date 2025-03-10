@@ -30,9 +30,9 @@ const EventDateTimeFields: React.FC<EventDateTimeFieldsProps> = ({ form }) => {
               <PopoverTrigger asChild>
                 <FormControl>
                   <Button
-                    variant={"outline"}
+                    variant="white"
                     className={cn(
-                      "w-full pl-3 text-left font-normal bg-white dark:bg-gray-950",
+                      "w-full pl-3 text-left font-normal",
                       !field.value && "text-muted-foreground"
                     )}
                   >

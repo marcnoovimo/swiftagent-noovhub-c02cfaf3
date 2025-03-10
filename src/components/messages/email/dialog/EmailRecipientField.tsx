@@ -55,7 +55,7 @@ const EmailRecipientField = ({
         {label}
       </div>
       <div className="flex-1 min-w-0 relative">
-        <div className="flex flex-wrap min-h-9 border border-input rounded-md p-2 relative focus-within:ring-1 focus-within:ring-ring">
+        <div className="flex flex-wrap min-h-9 border border-input rounded-md p-2 relative focus-within:ring-1 focus-within:ring-ring bg-white dark:bg-gray-950">
           {renderRecipientChips()}
           <input
             type="text"
