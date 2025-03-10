@@ -164,3 +164,62 @@
 .dark .rdp {
   background-color: hsl(var(--background)) !important;
 }
+
+/* Specific calendar date picker fixes */
+.react-datepicker,
+.react-datepicker__header,
+.react-datepicker__month-container,
+.react-datepicker__time-container {
+  background-color: #FFFFFF !important; 
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  opacity: 1 !important;
+}
+
+.dark .react-datepicker,
+.dark .react-datepicker__header,
+.dark .react-datepicker__month-container,
+.dark .react-datepicker__time-container {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Make all popover content solid and opaque */
+[data-radix-popper-content],
+.popover-content {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  opacity: 1 !important;
+  z-index: 99999 !important;
+}
+
+.dark [data-radix-popper-content],
+.dark .popover-content {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Calendar selector month/year navigation */
+.rdp-nav_button,
+.rdp-caption_label {
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+  z-index: 1 !important;
+}
+
+.dark .rdp-nav_button,
+.dark .rdp-caption_label {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Fix the specific event form date selector */
+[data-radix-popper-content][role="dialog"] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  opacity: 1 !important;
+  border-radius: 12px !important;
+}
+
+.dark [data-radix-popper-content][role="dialog"] {
+  background-color: hsl(var(--background)) !important;
+}

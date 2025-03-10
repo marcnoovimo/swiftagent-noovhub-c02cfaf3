@@ -87,6 +87,24 @@
   border-radius: 12px !important;
 }
 
+/* Calendar and month selection dropdown */
+.rdp-months,
+.rdp-month,
+.rdp-table,
+.rdp-tbody,
+.rdp-tfoot {
+  background-color: #FFFFFF !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+}
+
+/* Calendar day cells */
+.rdp-cell, 
+.rdp-head_cell, 
+.rdp-day {
+  background-color: transparent !important;
+}
+
 /* Ensure modals are visible in mobile */
 @media (max-width: 640px) {
   [data-radix-portal] {
@@ -116,5 +134,41 @@
 .dark [data-radix-portal] .calendar-content,
 .dark [data-radix-portal] .select-content,
 .dark [data-radix-portal] .popover-content {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Explicit styles for date picker and calendar selectors */
+[data-radix-popper-content=""] {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+  z-index: 99999 !important;
+}
+
+.dark [data-radix-popper-content=""] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Time selectors */
+input[type="time"] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.dark input[type="time"] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Month/year navigation in calendars */
+.rdp-nav,
+.rdp-caption {
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+.dark .rdp-nav,
+.dark .rdp-caption {
   background-color: hsl(var(--background)) !important;
 }

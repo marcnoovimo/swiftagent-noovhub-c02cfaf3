@@ -170,3 +170,56 @@
 .dark .rdp {
   background-color: hsl(var(--background)) !important;
 }
+
+/* Calendar inside popover */
+.popover-content .rdp,
+.dialog-content .rdp {
+  background-color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.dark .popover-content .rdp,
+.dark .dialog-content .rdp {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Type selector dropdown in calendar form */
+.type-select-dropdown {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  z-index: 99999 !important;
+  opacity: 1 !important;
+}
+
+.dark .type-select-dropdown {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Contact selector dropdown in calendar form */
+.contact-select-dropdown {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  z-index: 99999 !important;
+  opacity: 1 !important;
+}
+
+.dark .contact-select-dropdown {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* All select popover content */
+.select-content {
+  z-index: 99999 !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+}
+
+.dark .select-content {
+  background-color: hsl(var(--background)) !important;
+}
