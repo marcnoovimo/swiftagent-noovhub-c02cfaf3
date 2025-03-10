@@ -236,28 +236,29 @@ const EmailClient = () => {
   };
 
   return (
-    <div className="shadow-md rounded-xl overflow-hidden min-h-[600px] grid grid-cols-1 lg:grid-cols-12 bg-white">
+    <div className="flex flex-col lg:flex-row w-full rounded-xl overflow-hidden shadow-lg bg-background">
       <EmailSidebar 
         activeFolder={activeFolder} 
-        setActiveFolder={setActiveFolder} 
-        className="col-span-1 lg:col-span-2"
+        setActiveFolder={setActiveFolder}
         onCreateEmail={createNewEmail}
       />
       
-      <EmailList 
-        emails={emails} 
-        selectedEmail={selectedEmail} 
-        setSelectedEmail={setSelectedEmail} 
-        activeFolder={activeFolder} 
-      />
-      
-      <EmailView 
-        selectedEmail={selectedEmail} 
-        replyContent={replyContent} 
-        setReplyContent={setReplyContent} 
-        handleSendReply={handleSendReply} 
-        contacts={contacts}
-      />
+      <div className="flex flex-col lg:flex-row flex-1 border-l border-border/30 min-h-[600px]">
+        <EmailList 
+          emails={emails} 
+          selectedEmail={selectedEmail} 
+          setSelectedEmail={setSelectedEmail} 
+          activeFolder={activeFolder} 
+        />
+        
+        <EmailView 
+          selectedEmail={selectedEmail} 
+          replyContent={replyContent} 
+          setReplyContent={setReplyContent} 
+          handleSendReply={handleSendReply} 
+          contacts={contacts}
+        />
+      </div>
 
       <ContactsDrawer 
         isOpen={isContactsDrawerOpen} 

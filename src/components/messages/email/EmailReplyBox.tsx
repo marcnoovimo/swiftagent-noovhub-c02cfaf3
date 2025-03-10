@@ -1,9 +1,10 @@
+
 import React, { useState } from 'react';
 import { Paperclip, Send, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
-import '@/styles/buttons.css'; // Direct import of button styles
-import '@/styles/forms.css'; // Direct import of form styles for textarea
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface EmailReplyBoxProps {
   replyContent: string;
@@ -38,9 +39,9 @@ const EmailReplyBox = ({ replyContent, setReplyContent, handleSendReply }: Email
   };
   
   return (
-    <div className="p-2 sm:p-4 border border-border/50 rounded-lg">
-      <div className="flex items-center justify-between mb-2 sm:mb-3">
-        <h4 className="text-xs sm:text-sm font-medium">Répondre</h4>
+    <div className="p-4 border border-border/30 rounded-lg bg-card shadow-sm">
+      <div className="flex items-center justify-between mb-3">
+        <h4 className="text-sm font-medium">Répondre</h4>
         {user && (
           <span className="text-xs text-muted-foreground">
             De: {user.email || 'utilisateur@noovimo.fr'}
@@ -48,22 +49,24 @@ const EmailReplyBox = ({ replyContent, setReplyContent, handleSendReply }: Email
         )}
       </div>
       
-      <textarea
-        className="w-full p-2 sm:p-3 border border-border/50 rounded-lg bg-secondary/20 focus:outline-none focus:ring-1 focus:ring-[#d72345] resize-none text-xs sm:text-sm"
-        rows={5}
+      <Textarea
+        className="w-full p-3 border border-border/50 rounded-lg bg-background resize-none text-sm min-h-[120px] focus-visible:ring-1 focus-visible:ring-primary"
         placeholder="Votre réponse..."
         value={replyContent}
         onChange={(e) => setReplyContent(e.target.value)}
         disabled={isSending}
-      ></textarea>
+      />
       
-      <div className="flex justify-between items-center mt-2 sm:mt-3">
-        <button className="icon-button" disabled={isSending}>
-          <Paperclip size={16} className="text-muted-foreground" />
-        </button>
+      <div className="flex justify-between items-center mt-3">
+        <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs" disabled={isSending}>
+          <Paperclip size={14} />
+          Joindre
+        </Button>
         
-        <button
-          className="px-2 py-1 sm:px-4 sm:py-2 bg-[#d72345] text-white rounded-lg hover:bg-[#c01f3c] transition-colors flex items-center gap-1 sm:gap-2 text-xs sm:text-sm disabled:opacity-70"
+        <Button
+          variant="default"
+          size="sm"
+          className="flex items-center gap-1"
           onClick={handleSend}
           disabled={isSending}
         >
@@ -73,7 +76,7 @@ const EmailReplyBox = ({ replyContent, setReplyContent, handleSendReply }: Email
             <Send size={14} />
           )}
           <span>{isSending ? "Envoi..." : "Envoyer"}</span>
-        </button>
+        </Button>
       </div>
       
       <div className="mt-3 text-xs text-muted-foreground text-center">

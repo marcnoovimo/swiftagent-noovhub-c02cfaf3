@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { generateSynthesisData } from '@/services/statsService';
+import * as statsService from '@/services/statsService';
 
 export interface SynthesisData {
   transactions: number;
@@ -24,7 +24,7 @@ export const useStatsSynthesisData = (timeFilter: string) => {
       setIsLoading(true);
       try {
         // In a real app, this would use the timeFilter to fetch from API
-        const data = await generateSynthesisData(timeFilter);
+        const data = await statsService.generateCompleteStats(timeFilter);
         
         setSynthesisData({
           transactions: data.totalTransactions,

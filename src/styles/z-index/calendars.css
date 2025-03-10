@@ -127,3 +127,64 @@ button[aria-haspopup="dialog"],
 .dark [role="button"][aria-haspopup="dialog"] {
   background-color: hsl(var(--background)) !important;
 }
+
+/* All calendar component parts */
+.calendar,
+.calendar-container,
+.calendar-header,
+.calendar-grid,
+.calendar-day,
+.calendar-month,
+.calendar-year,
+.calendar-weekday,
+.calendar-today,
+.calendar-selected,
+.calendar-disabled,
+.calendar-range-start,
+.calendar-range-end,
+.calendar-range,
+.calendar-outside {
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+.dark .calendar,
+.dark .calendar-container,
+.dark .calendar-header,
+.dark .calendar-grid,
+.dark .calendar-day,
+.dark .calendar-month,
+.dark .calendar-year,
+.dark .calendar-weekday,
+.dark .calendar-today,
+.dark .calendar-selected,
+.dark .calendar-disabled,
+.dark .calendar-range-start,
+.dark .calendar-range-end,
+.dark .calendar-range,
+.dark .calendar-outside {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Input fields with date selection */
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+[data-date-input],
+[data-date-picker] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark input[type="date"],
+.dark input[type="datetime-local"],
+.dark input[type="month"],
+.dark input[type="time"],
+.dark input[type="week"],
+.dark [data-date-input],
+.dark [data-date-picker] {
+  background-color: hsl(var(--background)) !important;
+}
