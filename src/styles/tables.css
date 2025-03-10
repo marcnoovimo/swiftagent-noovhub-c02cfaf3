@@ -1,4 +1,6 @@
 
+@tailwind components;
+
 @layer components {
   /* Table container */
   .table-container {

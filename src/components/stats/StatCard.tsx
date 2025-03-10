@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
-import '@/styles/cards.css'; // Direct import of card styles
+import { Card } from "@/components/ui/card";
 
 interface StatCardProps {
   title: string;

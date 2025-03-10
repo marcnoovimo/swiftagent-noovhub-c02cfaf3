@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Transaction } from '@/types/stats';
 import { 
@@ -9,7 +10,6 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { formatDate } from '@/lib/utils';
-import '@/styles/tables.css'; // Direct import of table styles
 
 interface TransactionTableProps {
   transactions: Transaction[];
