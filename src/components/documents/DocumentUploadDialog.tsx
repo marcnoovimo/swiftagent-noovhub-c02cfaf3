@@ -2,7 +2,7 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Upload, FileUp, Scan } from 'lucide-react';
+import { Upload, Scan } from 'lucide-react';
 
 interface DocumentUploadDialogProps {
   open: boolean;
@@ -20,18 +20,20 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="sm:max-w-[425px] bg-white border border-border shadow-xl document-upload-dialog rounded-xl"
+        className="sm:max-w-[425px] document-upload-dialog"
         style={{ 
-          backgroundColor: "white !important", 
-          backdropFilter: "none !important",
-          background: "white !important",
-          opacity: "1 !important",
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+          backgroundColor: "white", 
+          backdropFilter: "none",
+          background: "white",
+          opacity: "1",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+          border: "1px solid hsl(var(--border))",
+          borderRadius: "16px"
         }}
       >
         <DialogHeader className="border-b pb-4 mb-4">
-          <DialogTitle>Ajouter un document</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-xl font-semibold">Ajouter un document</DialogTitle>
+          <DialogDescription className="text-sm mt-1 text-muted-foreground">
             Choisissez comment vous souhaitez ajouter votre document.
           </DialogDescription>
         </DialogHeader>
@@ -39,30 +41,34 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
         <div className="grid grid-cols-1 gap-4 py-4">
           <Button 
             variant="outline" 
-            className="w-full justify-start gap-3 p-4 h-auto bg-white hover:bg-gray-50 transition-colors border-gray-200 shadow-sm rounded-lg"
+            className="w-full flex justify-start gap-3 p-4 h-auto bg-white hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm rounded-lg"
             onClick={() => {
               onOpenChange(false);
               onScanClick();
             }}
           >
-            <Scan className="h-5 w-5 text-primary" />
-            <div className="flex flex-col items-start">
-              <span className="font-medium">Numériser un document</span>
+            <div className="flex-shrink-0">
+              <Scan className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex flex-col items-start text-left">
+              <span className="font-medium text-foreground">Numériser un document</span>
               <span className="text-sm text-muted-foreground">Utilisez l'appareil photo pour scanner un document</span>
             </div>
           </Button>
           
           <Button 
             variant="outline" 
-            className="w-full justify-start gap-3 p-4 h-auto bg-white hover:bg-gray-50 transition-colors border-gray-200 shadow-sm rounded-lg"
+            className="w-full flex justify-start gap-3 p-4 h-auto bg-white hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm rounded-lg"
             onClick={() => {
               onOpenChange(false);
               onImportClick();
             }}
           >
-            <Upload className="h-5 w-5 text-primary" />
-            <div className="flex flex-col items-start">
-              <span className="font-medium">Importer un fichier</span>
+            <div className="flex-shrink-0">
+              <Upload className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex flex-col items-start text-left">
+              <span className="font-medium text-foreground">Importer un fichier</span>
               <span className="text-sm text-muted-foreground">Sélectionnez un fichier depuis votre appareil</span>
             </div>
           </Button>
