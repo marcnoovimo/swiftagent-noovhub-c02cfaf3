@@ -1,17 +1,16 @@
 
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { 
   Building2, 
   CreditCard, 
-  TrendingUp, 
-  Home, 
-  BarChart3 
+  BarChart3, 
+  Home,
+  FileCheck,
+  FileText,
+  Users
 } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TimeFilter } from '@/types/stats';
 import { statsService } from '@/services/statsService';
-import TimeFilterSelector from '@/components/stats/TimeFilterSelector';
 import StatCard from '@/components/stats/StatCard';
 import TransactionTable from '@/components/stats/TransactionTable';
 import PerformanceDashboard from '@/components/dashboard/PerformanceDashboard';
@@ -20,50 +19,108 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Helmet } from 'react-helmet';
 
 const Stats = () => {
-  const [timeFilter, setTimeFilter] = useState<TimeFilter>('year');
   const isMobile = useMediaQuery('(max-width: 640px)');
   
   const { data: stats, isLoading, refetch } = useQuery({
-    queryKey: ['stats', timeFilter],
-    queryFn: () => statsService.getStats(timeFilter),
+    queryKey: ['stats', 'year'],
+    queryFn: () => statsService.getStats('year'),
   });
   
   useEffect(() => {
     refetch();
-  }, [timeFilter, refetch]);
+  }, [refetch]);
   
-  const formatCurrency = useCallback((value: number) => {
+  const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
       currency: 'EUR',
       maximumFractionDigits: 0
     }).format(value);
-  }, []);
+  };
 
   // Memoize card data to prevent unnecessary re-renders
-  const cardData = useMemo(() => {
+  const monthlyCardData = useMemo(() => {
     if (!stats) return [];
     
     return [
       {
-        title: "Ventes réalisées",
-        value: stats.totalSales,
-        icon: <Home size={isMobile ? 14 : 16} className="text-noovimo-500" />
-      },
-      {
-        title: "Compromis signés",
+        title: "Unités de ventes avants contrats",
         value: stats.totalCompromis,
         icon: <Building2 size={isMobile ? 14 : 16} className="text-noovimo-500" />
       },
       {
-        title: "Volume de transactions",
-        value: formatCurrency(stats.totalVolume),
-        icon: <BarChart3 size={isMobile ? 14 : 16} className="text-noovimo-500" />
+        title: "Honoraires avants contrats",
+        value: formatCurrency(stats.totalVolume * 0.05), // Estimation des honoraires sur compromis
+        icon: <FileCheck size={isMobile ? 14 : 16} className="text-noovimo-500" />
       },
       {
-        title: "Commissions totales",
+        title: "Unités de ventes actes",
+        value: stats.totalSales,
+        icon: <Home size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      },
+      {
+        title: "Honoraires actés",
+        value: formatCurrency(stats.totalCommission),
+        icon: <FileText size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      }
+    ];
+  }, [stats, isMobile]);
+
+  const yearlyCardData = useMemo(() => {
+    if (!stats) return [];
+    
+    return [
+      {
+        title: "Unités de ventes avants contrats",
+        value: stats.totalCompromis,
+        icon: <Building2 size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      },
+      {
+        title: "Honoraires avants contrats",
+        value: formatCurrency(stats.totalVolume * 0.05), // Estimation des honoraires sur compromis
+        icon: <FileCheck size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      },
+      {
+        title: "Unités de ventes actes",
+        value: stats.totalSales,
+        icon: <Home size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      },
+      {
+        title: "Honoraires actés",
         value: formatCurrency(stats.totalCommission),
         icon: <CreditCard size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      }
+    ];
+  }, [stats, formatCurrency, isMobile]);
+
+  const synthesisCardData = useMemo(() => {
+    if (!stats) return [];
+    
+    return [
+      {
+        title: "Unités de ventes avants contrats",
+        value: stats.totalCompromis,
+        icon: <Building2 size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      },
+      {
+        title: "Unités de ventes actés",
+        value: stats.totalSales,
+        icon: <Home size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      },
+      {
+        title: "Honoraires compromis",
+        value: formatCurrency(stats.totalVolume * 0.05), // Estimation des honoraires sur compromis
+        icon: <FileCheck size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      },
+      {
+        title: "Honoraires actés",
+        value: formatCurrency(stats.totalCommission),
+        icon: <FileText size={isMobile ? 14 : 16} className="text-noovimo-500" />
+      },
+      {
+        title: "Commissions agents",
+        value: formatCurrency(stats.totalCommission * 0.7), // Estimation des commissions agents
+        icon: <Users size={isMobile ? 14 : 16} className="text-noovimo-500" />
       }
     ];
   }, [stats, formatCurrency, isMobile]);
@@ -76,7 +133,6 @@ const Stats = () => {
         </Helmet>
         <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
           <Skeleton className="h-12 w-64" />
-          <Skeleton className="h-10 w-40" />
         </div>
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -105,25 +161,60 @@ const Stats = () => {
             Suivez vos performances commerciales et vos commissions
           </p>
         </div>
-        <TimeFilterSelector activeFilter={timeFilter} onChange={setTimeFilter} />
       </div>
       
-      {/* Performance Dashboard Component */}
+      {/* Section d'activité du mois */}
+      <div className="mb-6">
+        <h2 className="text-lg sm:text-xl font-semibold mb-4">Activité du mois</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4">
+          {monthlyCardData.map((card, index) => (
+            <StatCard
+              key={index}
+              title={card.title}
+              value={card.value}
+              icon={card.icon}
+            />
+          ))}
+        </div>
+      </div>
+      
+      {/* Section de cumul annuel */}
+      <div className="mb-6">
+        <h2 className="text-lg sm:text-xl font-semibold mb-4">Cumul annuel</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4">
+          {yearlyCardData.map((card, index) => (
+            <StatCard
+              key={index}
+              title={card.title}
+              value={card.value}
+              icon={card.icon}
+            />
+          ))}
+        </div>
+      </div>
+      
+      {/* Graphiques */}
       <div className="w-full overflow-visible mb-6">
+        <h2 className="text-lg sm:text-xl font-semibold mb-4">Graphique avants contrats / actes - Cumul annuel</h2>
         <PerformanceDashboard />
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
-        {cardData.map((card, index) => (
-          <StatCard
-            key={index}
-            title={card.title}
-            value={card.value}
-            icon={card.icon}
-          />
-        ))}
+      {/* Synthèse */}
+      <div className="mb-6">
+        <h2 className="text-lg sm:text-xl font-semibold mb-4">Synthèse</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-4">
+          {synthesisCardData.map((card, index) => (
+            <StatCard
+              key={index}
+              title={card.title}
+              value={card.value}
+              icon={card.icon}
+            />
+          ))}
+        </div>
       </div>
       
+      {/* Transactions récentes */}
       <div className="mb-4 sm:mb-6">
         <div className="glass-card rounded-xl p-2 sm:p-4 overflow-x-auto">
           <div className="flex items-center justify-between mb-2 sm:mb-4">
