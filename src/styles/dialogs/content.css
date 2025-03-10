@@ -47,3 +47,45 @@
     padding: 16px !important;
   }
 }
+
+/* Ensure radix components are also solid white */
+[data-radix-popper-content],
+[data-radix-dropdown-menu-content],
+[data-radix-select-content],
+[data-radix-popover-content],
+[role="dialog"],
+[role="menu"],
+[role="listbox"] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+}
+
+.dark [data-radix-popper-content],
+.dark [data-radix-dropdown-menu-content],
+.dark [data-radix-select-content],
+.dark [data-radix-popover-content],
+.dark [role="dialog"],
+.dark [role="menu"],
+.dark [role="listbox"] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Force all calendar and date picker dropdowns to be solid white */
+.rdp,
+.calendar-dropdown-content,
+.date-picker-dropdown {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+}
+
+.dark .rdp,
+.dark .calendar-dropdown-content,
+.dark .date-picker-dropdown {
+  background-color: hsl(var(--background)) !important;
+}

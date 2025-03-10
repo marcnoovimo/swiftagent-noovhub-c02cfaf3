@@ -1,13 +1,14 @@
 
 import React from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { EmailContact, Email } from './types/email';
+import { Email } from '../types/email';
 import { useEmailCompose } from './dialog/useEmailCompose';
 import EmailDialogHeader from './dialog/EmailDialogHeader';
 import EmailComposeForm from './dialog/EmailComposeForm';
 import EmailAttachmentsList from './dialog/EmailAttachmentsList';
 import EmailDialogFooter from './dialog/EmailDialogFooter';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { EmailContact } from '../types/email';
 
 interface NewEmailDialogProps {
   isOpen: boolean;
@@ -48,7 +49,17 @@ const NewEmailDialog = ({ isOpen, onClose, onSend, contacts }: NewEmailDialogPro
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={`p-0 flex flex-col ${isMobile ? 'h-[95vh] max-h-[95vh] max-w-[95vw] w-full' : 'sm:max-w-[700px] h-[80vh] max-h-[700px]'}`}>
+      <DialogContent 
+        className={`p-0 flex flex-col ${isMobile ? 'h-[95vh] max-h-[95vh] max-w-[95vw] w-full' : 'sm:max-w-[700px] h-[80vh] max-h-[700px]'}`}
+        style={{ 
+          backgroundColor: "#FFFFFF", 
+          opacity: 1,
+          backdropFilter: "none",
+          borderRadius: "0.75rem",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+          border: "1px solid hsl(var(--border))"
+        }}
+      >
         <EmailDialogHeader onClose={onClose} />
         
         <EmailComposeForm

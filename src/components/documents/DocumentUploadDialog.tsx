@@ -23,14 +23,14 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="document-upload-dialog"
+        className="sm:max-w-[425px] max-w-[95vw]"
         style={{ 
           backgroundColor: "#FFFFFF", 
           opacity: 1,
           backdropFilter: "none",
           borderRadius: "0.75rem",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-          maxWidth: "425px"
+          border: "1px solid hsl(var(--border))"
         }}
       >
         <DialogHeader className="border-b pb-4 mb-4">

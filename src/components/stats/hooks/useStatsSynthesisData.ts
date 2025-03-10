@@ -5,7 +5,7 @@ import { getDashboardStats } from '@/services/dashboardStatsService';
 export const useStatsSynthesisData = () => {
   const [timeFilter, setTimeFilter] = useState('thisMonth');
   const [isLoading, setIsLoading] = useState(true);
-  const [statsData, setStatsData] = useState(null);
+  const [statsData, setStatsData] = useState<any>(null);
   
   const [synthesisData, setSynthesisData] = useState({
     transactions: 0,
@@ -18,6 +18,7 @@ export const useStatsSynthesisData = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
+        // Use the correct import method for getDashboardStats
         const data = await getDashboardStats(timeFilter);
         setStatsData(data);
         

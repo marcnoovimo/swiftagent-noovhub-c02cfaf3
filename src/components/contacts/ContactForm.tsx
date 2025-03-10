@@ -33,13 +33,14 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="dialog-content sm:max-w-[800px] max-w-[95vw]" 
+        className="sm:max-w-[800px] max-w-[95vw]" 
         style={{ 
           backgroundColor: "#FFFFFF", 
           opacity: 1,
           backdropFilter: "none",
           borderRadius: "0.75rem",
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+          border: "1px solid hsl(var(--border))"
         }}
       >
         <DialogHeader className={`${isMobile ? 'mb-2 space-y-1' : 'mb-4 space-y-2'}`}>
