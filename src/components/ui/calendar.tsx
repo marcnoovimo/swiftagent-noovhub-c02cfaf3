@@ -15,6 +15,18 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const handleClear = () => {
+    if (props.mode === "single" && props.onSelect) {
+      props.onSelect(undefined);
+    }
+  };
+
+  const handleToday = () => {
+    if (props.mode === "single" && props.onSelect) {
+      props.onSelect(new Date());
+    }
+  };
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -63,14 +75,14 @@ function Calendar({
           <button 
             type="button" 
             className="text-sm text-primary hover:underline"
-            onClick={() => props.onSelect?.(undefined)}
+            onClick={handleClear}
           >
             Effacer
           </button>
           <button 
             type="button" 
             className="text-sm text-primary hover:underline"
-            onClick={() => props.onSelect?.(new Date())}
+            onClick={handleToday}
           >
             Aujourd'hui
           </button>
