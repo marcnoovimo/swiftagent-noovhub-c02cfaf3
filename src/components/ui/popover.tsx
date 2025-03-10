@@ -22,10 +22,11 @@ const PopoverContent = React.forwardRef<
         className
       )}
       style={{ 
-        backgroundColor: "hsl(var(--background))",
+        backgroundColor: "#FFFFFF",
         boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
         border: "1px solid hsl(var(--border))",
-        backdropFilter: "none"
+        backdropFilter: "none",
+        background: "#FFFFFF"
       }}
       {...props}
     />

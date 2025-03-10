@@ -19,7 +19,14 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] bg-background border border-border shadow-lg document-upload-dialog">
+      <DialogContent 
+        className="sm:max-w-[425px] bg-background border border-border shadow-lg document-upload-dialog"
+        style={{ 
+          backgroundColor: "white", 
+          backdropFilter: "none",
+          background: "white"
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Ajouter un document</DialogTitle>
           <DialogDescription>
