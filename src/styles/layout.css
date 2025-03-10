@@ -180,6 +180,8 @@ select:focus {
   background-color: hsl(var(--background)) !important;
   color: hsl(var(--foreground)) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
 }
 
 /* Ensure all dialog backgrounds are solid */
@@ -189,9 +191,33 @@ select:focus {
 .popover-content {
   background-color: hsl(var(--background)) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
 }
 
 /* Ensure floating elements have solid backgrounds */
 .floating-element {
   background-color: hsl(var(--background)) !important;
+  backdrop-filter: none !important;
+}
+
+/* Specific fix for document upload dialog */
+.document-upload-dialog {
+  background-color: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Fix for all radix dialog portals */
+[data-radix-portal] {
+  z-index: 9999;
+}
+
+[data-radix-portal] > * {
+  background-color: transparent !important;
+}
+
+[data-radix-portal] > * > * {
+  background-color: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }

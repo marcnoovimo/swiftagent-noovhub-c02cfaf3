@@ -66,6 +66,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         [data-radix-popper-content-wrapper] > div {
           background-color: hsl(var(--background)) !important;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+          border: 1px solid hsl(var(--border)) !important;
+          backdrop-filter: none !important;
         }
         
         .radix-dialog-content,
@@ -73,6 +75,23 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         .popover-content,
         .dropdown-content {
           background-color: hsl(var(--background)) !important;
+          border: 1px solid hsl(var(--border)) !important;
+          backdrop-filter: none !important;
+        }
+
+        /* Fix for all menus */
+        [data-radix-menu-content],
+        [data-radix-dropdown-menu-content],
+        [data-radix-select-content] {
+          background-color: hsl(var(--background)) !important;
+          border: 1px solid hsl(var(--border)) !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+          backdrop-filter: none !important;
+        }
+
+        /* Force high z-index for all dialogs and dropdown contents */
+        [data-radix-portal] {
+          z-index: 9999 !important;
         }
       `}} />
     </div>
