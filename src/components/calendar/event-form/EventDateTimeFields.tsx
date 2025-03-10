@@ -45,7 +45,15 @@ const EventDateTimeFields: React.FC<EventDateTimeFieldsProps> = ({ form }) => {
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-white dark:bg-gray-950" align="start">
+              <PopoverContent 
+                className="w-auto p-0 bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 shadow-lg rounded-lg" 
+                align="start"
+                style={{
+                  backdropFilter: "none",
+                  backgroundColor: "#FFFFFF",
+                  opacity: 1
+                }}
+              >
                 <Calendar
                   mode="single"
                   selected={field.value}

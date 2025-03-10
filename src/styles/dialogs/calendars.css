@@ -41,6 +41,7 @@
   border: 1px solid hsl(var(--border)) !important;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
   opacity: 1 !important;
+  backdrop-filter: none !important;
 }
 
 .dark .react-datepicker,
@@ -56,9 +57,39 @@
   background-color: #FFFFFF !important;
   opacity: 1 !important;
   z-index: 1 !important;
+  backdrop-filter: none !important;
 }
 
 .dark .rdp-nav_button,
 .dark .rdp-caption_label {
   background-color: hsl(var(--background)) !important;
+}
+
+/* Force solid white background on all calendar elements inside popovers */
+[data-radix-popover-content] .rdp,
+[data-radix-popover-content] .calendar {
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+}
+
+.dark [data-radix-popover-content] .rdp,
+.dark [data-radix-popover-content] .calendar {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Ensure calendar cells are properly styled */
+.rdp-cell, 
+.rdp-head_cell {
+  background-color: transparent !important;
+}
+
+/* Calendar days */
+.rdp-day {
+  background-color: transparent !important;
+}
+
+.rdp-day_selected {
+  background-color: hsl(var(--primary)) !important;
+  color: white !important;
 }

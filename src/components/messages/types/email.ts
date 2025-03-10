@@ -13,6 +13,15 @@ export interface EmailContact {
   avatar?: string;
   role?: string;
   department?: string;
+  // Propriétés additionnelles pour la compatibilité avec les composants existants
+  firstName?: string;
+  lastName?: string;
+  company?: string;
+  status?: string;
+  phone?: string;
+  lastContact?: string;
+  notes?: string;
+  unread?: number;
 }
 
 export interface EmailFolder {
@@ -20,6 +29,7 @@ export interface EmailFolder {
   name: string;
   count?: number;
   icon?: string;
+  unread?: number;
 }
 
 export interface EmailAttachment {

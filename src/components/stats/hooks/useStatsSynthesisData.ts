@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { getDashboardStats } from '@/services/dashboardStatsService';
+import * as dashboardStatsService from '@/services/dashboardStatsService';
 
 export const useStatsSynthesisData = () => {
   const [timeFilter, setTimeFilter] = useState('thisMonth');
@@ -19,7 +19,7 @@ export const useStatsSynthesisData = () => {
       setIsLoading(true);
       try {
         // Use the correct import method for getDashboardStats
-        const data = await getDashboardStats(timeFilter);
+        const data = await dashboardStatsService.default(timeFilter);
         setStatsData(data);
         
         // Calculate synthesis data

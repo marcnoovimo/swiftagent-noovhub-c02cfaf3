@@ -145,3 +145,28 @@ input[type="date"] {
 .dark .rdp {
   background-color: hsl(var(--background)) !important;
 }
+
+/* IMPORTANT: Ensure all calendar elements have white background */
+.rdp *,
+.calendar * {
+  background-color: transparent !important;
+}
+
+/* Fix for all buttons in calendars to have appropriate colors */
+.rdp-button {
+  background-color: transparent !important;
+}
+
+.rdp-day_selected {
+  background-color: hsl(var(--primary)) !important;
+  color: white !important;
+}
+
+/* Fix opacity for all calendar elements */
+.rdp, 
+.rdp-button, 
+.rdp-day, 
+.rdp-nav, 
+.rdp-caption {
+  opacity: 1 !important;
+}

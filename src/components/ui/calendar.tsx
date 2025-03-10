@@ -15,23 +15,10 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
-  // Fix the function argument issues
-  const handleClear = (e: React.MouseEvent<HTMLButtonElement>, onClick: () => void = () => {}, close: () => void = () => {}) => {
-    e.preventDefault()
-    onClick()
-    close()
-  }
-
-  const handleToday = (e: React.MouseEvent<HTMLButtonElement>, onClick: () => void = () => {}, close: () => void = () => {}) => {
-    e.preventDefault()
-    onClick()
-    close()
-  }
-
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3 pointer-events-auto", className)}
+      className={cn("p-3 pointer-events-auto bg-white dark:bg-gray-950", className)}
       locale={fr}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -73,10 +60,16 @@ function Calendar({
       }}
       footer={
         <div className="rdp-footer flex justify-between p-2 border-t border-gray-200 dark:border-gray-700 mt-2">
-          <button onClick={(e) => handleClear(e)} className="text-sm text-primary hover:underline">
+          <button onClick={(e) => {
+            e.preventDefault();
+            if (props.onResetClick) props.onResetClick();
+          }} className="text-sm text-primary hover:underline">
             Effacer
           </button>
-          <button onClick={(e) => handleToday(e)} className="text-sm text-primary hover:underline">
+          <button onClick={(e) => {
+            e.preventDefault();
+            if (props.selected && props.onSelect) props.onSelect(new Date());
+          }} className="text-sm text-primary hover:underline">
             Aujourd'hui
           </button>
         </div>
