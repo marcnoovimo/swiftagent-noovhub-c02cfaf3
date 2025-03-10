@@ -2,7 +2,7 @@
 /* Z-index management */
 .dropdown-content {
   z-index: 50 !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
   background-color: hsl(var(--background)) !important;
 }
 
@@ -13,7 +13,7 @@
   z-index: 100 !important;
   background-color: hsl(var(--background)) !important;
   border-radius: var(--radius);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
 }
 
 .popover-content {
@@ -55,5 +55,6 @@
 [data-radix-portal] > * > * {
   background-color: #FFFFFF !important;
   border: 1px solid hsl(var(--border)) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 12px !important;
 }

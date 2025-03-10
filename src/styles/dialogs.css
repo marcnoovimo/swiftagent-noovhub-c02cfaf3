@@ -19,15 +19,19 @@
 .dialog-content,
 .popover-content {
   background-color: #FFFFFF !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
   border: 1px solid hsl(var(--border)) !important;
   backdrop-filter: none !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
 }
 
 /* Specific fix for document upload dialog */
 .document-upload-dialog {
   background-color: #FFFFFF !important;
   border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 16px !important;
 }
 
 /* Force solid backgrounds on all dialog and menu elements */
@@ -55,4 +59,27 @@
 .dark [role="listbox"] {
   background-color: hsl(var(--background)) !important;
   backdrop-filter: none !important;
+}
+
+/* Improved aesthetics for dialogs */
+.dialog-header, 
+.sheet-header {
+  border-bottom: 1px solid hsl(var(--border));
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.dialog-footer,
+.sheet-footer {
+  border-top: 1px solid hsl(var(--border));
+  padding-top: 16px;
+  margin-top: 16px;
+}
+
+/* Dialog title improvements */
+[class*="dialog-title"] {
+  font-weight: 600 !important;
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+  color: hsl(var(--foreground)) !important;
 }
