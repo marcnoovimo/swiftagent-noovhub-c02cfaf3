@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
@@ -46,10 +45,7 @@ const DialogContent = React.forwardRef<
         border: "1px solid hsl(var(--border))",
         backdropFilter: "none",
         opacity: 1,
-        borderRadius: "16px",
-        maxWidth: "95vw",
-        maxHeight: "95vh",
-        overflow: "auto"
+        borderRadius: "16px"
       }}
       {...props}
     >

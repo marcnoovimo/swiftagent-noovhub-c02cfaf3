@@ -31,6 +31,7 @@
   z-index: 99960 !important;
   opacity: 1 !important;
   backdrop-filter: none !important;
+  max-width: 90vw !important;
 }
 
 .dark .document-upload-dialog {

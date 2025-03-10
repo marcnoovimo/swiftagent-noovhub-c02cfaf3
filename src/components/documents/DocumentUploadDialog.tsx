@@ -22,19 +22,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent 
-        className={`sm:max-w-[425px] document-upload-dialog ${isMobile ? 'max-w-[95vw] p-4' : ''}`}
-        style={{ 
-          backgroundColor: "#FFFFFF", 
-          backdropFilter: "none",
-          opacity: "1",
-          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
-          border: "1px solid hsl(var(--border))",
-          borderRadius: "16px",
-          overflow: "visible",
-          width: isMobile ? 'calc(100vw - 32px)' : 'auto'
-        }}
-      >
+      <DialogContent className={`sm:max-w-[425px] document-upload-dialog ${isMobile ? 'max-w-[95vw] p-4' : ''}`}>
         <DialogHeader className="border-b pb-4 mb-4">
           <DialogTitle className="text-xl font-semibold">Ajouter un document</DialogTitle>
           <DialogDescription className="text-sm mt-1 text-muted-foreground">
