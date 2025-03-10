@@ -1,8 +1,15 @@
 
 /* Fix for modal/popovers */
 .modal, .dialog, .popover {
-  background-color: hsl(var(--background)) !important;
+  background-color: #FFFFFF !important;
   z-index: 99950 !important;
+  opacity: 1 !important;
+}
+
+.dark .modal, 
+.dark .dialog, 
+.dark .popover {
+  background-color: hsl(var(--background)) !important;
 }
 
 /* Additional fixes for Radix dialogs and nested components */
@@ -17,6 +24,10 @@
   border: 1px solid hsl(var(--border)) !important;
   z-index: 99960 !important;
   opacity: 1 !important;
+}
+
+.dark .radix-dialog-content {
+  background-color: hsl(var(--background)) !important;
 }
 
 /* Ensure all dialog backgrounds are solid */
@@ -34,6 +45,13 @@
   opacity: 1 !important;
 }
 
+.dark .sheet-content,
+.dark .drawer-content,
+.dark .dialog-content,
+.dark .popover-content {
+  background-color: hsl(var(--background)) !important;
+}
+
 /* Specific fix for document upload dialog */
 .document-upload-dialog {
   background-color: #FFFFFF !important;
@@ -43,6 +61,10 @@
   overflow: visible !important;
   z-index: 99960 !important;
   opacity: 1 !important;
+}
+
+.dark .document-upload-dialog {
+  background-color: hsl(var(--background)) !important;
 }
 
 /* Force solid backgrounds on all dialog and menu elements */
@@ -58,6 +80,8 @@
   background-color: #FFFFFF !important;
   backdrop-filter: none !important;
   opacity: 1 !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid hsl(var(--border)) !important;
 }
 
 .dark [class*="dialog"],
@@ -106,4 +130,37 @@
 /* Ensure Radix UI portal elements have proper z-index */
 [data-radix-portal] {
   z-index: 99990 !important;
+}
+
+/* Calendar & date picker specific styles */
+.rdp-months,
+.rdp-month,
+.rdp-table,
+.rdp-cell,
+.rdp-head,
+.rdp-head_cell,
+.rdp-button {
+  background-color: #FFFFFF !important;
+}
+
+.dark .rdp-months,
+.dark .rdp-month,
+.dark .rdp-table,
+.dark .rdp-cell,
+.dark .rdp-head,
+.dark .rdp-head_cell,
+.dark .rdp-button {
+  background-color: hsl(var(--background)) !important;
+}
+
+.rdp {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+}
+
+.dark .rdp {
+  background-color: hsl(var(--background)) !important;
 }

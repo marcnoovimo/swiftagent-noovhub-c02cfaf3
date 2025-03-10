@@ -54,8 +54,7 @@ const DropdownMenuSubContent = React.forwardRef<
       boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
       border: "1px solid hsl(var(--border))",
       backdropFilter: "none",
-      background: "#FFFFFF",
-      opacity: "1",
+      opacity: 1,
       borderRadius: "12px"
     }}
     {...props}
@@ -81,9 +80,9 @@ const DropdownMenuContent = React.forwardRef<
         boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
         border: "1px solid hsl(var(--border))",
         backdropFilter: "none",
-        background: "#FFFFFF",
-        opacity: "1",
-        borderRadius: "12px"
+        opacity: 1,
+        borderRadius: "12px",
+        zIndex: 99999
       }}
       {...props}
     />
@@ -104,6 +103,9 @@ const DropdownMenuItem = React.forwardRef<
       inset && "pl-8",
       className
     )}
+    style={{
+      backgroundColor: "#FFFFFF",
+    }}
     {...props}
   />
 ))
