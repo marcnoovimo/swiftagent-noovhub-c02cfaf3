@@ -20,11 +20,12 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="sm:max-w-[425px] bg-background border border-border shadow-lg document-upload-dialog"
+        className="sm:max-w-[425px] bg-white border border-border shadow-lg document-upload-dialog"
         style={{ 
-          backgroundColor: "white", 
-          backdropFilter: "none",
-          background: "white"
+          backgroundColor: "white !important", 
+          backdropFilter: "none !important",
+          background: "white !important",
+          opacity: "1 !important"
         }}
       >
         <DialogHeader>
@@ -37,7 +38,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
         <div className="grid grid-cols-1 gap-4 py-4">
           <Button 
             variant="outline" 
-            className="w-full justify-start gap-2 p-4 h-auto bg-background"
+            className="w-full justify-start gap-2 p-4 h-auto bg-white"
             onClick={() => {
               onOpenChange(false);
               onScanClick();
@@ -52,7 +53,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
           
           <Button 
             variant="outline" 
-            className="w-full justify-start gap-2 p-4 h-auto bg-background"
+            className="w-full justify-start gap-2 p-4 h-auto bg-white"
             onClick={() => {
               onOpenChange(false);
               onImportClick();
