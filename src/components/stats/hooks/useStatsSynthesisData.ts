@@ -41,7 +41,7 @@ export const useStatsSynthesisData = (stats: StatsData | undefined, isMobile: bo
         icon: <Users size={isMobile ? 14 : 16} className="text-noovimo-500" />
       }
     ];
-  }, [stats, formatCurrency, isMobile]);
+  }, [stats, isMobile]);
 
   return synthesisCardData;
 };
