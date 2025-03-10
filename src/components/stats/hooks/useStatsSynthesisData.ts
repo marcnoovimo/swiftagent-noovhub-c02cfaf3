@@ -1,12 +1,17 @@
 
 import { useState, useEffect } from 'react';
-import { SynthesisCardData } from '@/types/stats';
 import { generateSynthesisData } from '@/services/statsService';
-import { dashboardStatsService } from '@/services/dashboardStatsService';
+
+export interface SynthesisData {
+  transactions: number;
+  revenue: number;
+  averageTransaction: number;
+  averageCommission: number;
+}
 
 export const useStatsSynthesisData = (timeFilter: string) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [synthesisData, setSynthesisData] = useState({
+  const [synthesisData, setSynthesisData] = useState<SynthesisData>({
     transactions: 0,
     revenue: 0,
     averageTransaction: 0,
@@ -20,7 +25,6 @@ export const useStatsSynthesisData = (timeFilter: string) => {
       try {
         // In a real app, this would use the timeFilter to fetch from API
         const data = await generateSynthesisData(timeFilter);
-        // const stats = await dashboardStatsService.getDashboardStats();
         
         setSynthesisData({
           transactions: data.totalTransactions,

@@ -7,7 +7,17 @@
 .rdp-head,
 .rdp-head_cell,
 .rdp-button {
-  background-color: transparent !important;
+  background-color: #FFFFFF !important;
+}
+
+.dark .rdp-months,
+.dark .rdp-month,
+.dark .rdp-table,
+.dark .rdp-cell,
+.dark .rdp-head,
+.dark .rdp-head_cell,
+.dark .rdp-button {
+  background-color: hsl(var(--background)) !important;
 }
 
 .rdp {
@@ -44,10 +54,15 @@
 /* Calendar selector month/year navigation */
 .rdp-nav_button,
 .rdp-caption_label {
-  background-color: transparent !important;
+  background-color: #FFFFFF !important;
   opacity: 1 !important;
   z-index: 1 !important;
   backdrop-filter: none !important;
+}
+
+.dark .rdp-nav_button,
+.dark .rdp-caption_label {
+  background-color: hsl(var(--background)) !important;
 }
 
 /* Force solid white background on all calendar elements inside popovers */
@@ -56,6 +71,8 @@
   background-color: #FFFFFF !important;
   opacity: 1 !important;
   backdrop-filter: none !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
 }
 
 .dark [data-radix-popover-content] .rdp,
@@ -66,12 +83,21 @@
 /* Ensure calendar cells are properly styled */
 .rdp-cell, 
 .rdp-head_cell {
-  background-color: transparent !important;
+  background-color: #FFFFFF !important;
+}
+
+.dark .rdp-cell, 
+.dark .rdp-head_cell {
+  background-color: hsl(var(--background)) !important;
 }
 
 /* Calendar days */
 .rdp-day {
-  background-color: transparent !important;
+  background-color: #FFFFFF !important;
+}
+
+.dark .rdp-day {
+  background-color: hsl(var(--background)) !important;
 }
 
 .rdp-day_selected {
@@ -83,6 +109,7 @@
 [role="button"][aria-haspopup="dialog"] {
   background-color: #FFFFFF !important;
   border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
 }
 
 .dark [role="button"][aria-haspopup="dialog"] {
@@ -96,6 +123,7 @@
   border: 1px solid hsl(var(--border)) !important;
   opacity: 1 !important;
   z-index: 50 !important;
+  backdrop-filter: none !important;
 }
 
 .dark .PopoverContent {

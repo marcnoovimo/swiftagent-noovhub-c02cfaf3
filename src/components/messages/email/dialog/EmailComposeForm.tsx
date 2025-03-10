@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -64,7 +65,6 @@ const EmailComposeForm = ({
             onOpenContactSelector={() => onOpenContactSelector('to')}
             contacts={contacts}
             placeholder="Ajouter des destinataires..."
-            isMobile={isMobile}
           />
         </div>
         
@@ -76,7 +76,6 @@ const EmailComposeForm = ({
             onOpenContactSelector={() => onOpenContactSelector('cc')}
             contacts={contacts}
             placeholder="Ajouter en copie..."
-            isMobile={isMobile}
           />
         )}
         
@@ -88,7 +87,6 @@ const EmailComposeForm = ({
             onOpenContactSelector={() => onOpenContactSelector('bcc')}
             contacts={contacts}
             placeholder="Ajouter en copie cachée..."
-            isMobile={isMobile}
           />
         )}
         
@@ -113,7 +111,7 @@ const EmailComposeForm = ({
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             placeholder="Objet du message"
-            className="flex-1 h-9 text-sm"
+            className="flex-1 h-9 text-sm bg-white"
           />
         </div>
       </div>
@@ -123,7 +121,7 @@ const EmailComposeForm = ({
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Écrivez votre message ici..."
-          className="h-full resize-none p-4 border-0 focus-visible:ring-0 text-sm"
+          className="h-full resize-none p-4 border-0 focus-visible:ring-0 text-sm bg-white"
         />
         
         {showContactSelector && (

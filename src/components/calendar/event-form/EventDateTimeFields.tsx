@@ -32,7 +32,7 @@ const EventDateTimeFields: React.FC<EventDateTimeFieldsProps> = ({ form }) => {
                   <Button
                     variant="white"
                     className={cn(
-                      "w-full pl-3 text-left font-normal",
+                      "w-full pl-3 text-left font-normal bg-white border border-gray-200 shadow-sm",
                       !field.value && "text-muted-foreground"
                     )}
                   >
@@ -46,12 +46,15 @@ const EventDateTimeFields: React.FC<EventDateTimeFieldsProps> = ({ form }) => {
                 </FormControl>
               </PopoverTrigger>
               <PopoverContent 
-                className="w-auto p-0 bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 shadow-lg rounded-lg" 
+                className="w-auto p-0" 
                 align="start"
                 style={{
-                  backdropFilter: "none",
                   backgroundColor: "#FFFFFF",
-                  opacity: 1
+                  boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
+                  border: "1px solid hsl(var(--border))",
+                  opacity: 1,
+                  backdropFilter: "none",
+                  borderRadius: "0.5rem"
                 }}
               >
                 <Calendar
@@ -60,7 +63,7 @@ const EventDateTimeFields: React.FC<EventDateTimeFieldsProps> = ({ form }) => {
                   onSelect={field.onChange}
                   initialFocus
                   locale={fr}
-                  className="p-3 pointer-events-auto bg-white dark:bg-gray-950 border-0"
+                  className="bg-white border-0 rounded-lg"
                 />
               </PopoverContent>
             </Popover>
@@ -79,7 +82,7 @@ const EventDateTimeFields: React.FC<EventDateTimeFieldsProps> = ({ form }) => {
             <div className="flex items-center space-x-2">
               <Clock className="h-4 w-4 text-muted-foreground" />
               <FormControl>
-                <Input type="time" {...field} className="bg-white dark:bg-gray-950" />
+                <Input type="time" {...field} className="bg-white border border-gray-200 shadow-sm" />
               </FormControl>
             </div>
             <FormMessage />
@@ -97,7 +100,7 @@ const EventDateTimeFields: React.FC<EventDateTimeFieldsProps> = ({ form }) => {
             <div className="flex items-center space-x-2">
               <Clock className="h-4 w-4 text-muted-foreground" />
               <FormControl>
-                <Input type="time" {...field} className="bg-white dark:bg-gray-950" />
+                <Input type="time" {...field} className="bg-white border border-gray-200 shadow-sm" />
               </FormControl>
             </div>
             <FormMessage />

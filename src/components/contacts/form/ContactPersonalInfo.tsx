@@ -37,7 +37,7 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
           value={formData.firstName}
           onChange={(e) => onChangeField('firstName', e.target.value)}
           placeholder="Prénom du contact"
-          className="bg-white dark:bg-gray-950"
+          className="bg-white dark:bg-gray-950 border border-gray-200 shadow-sm"
         />
       </div>
       
@@ -50,7 +50,7 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
           value={formData.lastName}
           onChange={(e) => onChangeField('lastName', e.target.value)}
           placeholder="Nom du contact"
-          className="bg-white dark:bg-gray-950"
+          className="bg-white dark:bg-gray-950 border border-gray-200 shadow-sm"
         />
       </div>
       
@@ -62,7 +62,7 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
           value={formData.gender} 
           onValueChange={onGenderChange}
         >
-          <SelectTrigger id="gender" className="bg-white dark:bg-gray-950">
+          <SelectTrigger id="gender" className="bg-white dark:bg-gray-950 border border-gray-200 shadow-sm">
             <SelectValue placeholder="Sélectionnez une civilité" />
           </SelectTrigger>
           <SelectContent>
@@ -80,8 +80,8 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
         <Popover>
           <PopoverTrigger asChild>
             <Button
-              variant="outline"
-              className="w-full justify-start text-left font-normal bg-white dark:bg-gray-950"
+              variant="white"
+              className="w-full justify-start text-left font-normal bg-white border border-gray-200 shadow-sm"
             >
               {formData.dateOfBirth ? (
                 format(formData.dateOfBirth, 'dd MMMM yyyy', { locale: fr })
@@ -92,14 +92,15 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
             </Button>
           </PopoverTrigger>
           <PopoverContent 
-            className="w-auto p-0 bg-white dark:bg-gray-950 border-border" 
+            className="w-auto p-0" 
             align="start"
             style={{ 
               backgroundColor: "#FFFFFF",
               boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
               border: "1px solid hsl(var(--border))",
               opacity: 1,
-              backdropFilter: "none"
+              backdropFilter: "none",
+              borderRadius: "0.5rem"
             }}
           >
             <Calendar
@@ -108,7 +109,7 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
               onSelect={onDateOfBirthChange}
               initialFocus
               disabled={(date) => date > new Date()}
-              className="p-3 pointer-events-auto bg-white dark:bg-gray-950 border-0"
+              className="bg-white border-0 rounded-lg"
             />
           </PopoverContent>
         </Popover>
@@ -123,7 +124,7 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
           value={formData.phone}
           onChange={(e) => onChangeField('phone', e.target.value)}
           placeholder="Téléphone fixe"
-          className="bg-white dark:bg-gray-950"
+          className="bg-white dark:bg-gray-950 border border-gray-200 shadow-sm"
         />
       </div>
       
@@ -136,7 +137,7 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
           value={formData.mobile}
           onChange={(e) => onChangeField('mobile', e.target.value)}
           placeholder="Téléphone mobile"
-          className="bg-white dark:bg-gray-950"
+          className="bg-white dark:bg-gray-950 border border-gray-200 shadow-sm"
         />
       </div>
       
@@ -150,7 +151,7 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
           value={formData.email}
           onChange={(e) => onChangeField('email', e.target.value)}
           placeholder="email@exemple.com"
-          className="bg-white dark:bg-gray-950"
+          className="bg-white dark:bg-gray-950 border border-gray-200 shadow-sm"
         />
       </div>
       
@@ -163,7 +164,7 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
           value={formData.address}
           onChange={(e) => onChangeField('address', e.target.value)}
           placeholder="Adresse postale"
-          className="bg-white dark:bg-gray-950"
+          className="bg-white dark:bg-gray-950 border border-gray-200 shadow-sm"
         />
       </div>
       
@@ -176,7 +177,7 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
           value={formData.city}
           onChange={(e) => onChangeField('city', e.target.value)}
           placeholder="Ville"
-          className="bg-white dark:bg-gray-950"
+          className="bg-white dark:bg-gray-950 border border-gray-200 shadow-sm"
         />
       </div>
     </div>

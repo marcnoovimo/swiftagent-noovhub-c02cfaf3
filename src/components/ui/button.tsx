@@ -20,7 +20,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-noovimo-500 underline-offset-4 hover:underline",
         white: "bg-white text-foreground border border-input hover:bg-gray-50",
-        date: "bg-white text-foreground border border-input hover:bg-gray-50 h-9 px-3 py-2",
+        date: "bg-white text-foreground border border-input hover:bg-gray-50 h-9 px-3 py-2 shadow-sm",
       },
       size: {
         default: "h-10 px-4 py-2",
