@@ -3,7 +3,8 @@
 .calendar-dropdown-content,
 .date-picker-dropdown,
 .rdp-root,
-.rdp {
+.rdp,
+[data-radix-popper-content] {
   background-color: #FFFFFF !important;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
   border: 1px solid hsl(var(--border)) !important;
@@ -15,7 +16,8 @@
 .dark .calendar-dropdown-content,
 .dark .date-picker-dropdown,
 .dark .rdp-root,
-.dark .rdp {
+.dark .rdp,
+.dark [data-radix-popper-content] {
   background-color: hsl(var(--background)) !important;
 }
 
@@ -54,7 +56,7 @@
   text-decoration: underline;
 }
 
-/* Calendar popover style */
+/* Calendar popover style - important for fixing transparency issues */
 [data-radix-popover-content] .rdp {
   background-color: #FFFFFF !important;
   border: 1px solid hsl(var(--border)) !important;
@@ -68,7 +70,8 @@
 }
 
 /* Additional styles for the popover content when it contains a calendar */
-.PopoverContent-calendar {
+.PopoverContent-calendar,
+[data-radix-popover-content] {
   width: auto !important;
   padding: 0 !important;
   background-color: #FFFFFF !important;
@@ -78,7 +81,8 @@
   opacity: 1 !important;
 }
 
-.dark .PopoverContent-calendar {
+.dark .PopoverContent-calendar,
+.dark [data-radix-popover-content] {
   background-color: hsl(var(--background)) !important;
 }
 
@@ -92,5 +96,52 @@ input[type="date"] {
 }
 
 .dark input[type="date"] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Fix for any calendar-related popover content */
+[data-radix-popper-content] {
+  background-color: #FFFFFF !important;
+  backdrop-filter: none !important;
+}
+
+.dark [data-radix-popper-content] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Additional specific fixes for contact form date picker and event form calendar */
+.contact-form [data-radix-popper-content],
+.event-form [data-radix-popper-content] {
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+}
+
+.dark .contact-form [data-radix-popper-content],
+.dark .event-form [data-radix-popper-content] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Ensure all calendar cells have proper background */
+.rdp-months,
+.rdp-month,
+.rdp-table,
+.rdp-tbody,
+.rdp-tfoot,
+.rdp-head,
+.rdp-head_row,
+.rdp-days,
+.rdp-day_selected,
+.rdp-day_today,
+.rdp-day {
+  background-color: transparent !important;
+}
+
+/* Calendar container background */
+.rdp {
+  background-color: #FFFFFF !important;
+}
+
+.dark .rdp {
   background-color: hsl(var(--background)) !important;
 }

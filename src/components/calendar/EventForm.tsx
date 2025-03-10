@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
@@ -219,7 +218,7 @@ const EventForm: React.FC<EventFormProps> = ({
           </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 event-form">
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Title */}
                 <FormField
@@ -229,7 +228,7 @@ const EventForm: React.FC<EventFormProps> = ({
                     <FormItem className="md:col-span-2">
                       <FormLabel>Titre</FormLabel>
                       <FormControl>
-                        <Input placeholder="Titre du rendez-vous" {...field} />
+                        <Input placeholder="Titre du rendez-vous" {...field} className="bg-white dark:bg-gray-950" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -249,7 +248,7 @@ const EventForm: React.FC<EventFormProps> = ({
                             <Button
                               variant={"outline"}
                               className={cn(
-                                "w-full pl-3 text-left font-normal",
+                                "w-full pl-3 text-left font-normal bg-white dark:bg-gray-950",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -262,14 +261,14 @@ const EventForm: React.FC<EventFormProps> = ({
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
+                        <PopoverContent className="w-auto p-0 bg-white dark:bg-gray-950" align="start">
                           <Calendar
                             mode="single"
                             selected={field.value}
                             onSelect={field.onChange}
                             initialFocus
                             locale={fr}
-                            className={cn("p-3 pointer-events-auto")}
+                            className="p-3 pointer-events-auto bg-white dark:bg-gray-950 border-0"
                           />
                         </PopoverContent>
                       </Popover>
@@ -290,11 +289,11 @@ const EventForm: React.FC<EventFormProps> = ({
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="bg-white dark:bg-gray-950">
                             <SelectValue placeholder="Type de rendez-vous" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="bg-white dark:bg-gray-950">
                           {Object.entries(EVENT_TYPES).map(([type, info]) => (
                             <SelectItem key={type} value={type}>
                               <div className="flex items-center gap-2">
@@ -320,7 +319,7 @@ const EventForm: React.FC<EventFormProps> = ({
                       <div className="flex items-center space-x-2">
                         <Clock className="h-4 w-4 text-muted-foreground" />
                         <FormControl>
-                          <Input type="time" {...field} />
+                          <Input type="time" {...field} className="bg-white dark:bg-gray-950" />
                         </FormControl>
                       </div>
                       <FormMessage />
@@ -338,7 +337,7 @@ const EventForm: React.FC<EventFormProps> = ({
                       <div className="flex items-center space-x-2">
                         <Clock className="h-4 w-4 text-muted-foreground" />
                         <FormControl>
-                          <Input type="time" {...field} />
+                          <Input type="time" {...field} className="bg-white dark:bg-gray-950" />
                         </FormControl>
                       </div>
                       <FormMessage />
@@ -356,7 +355,7 @@ const EventForm: React.FC<EventFormProps> = ({
                       <div className="flex items-center space-x-2">
                         <MapPin className="h-4 w-4 text-muted-foreground" />
                         <FormControl>
-                          <Input placeholder="Lieu du rendez-vous" {...field} />
+                          <Input placeholder="Lieu du rendez-vous" {...field} className="bg-white dark:bg-gray-950" />
                         </FormControl>
                       </div>
                       <FormMessage />
@@ -378,11 +377,11 @@ const EventForm: React.FC<EventFormProps> = ({
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-white dark:bg-gray-950">
                               <SelectValue placeholder="Sélectionner un contact" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="bg-white dark:bg-gray-950">
                             {contacts?.map((contact: Contact) => (
                               <SelectItem key={contact.id} value={contact.id}>
                                 {contact.firstName} {contact.lastName} {contact.company ? `(${contact.company})` : ''}
@@ -406,7 +405,7 @@ const EventForm: React.FC<EventFormProps> = ({
                       <FormControl>
                         <Textarea 
                           placeholder="Description du rendez-vous" 
-                          className="resize-none" 
+                          className="resize-none bg-white dark:bg-gray-950" 
                           {...field} 
                         />
                       </FormControl>
@@ -447,11 +446,11 @@ const EventForm: React.FC<EventFormProps> = ({
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-white dark:bg-gray-950">
                               <SelectValue placeholder="Type de rappel" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="bg-white dark:bg-gray-950">
                             <SelectItem value="email">Email</SelectItem>
                             <SelectItem value="sms">SMS</SelectItem>
                             <SelectItem value="whatsapp">WhatsApp</SelectItem>
@@ -481,7 +480,7 @@ const EventForm: React.FC<EventFormProps> = ({
                     type="button" 
                     variant="outline" 
                     onClick={() => onOpenChange(false)}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 bg-white dark:bg-gray-950"
                   >
                     <X className="h-4 w-4" /> Annuler
                   </Button>

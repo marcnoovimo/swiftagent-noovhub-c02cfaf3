@@ -78,7 +78,8 @@
 }
 
 /* Calendar popup specific */
-.rdp {
+.rdp,
+[data-radix-popper-content] {
   z-index: 99999 !important;
   background-color: #FFFFFF !important;
   opacity: 1 !important;
@@ -93,7 +94,7 @@
 .rdp-table,
 .rdp-tbody,
 .rdp-tfoot {
-  background-color: #FFFFFF !important;
+  background-color: transparent !important;
   border-radius: 12px !important;
   opacity: 1 !important;
 }
@@ -118,7 +119,8 @@
 [data-radix-portal] [role="listbox"],
 [data-radix-portal] .calendar-content,
 [data-radix-portal] .select-content,
-[data-radix-portal] .popover-content {
+[data-radix-portal] .popover-content,
+[data-radix-popper-content] {
   background-color: #FFFFFF !important;
   backdrop-filter: none !important;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
@@ -133,7 +135,8 @@
 .dark [data-radix-portal] [role="listbox"],
 .dark [data-radix-portal] .calendar-content,
 .dark [data-radix-portal] .select-content,
-.dark [data-radix-portal] .popover-content {
+.dark [data-radix-portal] .popover-content,
+.dark [data-radix-popper-content] {
   background-color: hsl(var(--background)) !important;
 }
 
@@ -164,19 +167,19 @@ input[type="time"] {
 /* Month/year navigation in calendars */
 .rdp-nav,
 .rdp-caption {
-  background-color: #FFFFFF !important;
+  background-color: transparent !important;
   opacity: 1 !important;
 }
 
 .dark .rdp-nav,
 .dark .rdp-caption {
-  background-color: hsl(var(--background)) !important;
+  background-color: transparent !important;
 }
 
 /* Calendar footer styles */
 .rdp-nav,
 .rdp-footer {
-  background-color: #FFFFFF !important;
+  background-color: transparent !important;
   opacity: 1 !important;
   display: flex;
   justify-content: space-between;
@@ -185,7 +188,7 @@ input[type="time"] {
 }
 
 .dark .rdp-footer {
-  background-color: hsl(var(--background)) !important;
+  background-color: transparent !important;
 }
 
 .rdp-button_reset {
@@ -196,4 +199,17 @@ input[type="time"] {
 .rdp-button_reset:hover {
   text-decoration: underline;
   background: transparent;
+}
+
+/* Fix for contact form and event form popover content */
+.contact-form [data-radix-popper-content],
+.event-form [data-radix-popper-content] {
+  background-color: #FFFFFF !important;
+  backdrop-filter: none !important;
+  opacity: 1 !important;
+}
+
+.dark .contact-form [data-radix-popper-content],
+.dark .event-form [data-radix-popper-content] {
+  background-color: hsl(var(--background)) !important;
 }

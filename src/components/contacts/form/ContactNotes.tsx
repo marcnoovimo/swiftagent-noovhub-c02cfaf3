@@ -1,33 +1,28 @@
+
 import React from 'react';
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { UseFormReturn } from 'react-hook-form';
-import { ContactFormValues } from './types';
-import '@/styles/forms.css'; // Direct import of form styles
+import { Label } from '@/components/ui/label';
+import { ContactFormData } from './types';
 
 interface ContactNotesProps {
-  form: UseFormReturn<ContactFormValues>;
+  formData: ContactFormData;
+  onChangeField: (id: string, value: any) => void;
 }
 
-const ContactNotes: React.FC<ContactNotesProps> = ({ form }) => {
+const ContactNotes: React.FC<ContactNotesProps> = ({ formData, onChangeField }) => {
   return (
-    <FormField
-      control={form.control}
-      name="notes"
-      render={({ field }) => (
-        <FormItem className="md:col-span-2">
-          <FormLabel>Notes</FormLabel>
-          <FormControl>
-            <Textarea 
-              placeholder="Informations complémentaires sur ce contact..." 
-              className="resize-none" 
-              {...field} 
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="notes">Notes</Label>
+        <Textarea 
+          id="notes" 
+          value={formData.notes} 
+          onChange={(e) => onChangeField('notes', e.target.value)}
+          placeholder="Notes additionnelles sur le contact"
+          className="min-h-[150px] bg-white dark:bg-gray-950"
+        />
+      </div>
+    </div>
   );
 };
 

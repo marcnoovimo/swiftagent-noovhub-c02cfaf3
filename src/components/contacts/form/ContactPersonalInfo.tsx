@@ -71,7 +71,7 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
         </Select>
       </div>
       
-      <div className="space-y-2">
+      <div className="space-y-2 contact-form">
         <Label htmlFor="dateOfBirth" className="flex items-center gap-2">
           <CalendarIcon size={16} /> Date de naissance
         </Label>
@@ -89,14 +89,14 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto p-0 bg-white dark:bg-gray-950 border-border" align="start">
             <Calendar
               mode="single"
               selected={formData.dateOfBirth}
               onSelect={onDateOfBirthChange}
               initialFocus
               disabled={(date) => date > new Date()}
-              className="bg-white dark:bg-gray-950 border border-solid border-border rounded-xl shadow-lg"
+              className="p-3 pointer-events-auto bg-white dark:bg-gray-950 border-0"
             />
           </PopoverContent>
         </Popover>
