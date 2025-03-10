@@ -81,6 +81,8 @@
   .radix-sheet-content {
     background-color: hsl(var(--background)) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+    backdrop-filter: none !important;
+    opacity: 1 !important;
   }
   
   /* Fix for Dialog, Sheet, Popover components */

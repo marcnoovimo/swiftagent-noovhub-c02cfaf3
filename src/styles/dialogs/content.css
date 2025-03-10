@@ -30,6 +30,7 @@
   overflow: visible !important;
   z-index: 99960 !important;
   opacity: 1 !important;
+  backdrop-filter: none !important;
 }
 
 .dark .document-upload-dialog {

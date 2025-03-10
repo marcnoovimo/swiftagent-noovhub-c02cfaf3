@@ -31,7 +31,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
           boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
           border: "1px solid hsl(var(--border))",
           borderRadius: "16px",
-          overflow: "visible", // Pour s'assurer que le contenu est visible
+          overflow: "visible",
           width: isMobile ? 'calc(100vw - 32px)' : 'auto'
         }}
       >
