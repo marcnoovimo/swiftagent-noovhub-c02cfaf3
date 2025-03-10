@@ -1,4 +1,3 @@
-
 /* Calendar dropdown styling */
 .calendar-dropdown-content,
 .date-picker-dropdown,
@@ -11,6 +10,7 @@
   border-radius: 12px !important;
   opacity: 1 !important;
   z-index: 99999 !important;
+  backdrop-filter: none !important;
 }
 
 .dark .calendar-dropdown-content,
@@ -169,4 +169,43 @@ input[type="date"] {
 .rdp-nav, 
 .rdp-caption {
   opacity: 1 !important;
+}
+
+/* Fix for calendar elements - ensure solid white background */
+.rdp *,
+.calendar *,
+[data-radix-popper-content] * {
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* Force solid background on date picker inputs */
+input[type="date"],
+.rdp-button,
+.rdp-day,
+.rdp-nav_button {
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+.dark input[type="date"],
+.dark .rdp-button,
+.dark .rdp-day,
+.dark .rdp-nav_button {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Fix specifically for birthday selector and other date pickers */
+.contact-form [data-radix-popper-content],
+.event-form [data-radix-popper-content] {
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+}
+
+.dark .contact-form [data-radix-popper-content],
+.dark .event-form [data-radix-popper-content] {
+  background-color: hsl(var(--background)) !important;
 }

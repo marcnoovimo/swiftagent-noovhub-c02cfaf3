@@ -7,14 +7,33 @@ import { fr } from "date-fns/locale"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  onResetClick?: () => void;
+}
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  onResetClick,
   ...props
 }: CalendarProps) {
+  const handleReset = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onResetClick) {
+      onResetClick();
+    } else if (props.mode === "single" && props.onSelect) {
+      props.onSelect(undefined);
+    }
+  };
+
+  const handleToday = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (props.mode === "single" && props.onSelect) {
+      props.onSelect(new Date());
+    }
+  };
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -60,16 +79,16 @@ function Calendar({
       }}
       footer={
         <div className="rdp-footer flex justify-between p-2 border-t border-gray-200 dark:border-gray-700 mt-2">
-          <button onClick={(e) => {
-            e.preventDefault();
-            if (props.onResetClick) props.onResetClick();
-          }} className="text-sm text-primary hover:underline">
+          <button 
+            onClick={handleReset}
+            className="text-sm text-primary hover:underline"
+          >
             Effacer
           </button>
-          <button onClick={(e) => {
-            e.preventDefault();
-            if (props.selected && props.onSelect) props.onSelect(new Date());
-          }} className="text-sm text-primary hover:underline">
+          <button 
+            onClick={handleToday}
+            className="text-sm text-primary hover:underline"
+          >
             Aujourd'hui
           </button>
         </div>
