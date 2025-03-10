@@ -1,7 +1,7 @@
 
 /* Z-index management */
 .dropdown-content {
-  z-index: 50 !important;
+  z-index: 99950 !important;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
   background-color: hsl(var(--background)) !important;
 }
@@ -10,42 +10,42 @@
   max-width: 90vw !important;
   max-height: 85vh !important;
   overflow-y: auto !important;
-  z-index: 100 !important;
+  z-index: 99960 !important;
   background-color: hsl(var(--background)) !important;
   border-radius: var(--radius);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
 }
 
 .popover-content {
-  z-index: 40 !important;
+  z-index: 99950 !important;
   background-color: hsl(var(--background)) !important;
 }
 
 .toast-viewport {
-  z-index: 200 !important;
+  z-index: 99970 !important;
 }
 
 .custom-tooltip {
-  z-index: 60;
+  z-index: 99960 !important;
 }
 
 /* General z-index hierarchy */
 .modal, .dialog, .popover {
-  z-index: 100;
+  z-index: 99950 !important;
   background-color: hsl(var(--background)) !important;
 }
 
 .toast {
-  z-index: 200;
+  z-index: 99970 !important;
 }
 
 .tooltip {
-  z-index: 300;
+  z-index: 99980 !important;
 }
 
 /* Fix for all radix dialog portals */
 [data-radix-portal] {
-  z-index: 9999;
+  z-index: 99990 !important;
 }
 
 [data-radix-portal] > * {
@@ -57,4 +57,25 @@
   border: 1px solid hsl(var(--border)) !important;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
   border-radius: 12px !important;
+  opacity: 1 !important;
+}
+
+/* Specific z-index fixes for select and dropdown components */
+[role="listbox"],
+[role="menu"] {
+  z-index: 99999 !important;
+}
+
+/* Calendar popup specific */
+.rdp {
+  z-index: 99999 !important;
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Ensure modals are visible in mobile */
+@media (max-width: 640px) {
+  [data-radix-portal] {
+    z-index: 99999 !important;
+  }
 }
