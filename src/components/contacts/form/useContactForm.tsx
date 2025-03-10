@@ -1,71 +1,75 @@
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { contactFormSchema, ContactFormValues } from './types';
+import { useState } from 'react';
+import { format } from 'date-fns';
+import { ContactFormData } from './types';
 import { Contact } from '@/types/contact';
-import { useToast } from '@/hooks/use-toast';
 
-interface UseContactFormProps {
-  onSave?: (contact: Omit<Contact, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  onClose: () => void;
-}
-
-export const useContactForm = ({ onSave, onClose }: UseContactFormProps) => {
-  const { toast } = useToast();
-  
-  const form = useForm<ContactFormValues>({
-    resolver: zodResolver(contactFormSchema),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      emailPro: '',
-      phone: '',
-      mobile: '',
-      company: '',
-      position: '',
-      address: '',
-      city: '',
-      notes: '',
-      category: 'prospect',
-      tags: [],
-      source: 'manual',
-    },
+export const useContactForm = (contact?: Contact) => {
+  const [formData, setFormData] = useState<ContactFormData>({
+    firstName: contact?.firstName || '',
+    lastName: contact?.lastName || '',
+    email: contact?.email || '',
+    emailPro: contact?.emailPro || '',
+    phone: contact?.phone || '',
+    mobile: contact?.mobile || '',
+    company: contact?.company || '',
+    position: contact?.position || '',
+    address: contact?.address || '',
+    city: contact?.city || '',
+    notes: contact?.notes || '',
+    category: contact?.category || 'client',
+    tags: contact?.tags || [],
+    dateOfBirth: contact?.dateOfBirth ? new Date(contact.dateOfBirth) : undefined,
+    gender: contact?.gender || 'other',
   });
 
-  const onSubmit = (data: ContactFormValues) => {
-    // Convert form values to the expected Contact type (without id/createdAt/updatedAt)
-    const contactData: Omit<Contact, 'id' | 'createdAt' | 'updatedAt'> = {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email || undefined,
-      emailPro: data.emailPro || undefined,
-      phone: data.phone,
-      mobile: data.mobile,
-      company: data.company,
-      position: data.position,
-      address: data.address,
-      city: data.city,
-      notes: data.notes,
-      category: data.category,
-      tags: data.tags,
-      source: data.source,
-      photo: data.photo,
+  const [newTag, setNewTag] = useState('');
+
+  const handleChange = (id: string, value: any) => {
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setFormData(prev => ({ ...prev, category: value as any }));
+  };
+
+  const handleGenderChange = (value: string) => {
+    setFormData(prev => ({ ...prev, gender: value as any }));
+  };
+
+  const handleDateOfBirthChange = (date: Date | undefined) => {
+    setFormData(prev => ({ ...prev, dateOfBirth: date }));
+  };
+
+  const handleAddTag = () => {
+    if (newTag.trim() && !formData.tags.includes(newTag.trim())) {
+      setFormData(prev => ({ ...prev, tags: [...prev.tags, newTag.trim()] }));
+      setNewTag('');
+    }
+  };
+
+  const handleRemoveTag = (tag: string) => {
+    setFormData(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tag) }));
+  };
+
+  const prepareDataForSubmission = () => {
+    // Format de la date pour l'API
+    return {
+      ...formData,
+      dateOfBirth: formData.dateOfBirth ? format(formData.dateOfBirth, 'yyyy-MM-dd') : undefined,
     };
-    
-    onSave?.(contactData);
-    
-    toast({
-      title: "Contact créé",
-      description: `${data.firstName} ${data.lastName} a été ajouté au répertoire.`,
-    });
-    
-    form.reset();
-    onClose();
   };
 
   return {
-    form,
-    onSubmit
+    formData,
+    newTag,
+    setNewTag,
+    handleChange,
+    handleCategoryChange,
+    handleGenderChange,
+    handleDateOfBirthChange,
+    handleAddTag,
+    handleRemoveTag,
+    prepareDataForSubmission
   };
 };
