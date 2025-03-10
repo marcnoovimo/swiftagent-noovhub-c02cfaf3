@@ -1,13 +1,11 @@
 
 import { useState, useEffect } from 'react';
-import { useDashboardStatsQuery } from '@/services/dashboardStatsService';
+import { getDashboardStats } from '@/services/dashboardStatsService';
 
 export const useStatsSynthesisData = () => {
   const [timeFilter, setTimeFilter] = useState('thisMonth');
-  const { 
-    data: statsData, 
-    isLoading 
-  } = useDashboardStatsQuery(timeFilter);
+  const [isLoading, setIsLoading] = useState(true);
+  const [statsData, setStatsData] = useState(null);
   
   const [synthesisData, setSynthesisData] = useState({
     transactions: 0,
@@ -17,21 +15,33 @@ export const useStatsSynthesisData = () => {
   });
 
   useEffect(() => {
-    if (statsData) {
-      // Calculate synthesis data
-      const transactions = statsData.transactions.count || 0;
-      const revenue = statsData.revenue.total || 0;
-      const averageTransaction = transactions > 0 ? revenue / transactions : 0;
-      const averageCommission = statsData.commissions.average || 0;
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getDashboardStats(timeFilter);
+        setStatsData(data);
+        
+        // Calculate synthesis data
+        const transactions = data?.transactions?.count || 0;
+        const revenue = data?.revenue?.total || 0;
+        const averageTransaction = transactions > 0 ? revenue / transactions : 0;
+        const averageCommission = data?.commissions?.average || 0;
 
-      setSynthesisData({
-        transactions,
-        revenue,
-        averageTransaction,
-        averageCommission
-      });
-    }
-  }, [statsData]);
+        setSynthesisData({
+          transactions,
+          revenue,
+          averageTransaction,
+          averageCommission
+        });
+      } catch (error) {
+        console.error("Error fetching dashboard stats:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, [timeFilter]);
 
   return {
     synthesisData,

@@ -1,19 +1,19 @@
 
 import React from 'react';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from "@/components/ui/textarea";
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tags } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import { ContactFormData } from './types';
 
-interface ContactAdditionalInfoProps {
+export interface ContactAdditionalInfoProps {
   formData: ContactFormData;
   onChangeField: (id: string, value: any) => void;
   newTag: string;
   setNewTag: (tag: string) => void;
   onAddTag: () => void;
   onRemoveTag: (tag: string) => void;
+  isMobile: boolean;
 }
 
 const ContactAdditionalInfo: React.FC<ContactAdditionalInfoProps> = ({
@@ -22,54 +22,67 @@ const ContactAdditionalInfo: React.FC<ContactAdditionalInfoProps> = ({
   newTag,
   setNewTag,
   onAddTag,
-  onRemoveTag
+  onRemoveTag,
+  isMobile
 }) => {
   return (
     <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="tags" className="flex items-center gap-2">
-          <Tags size={16} /> Tags
-        </Label>
+      <div>
+        <h3 className={`font-medium ${isMobile ? 'text-sm mb-2' : 'text-base mb-3'}`}>Tags</h3>
+        <div className="flex flex-wrap gap-2 mb-2">
+          {formData.tags && formData.tags.map((tag: string) => (
+            <Badge 
+              key={tag} 
+              variant="secondary"
+              className="flex items-center gap-1 px-2 py-1"
+            >
+              {tag}
+              <button 
+                onClick={() => onRemoveTag(tag)}
+                className="ml-1 p-0.5 hover:bg-gray-200 rounded-full"
+              >
+                <X size={14} />
+              </button>
+            </Badge>
+          ))}
+        </div>
         <div className="flex gap-2">
-          <Input 
-            id="newTag"
+          <Input
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
             placeholder="Ajouter un tag"
-            className="bg-white dark:bg-gray-950"
+            className={`${isMobile ? 'text-sm' : 'text-base'}`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                onAddTag();
+              }
+            }}
           />
-          <Button type="button" onClick={onAddTag} className="flex-shrink-0">
-            Ajouter
+          <Button 
+            onClick={onAddTag} 
+            type="button" 
+            variant="outline" 
+            size="sm"
+            className="px-2"
+          >
+            <Plus size={18} />
           </Button>
         </div>
-        
-        <div className="flex flex-wrap gap-2 mt-2">
-          {formData.tags.map((tag, index) => (
-            <div key={index} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm flex items-center gap-1">
-              {tag}
-              <button 
-                type="button" 
-                onClick={() => onRemoveTag(tag)}
-                className="text-secondary-foreground/70 hover:text-secondary-foreground"
-              >
-                &times;
-              </button>
-            </div>
-          ))}
-        </div>
       </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="notes" className="flex items-center gap-2">
-          Notes
-        </Label>
-        <Textarea 
-          id="notes"
-          value={formData.notes}
-          onChange={(e) => onChangeField('notes', e.target.value)}
-          placeholder="Notes et informations supplémentaires sur le contact"
-          className="min-h-[120px] bg-white dark:bg-gray-950"
-        />
+
+      <div className="space-y-4">
+        <div>
+          <h3 className={`font-medium ${isMobile ? 'text-sm mb-2' : 'text-base mb-3'}`}>Notes</h3>
+          <textarea
+            id="notes"
+            value={formData.notes || ''}
+            onChange={(e) => onChangeField('notes', e.target.value)}
+            rows={6}
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-noovimo-500"
+            placeholder="Ajouter des notes concernant ce contact"
+          />
+        </div>
       </div>
     </div>
   );
