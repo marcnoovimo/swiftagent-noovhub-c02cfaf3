@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { X, User, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { EmailContact } from '../types/email';
+import { EmailContact } from '../../types/email';
 
 interface EmailContactSelectorProps {
   contacts: EmailContact[];
@@ -24,8 +23,8 @@ const EmailContactSelector = ({
   const filteredContacts = contacts.filter(contact => {
     const query = contactSearchQuery.toLowerCase();
     return (
-      contact.firstName.toLowerCase().includes(query) ||
-      contact.lastName.toLowerCase().includes(query) ||
+      contact.firstName?.toLowerCase().includes(query) ||
+      contact.lastName?.toLowerCase().includes(query) ||
       contact.email.toLowerCase().includes(query)
     );
   });

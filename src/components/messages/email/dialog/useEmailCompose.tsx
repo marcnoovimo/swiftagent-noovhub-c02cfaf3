@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { EmailContact, Email } from '../types/email';
+import { Email } from '../../types/email';
 
 export const useEmailCompose = (onSend: (emailData: Partial<Email>) => void) => {
   const [subject, setSubject] = useState('');

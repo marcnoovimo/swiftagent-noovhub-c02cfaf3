@@ -24,13 +24,41 @@ const Stats = () => {
     refetch();
   }, [refetch]);
 
-  // Get memoized synthesis card data from custom hook
-  const synthesisCardData = useStatsSynthesisData(stats, isMobile);
+  // Get synthesis data from custom hook
+  const { synthesisData, isLoading: isSynthesisLoading } = useStatsSynthesisData();
   
-  // Additional card data is kept in the hook for potential future use
-  // but not displayed in the UI as per latest requirements
+  // Convert synthesisData to array format expected by SynthesisSection
+  const synthesisCardData = [
+    {
+      title: "Transactions",
+      value: synthesisData.transactions,
+      change: 0,
+      trend: "stable",
+    },
+    {
+      title: "Chiffre d'affaires",
+      value: synthesisData.revenue,
+      format: "currency",
+      change: 0,
+      trend: "stable",
+    },
+    {
+      title: "Montant moyen",
+      value: synthesisData.averageTransaction,
+      format: "currency",
+      change: 0,
+      trend: "stable",
+    },
+    {
+      title: "Commission moyenne",
+      value: synthesisData.averageCommission,
+      format: "currency",
+      change: 0,
+      trend: "stable",
+    }
+  ];
 
-  if (isLoading || !stats) {
+  if (isLoading || !stats || isSynthesisLoading) {
     return <StatsLoading />;
   }
 

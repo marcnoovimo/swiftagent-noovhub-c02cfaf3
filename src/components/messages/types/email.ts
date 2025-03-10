@@ -13,7 +13,7 @@ export interface EmailContact {
   avatar?: string;
   role?: string;
   department?: string;
-  // Propriétés additionnelles pour la compatibilité avec les composants existants
+  // Additional properties for compatibility with existing components
   firstName?: string;
   lastName?: string;
   company?: string;
@@ -22,6 +22,12 @@ export interface EmailContact {
   lastContact?: string;
   notes?: string;
   unread?: number;
+  address?: string;
+  communicationHistory?: Array<{
+    type: string;
+    date: string;
+    summary: string;
+  }>;
 }
 
 export interface EmailFolder {
@@ -30,12 +36,14 @@ export interface EmailFolder {
   count?: number;
   icon?: string;
   unread?: number;
+  isDefault?: boolean;
+  color?: string;
 }
 
 export interface EmailAttachment {
-  id: string;
+  id?: string;
   name: string;
-  size: number; // In bytes
+  size: string | number;
   type: string;
   url?: string;
 }
@@ -43,19 +51,19 @@ export interface EmailAttachment {
 export interface Email {
   id: string;
   subject: string;
-  body: string;
+  body?: string;
   content?: string; // Alternative for body for some components
   from: EmailAddress;
-  to: EmailAddress[];
-  cc?: EmailAddress[];
-  bcc?: EmailAddress[];
+  to: string[] | EmailAddress[];
+  cc?: string[] | EmailAddress[];
+  bcc?: string[] | EmailAddress[];
   attachments?: EmailAttachment[];
   hasAttachments?: boolean;
-  date: string;
-  timestamp?: number | string;
-  read: boolean;
+  date?: string;
+  timestamp?: string;
+  read?: boolean;
   isRead?: boolean; // Alternative for read property
-  starred: boolean;
+  starred?: boolean;
   isStarred?: boolean; // Alternative for starred property
   labels?: string[];
   folder: string;

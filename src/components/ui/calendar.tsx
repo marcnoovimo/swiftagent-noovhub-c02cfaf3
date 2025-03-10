@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { DayPicker } from "react-day-picker"
+import { DayPicker, SelectSingleEventHandler } from "react-day-picker"
 import { fr } from "date-fns/locale"
 
 import { cn } from "@/lib/utils"
@@ -23,14 +23,18 @@ function Calendar({
     if (onResetClick) {
       onResetClick();
     } else if (props.mode === "single" && props.onSelect) {
-      props.onSelect(undefined);
+      // Use type assertion to access onSelect property safely
+      const onSelect = props.onSelect as SelectSingleEventHandler;
+      onSelect(undefined);
     }
   };
 
   const handleToday = (e: React.MouseEvent) => {
     e.preventDefault();
     if (props.mode === "single" && props.onSelect) {
-      props.onSelect(new Date());
+      // Use type assertion to access onSelect property safely
+      const onSelect = props.onSelect as SelectSingleEventHandler;
+      onSelect(new Date());
     }
   };
 

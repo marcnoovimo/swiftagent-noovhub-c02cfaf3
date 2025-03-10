@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { X, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { EmailContact } from '../types/email';
+import { EmailContact } from '../../types/email';
 
 interface EmailRecipientFieldProps {
   label: string;

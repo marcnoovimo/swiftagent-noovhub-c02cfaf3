@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import EmailRecipientField from './EmailRecipientField';
 import EmailContactSelector from './EmailContactSelector';
-import { EmailContact } from '../types/email';
+import { EmailContact } from '../../types/email';
 
 interface EmailComposeFormProps {
   recipients: string[];

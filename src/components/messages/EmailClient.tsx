@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import EmailSidebar from './email/EmailSidebar';
 import EmailList from './email/EmailList';
@@ -133,6 +132,7 @@ const EmailClient = () => {
   const [contacts] = useState<EmailContact[]>([
     {
       id: '1',
+      name: 'Jean Dupont',
       firstName: 'Jean',
       lastName: 'Dupont',
       email: 'jean.dupont@gmail.com',
@@ -156,6 +156,7 @@ const EmailClient = () => {
     },
     {
       id: '2',
+      name: 'Marie Martin',
       firstName: 'Marie',
       lastName: 'Martin',
       email: 'marie.martin@outlook.com',
@@ -174,6 +175,7 @@ const EmailClient = () => {
     },
     {
       id: '3',
+      name: 'Philippe Blanc',
       firstName: 'Philippe',
       lastName: 'Blanc',
       email: 'm.blanc@notaires.fr',
@@ -187,6 +189,7 @@ const EmailClient = () => {
     },
     {
       id: '4',
+      name: 'Sophie Leroy',
       firstName: 'Sophie',
       lastName: 'Leroy',
       email: 'sophie.leroy@noovimo.fr',
@@ -199,6 +202,7 @@ const EmailClient = () => {
     },
     {
       id: '5',
+      name: 'Laurent Dubois',
       firstName: 'Laurent',
       lastName: 'Dubois',
       email: 'l.dubois@noovimo.fr',
