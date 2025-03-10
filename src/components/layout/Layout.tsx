@@ -58,6 +58,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           aria-hidden="true"
         />
       )}
+      
+      {/* CSS overlay to ensure all dialogs and menus have proper backgrounds */}
+      <style jsx global>{`
+        [role="dialog"] > div,
+        [data-radix-popper-content-wrapper] > div {
+          background-color: hsl(var(--background)) !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        .radix-dialog-content,
+        .dialog-content,
+        .popover-content,
+        .dropdown-content {
+          background-color: hsl(var(--background)) !important;
+        }
+      `}</style>
     </div>
   );
 };

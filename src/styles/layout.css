@@ -178,6 +178,16 @@ select:focus {
 [data-radix-hover-card-content] {
   background-color: hsl(var(--background)) !important;
   color: hsl(var(--foreground)) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Ensure all dialog backgrounds are solid */
+.sheet-content,
+.drawer-content,
+.dialog-content,
+.popover-content {
+  background-color: hsl(var(--background)) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Ensure floating elements have solid backgrounds */

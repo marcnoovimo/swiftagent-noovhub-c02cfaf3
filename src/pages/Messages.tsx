@@ -41,7 +41,7 @@ const Messages = () => {
           </TabsTrigger>
           <TabsTrigger value="email" className="flex items-center gap-1 text-xs sm:text-sm md:text-base">
             <Mail size={16} className="flex-shrink-0" />
-            <span className="hidden xs:inline truncate">Messagerie Noovimo</span>
+            <span className="hidden xs:inline truncate">Boîte de réception</span>
             <span className="xs:hidden truncate">Emails</span>
           </TabsTrigger>
         </TabsList>

@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Inbox, Send, FileText, Trash, PenSquare, Users, Archive, Star, AlertCircle, Home, Clock } from 'lucide-react';
+import { Inbox, Send, FileText, Trash, PenSquare, Archive, Star, AlertCircle, FolderPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { EmailFolder } from '../types/email';
@@ -18,10 +19,9 @@ const EmailSidebar = ({ activeFolder, setActiveFolder, className = '', onCreateE
     { id: 'inbox', name: 'Boîte de réception', icon: 'inbox', count: 18, unread: 3, isDefault: true },
     { id: 'sent', name: 'Messages envoyés', icon: 'send', count: 32 },
     { id: 'drafts', name: 'Brouillons', icon: 'fileText', count: 4 },
-    { id: 'clients', name: 'Clients', icon: 'users', count: 27, unread: 5, color: 'blue' },
-    { id: 'mandats', name: 'Mandats', icon: 'home', count: 15, color: 'green' },
     { id: 'urgent', name: 'Urgent', icon: 'alert', count: 3, unread: 2, color: 'red' },
     { id: 'archived', name: 'Archives', icon: 'archive', count: 45 },
+    { id: 'new-folder', name: 'Créer un dossier', icon: 'folderPlus', count: 0 },
     { id: 'trash', name: 'Corbeille', icon: 'trash', count: 12 },
   ];
 
@@ -35,13 +35,11 @@ const EmailSidebar = ({ activeFolder, setActiveFolder, className = '', onCreateE
       case 'inbox': return <Inbox {...iconProps} />;
       case 'send': return <Send {...iconProps} />;
       case 'fileText': return <FileText {...iconProps} />;
-      case 'users': return <Users {...iconProps} />;
-      case 'home': return <Home {...iconProps} />;
       case 'alert': return <AlertCircle {...iconProps} />;
       case 'archive': return <Archive {...iconProps} />;
       case 'trash': return <Trash {...iconProps} />;
       case 'star': return <Star {...iconProps} />;
-      case 'clock': return <Clock {...iconProps} />;
+      case 'folderPlus': return <FolderPlus {...iconProps} />;
       default: return <Inbox {...iconProps} />;
     }
   };
@@ -74,7 +72,7 @@ const EmailSidebar = ({ activeFolder, setActiveFolder, className = '', onCreateE
               <span className="text-xs sm:text-sm">{folder.name}</span>
             </div>
             
-            {folder.count !== undefined && (
+            {folder.count !== undefined && folder.count > 0 && (
               <div className="flex items-center">
                 {folder.unread && folder.unread > 0 ? (
                   <Badge variant="default" className="ml-auto text-[10px] h-5 min-w-5 flex items-center justify-center bg-[#d72345]">
