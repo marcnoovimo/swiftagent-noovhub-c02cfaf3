@@ -32,7 +32,7 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="dialog-content sm:max-w-[800px] max-w-[95vw] bg-background">
+      <DialogContent className="dialog-content sm:max-w-[800px] max-w-[95vw] bg-background !bg-white dark:!bg-gray-900">
         <DialogHeader className={`${isMobile ? 'mb-2 space-y-1' : 'mb-4 space-y-2'}`}>
           <DialogTitle className="text-xl font-semibold text-center sm:text-left">{contact ? 'Modifier le contact' : 'Nouveau contact'}</DialogTitle>
           <DialogDescription className="text-center sm:text-left">

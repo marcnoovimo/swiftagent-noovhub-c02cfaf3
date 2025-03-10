@@ -1,47 +1,42 @@
 
-import { useMemo } from 'react';
-import { StatsData } from '@/types/stats';
-import { formatCurrency } from '@/lib/utils';
-import { Building2, FileCheck, FileText, Home, Users } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useDashboardStatsQuery } from '@/services/dashboardStatsService';
 
-interface SynthesisCardData {
-  title: string;
-  value: string | number;
-  icon: React.ReactNode;
-}
+export const useStatsSynthesisData = () => {
+  const [timeFilter, setTimeFilter] = useState('thisMonth');
+  const { 
+    data: statsData, 
+    isLoading 
+  } = useDashboardStatsQuery(timeFilter);
+  
+  const [synthesisData, setSynthesisData] = useState({
+    transactions: 0,
+    revenue: 0,
+    averageTransaction: 0,
+    averageCommission: 0
+  });
 
-export const useStatsSynthesisData = (stats: StatsData | undefined, isMobile: boolean): SynthesisCardData[] => {
-  const synthesisCardData = useMemo(() => {
-    if (!stats) return [];
-    
-    return [
-      {
-        title: "Unités de ventes avants contrats",
-        value: stats.totalCompromis,
-        icon: <Building2 size={isMobile ? 14 : 16} className="text-noovimo-500" />
-      },
-      {
-        title: "Unités de ventes actés",
-        value: stats.totalSales,
-        icon: <Home size={isMobile ? 14 : 16} className="text-noovimo-500" />
-      },
-      {
-        title: "Honoraires compromis",
-        value: formatCurrency(stats.totalVolume * 0.05), // Estimation des honoraires sur compromis
-        icon: <FileCheck size={isMobile ? 14 : 16} className="text-noovimo-500" />
-      },
-      {
-        title: "Honoraires actés",
-        value: formatCurrency(stats.totalCommission),
-        icon: <FileText size={isMobile ? 14 : 16} className="text-noovimo-500" />
-      },
-      {
-        title: "Commissions agents",
-        value: formatCurrency(stats.totalCommission * 0.7), // Estimation des commissions agents
-        icon: <Users size={isMobile ? 14 : 16} className="text-noovimo-500" />
-      }
-    ];
-  }, [stats, isMobile]);
+  useEffect(() => {
+    if (statsData) {
+      // Calculate synthesis data
+      const transactions = statsData.transactions.count || 0;
+      const revenue = statsData.revenue.total || 0;
+      const averageTransaction = transactions > 0 ? revenue / transactions : 0;
+      const averageCommission = statsData.commissions.average || 0;
 
-  return synthesisCardData;
+      setSynthesisData({
+        transactions,
+        revenue,
+        averageTransaction,
+        averageCommission
+      });
+    }
+  }, [statsData]);
+
+  return {
+    synthesisData,
+    isLoading,
+    timeFilter,
+    setTimeFilter
+  };
 };
