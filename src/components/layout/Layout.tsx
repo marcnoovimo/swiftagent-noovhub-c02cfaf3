@@ -60,7 +60,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       )}
       
       {/* CSS overlay to ensure all dialogs and menus have proper backgrounds */}
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{
+        __html: `
         [role="dialog"] > div,
         [data-radix-popper-content-wrapper] > div {
           background-color: hsl(var(--background)) !important;
@@ -73,7 +74,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         .dropdown-content {
           background-color: hsl(var(--background)) !important;
         }
-      `}</style>
+      `}} />
     </div>
   );
 };
