@@ -22,7 +22,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={`document-upload-dialog ${isMobile ? 'max-w-[95vw] p-4' : 'sm:max-w-[425px] p-6'}`}>
+      <DialogContent className="document-upload-dialog">
         <DialogHeader className="border-b pb-4 mb-4">
           <DialogTitle className="text-xl font-semibold">Ajouter un document</DialogTitle>
           <DialogDescription className="text-sm mt-1 text-muted-foreground">

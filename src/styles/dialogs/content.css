@@ -31,10 +31,19 @@
   z-index: 99960 !important;
   opacity: 1 !important;
   backdrop-filter: none !important;
-  max-width: 90vw !important;
+  max-width: 425px !important;
   max-height: 85vh !important;
+  padding: 24px !important;
 }
 
 .dark .document-upload-dialog {
   background-color: hsl(var(--background)) !important;
+}
+
+/* Mobile styles for document upload dialog */
+@media (max-width: 640px) {
+  .document-upload-dialog {
+    max-width: 95vw !important;
+    padding: 16px !important;
+  }
 }

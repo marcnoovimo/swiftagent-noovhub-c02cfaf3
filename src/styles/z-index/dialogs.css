@@ -18,3 +18,11 @@
 .dark .document-upload-dialog {
   background-color: hsl(var(--background)) !important;
 }
+
+/* Mobile styles for dialogs */
+@media (max-width: 640px) {
+  .document-upload-dialog {
+    max-width: 95vw !important;
+    padding: 16px !important;
+  }
+}
