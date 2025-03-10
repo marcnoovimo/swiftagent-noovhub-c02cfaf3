@@ -1,0 +1,94 @@
+
+/* Select dropdown styles */
+[data-radix-select-content] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  z-index: 99999 !important;
+  opacity: 1 !important;
+}
+
+.dark [data-radix-select-content] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Fix for Select content - ensure always visible */
+.SelectContent {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  opacity: 1 !important;
+  z-index: 99999 !important;
+  max-height: 300px !important;
+}
+
+.dark .SelectContent {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Make sure select items are clearly visible */
+[data-radix-select-content] [role="option"] {
+  padding: 10px 12px !important;
+  margin: 2px !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+  background-color: #FFFFFF !important;
+}
+
+.dark [data-radix-select-content] [role="option"] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Selected item in dropdown */
+[data-radix-select-content] [data-state="checked"] {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+  font-weight: 500 !important;
+}
+
+.dark [data-radix-select-content] [data-state="checked"] {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Type selector dropdown in calendar form */
+.type-select-dropdown {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  z-index: 99999 !important;
+  opacity: 1 !important;
+}
+
+.dark .type-select-dropdown {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Contact selector dropdown in calendar form */
+.contact-select-dropdown {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  z-index: 99999 !important;
+  opacity: 1 !important;
+}
+
+.dark .contact-select-dropdown {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* All select popover content */
+.select-content {
+  z-index: 99999 !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+}
+
+.dark .select-content {
+  background-color: hsl(var(--background)) !important;
+}

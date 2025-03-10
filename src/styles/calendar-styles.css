@@ -1,0 +1,96 @@
+
+/* Calendar dropdown styling */
+.calendar-dropdown-content,
+.date-picker-dropdown,
+.rdp-root,
+.rdp {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+  z-index: 99999 !important;
+}
+
+.dark .calendar-dropdown-content,
+.dark .date-picker-dropdown,
+.dark .rdp-root,
+.dark .rdp {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Calendar inside popover */
+.popover-content .rdp,
+.dialog-content .rdp {
+  background-color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.dark .popover-content .rdp,
+.dark .dialog-content .rdp {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Calendar popup footer */
+.rdp-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid hsl(var(--border));
+  margin-top: 8px;
+}
+
+.rdp-footer button {
+  background: none;
+  border: none;
+  color: hsl(var(--primary));
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.rdp-footer button:hover {
+  text-decoration: underline;
+}
+
+/* Calendar popover style */
+[data-radix-popover-content] .rdp {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+}
+
+.dark [data-radix-popover-content] .rdp {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Additional styles for the popover content when it contains a calendar */
+.PopoverContent-calendar {
+  width: auto !important;
+  padding: 0 !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+}
+
+.dark .PopoverContent-calendar {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Date picker input styles */
+input[type="date"] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  opacity: 1 !important;
+}
+
+.dark input[type="date"] {
+  background-color: hsl(var(--background)) !important;
+}
