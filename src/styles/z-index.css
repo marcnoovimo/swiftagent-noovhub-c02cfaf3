@@ -172,3 +172,28 @@ input[type="time"] {
 .dark .rdp-caption {
   background-color: hsl(var(--background)) !important;
 }
+
+/* Calendar footer styles */
+.rdp-nav,
+.rdp-footer {
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.dark .rdp-footer {
+  background-color: hsl(var(--background)) !important;
+}
+
+.rdp-button_reset {
+  font-size: 14px;
+  color: hsl(var(--primary));
+}
+
+.rdp-button_reset:hover {
+  text-decoration: underline;
+  background: transparent;
+}

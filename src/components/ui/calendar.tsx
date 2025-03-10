@@ -18,7 +18,7 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3 pointer-events-auto bg-white border border-solid border-border rounded-xl shadow-lg", className)}
+      className={cn("p-3 pointer-events-auto bg-white dark:bg-gray-950 border border-solid border-border rounded-xl shadow-lg", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
@@ -58,6 +58,24 @@ function Calendar({
         IconRight: ({ ..._props }) => <ChevronRight className="h-4 w-4" />,
       }}
       locale={fr}
+      footer={
+        <div className="flex justify-between mt-2 pt-2 border-t border-border">
+          <button 
+            type="button" 
+            className="text-sm text-primary hover:underline"
+            onClick={() => props.onSelect?.(undefined)}
+          >
+            Effacer
+          </button>
+          <button 
+            type="button" 
+            className="text-sm text-primary hover:underline"
+            onClick={() => props.onSelect?.(new Date())}
+          >
+            Aujourd'hui
+          </button>
+        </div>
+      }
       {...props}
     />
   );

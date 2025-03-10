@@ -223,3 +223,38 @@
 .dark .select-content {
   background-color: hsl(var(--background)) !important;
 }
+
+/* Date picker input styles */
+input[type="date"] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  opacity: 1 !important;
+}
+
+.dark input[type="date"] {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Calendar popup footer */
+.rdp-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid hsl(var(--border));
+  margin-top: 8px;
+}
+
+.rdp-footer button {
+  background: none;
+  border: none;
+  color: hsl(var(--primary));
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.rdp-footer button:hover {
+  text-decoration: underline;
+}
