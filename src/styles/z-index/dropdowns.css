@@ -1,0 +1,24 @@
+
+/* Dropdown content styling */
+.dropdown-content {
+  z-index: 99950 !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+}
+
+/* Specific z-index fixes for select and dropdown components */
+[role="listbox"],
+[role="menu"] {
+  z-index: 99999 !important;
+  background-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Dark mode dropdown styles */
+.dark [role="listbox"],
+.dark [role="menu"] {
+  background-color: hsl(var(--background)) !important;
+}

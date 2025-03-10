@@ -1,0 +1,15 @@
+
+/* Popover content styling */
+.popover-content {
+  z-index: 99950 !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 12px !important;
+  opacity: 1 !important;
+}
+
+/* Dark mode popover styles */
+.dark .popover-content {
+  background-color: hsl(var(--background)) !important;
+}

@@ -1,0 +1,10 @@
+
+/* Time selectors */
+input[type="time"] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.dark input[type="time"] {
+  background-color: hsl(var(--background)) !important;
+}
