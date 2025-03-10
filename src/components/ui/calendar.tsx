@@ -1,13 +1,13 @@
 
-import * as React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker } from "react-day-picker";
-import { fr } from "date-fns/locale";
+import * as React from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { DayPicker } from "react-day-picker"
+import { fr } from "date-fns/locale"
 
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
 function Calendar({
   className,
@@ -15,22 +15,24 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
-  const handleClear = () => {
-    if (props.mode === "single" && props.onSelect) {
-      props.onSelect(undefined);
-    }
-  };
+  // Fix the function argument issues
+  const handleClear = (e: React.MouseEvent<HTMLButtonElement>, onClick: () => void = () => {}, close: () => void = () => {}) => {
+    e.preventDefault()
+    onClick()
+    close()
+  }
 
-  const handleToday = () => {
-    if (props.mode === "single" && props.onSelect) {
-      props.onSelect(new Date());
-    }
-  };
+  const handleToday = (e: React.MouseEvent<HTMLButtonElement>, onClick: () => void = () => {}, close: () => void = () => {}) => {
+    e.preventDefault()
+    onClick()
+    close()
+  }
 
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3 pointer-events-auto bg-white dark:bg-gray-950 border border-solid border-border rounded-xl shadow-lg", className)}
+      className={cn("p-3 pointer-events-auto", className)}
+      locale={fr}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
@@ -66,32 +68,23 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: () => <ChevronLeft className="h-4 w-4" />,
-        IconRight: () => <ChevronRight className="h-4 w-4" />,
+        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
+        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
       }}
-      locale={fr}
       footer={
-        <div className="flex justify-between mt-2 pt-2 border-t border-border">
-          <button 
-            type="button" 
-            className="text-sm text-primary hover:underline"
-            onClick={handleClear}
-          >
+        <div className="rdp-footer flex justify-between p-2 border-t border-gray-200 dark:border-gray-700 mt-2">
+          <button onClick={(e) => handleClear(e)} className="text-sm text-primary hover:underline">
             Effacer
           </button>
-          <button 
-            type="button" 
-            className="text-sm text-primary hover:underline"
-            onClick={handleToday}
-          >
+          <button onClick={(e) => handleToday(e)} className="text-sm text-primary hover:underline">
             Aujourd'hui
           </button>
         </div>
       }
       {...props}
     />
-  );
+  )
 }
-Calendar.displayName = "Calendar";
+Calendar.displayName = "Calendar"
 
-export { Calendar };
+export { Calendar }
