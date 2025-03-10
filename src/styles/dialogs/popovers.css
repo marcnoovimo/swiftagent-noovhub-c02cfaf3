@@ -1,0 +1,28 @@
+
+/* Make all popover content solid and opaque */
+[data-radix-popper-content],
+.popover-content {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  opacity: 1 !important;
+  z-index: 99999 !important;
+}
+
+.dark [data-radix-popper-content],
+.dark .popover-content {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Fix the specific event form date selector */
+[data-radix-popper-content][role="dialog"] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  opacity: 1 !important;
+  border-radius: 12px !important;
+}
+
+.dark [data-radix-popper-content][role="dialog"] {
+  background-color: hsl(var(--background)) !important;
+}

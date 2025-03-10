@@ -1,0 +1,5 @@
+
+/* Ensure Radix UI portal elements have proper z-index */
+[data-radix-portal] {
+  z-index: 99990 !important;
+}

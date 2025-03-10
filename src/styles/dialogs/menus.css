@@ -1,0 +1,31 @@
+
+/* Force solid backgrounds on all dialog and menu elements */
+[class*="dialog"],
+[class*="popover"],
+[class*="dropdown"],
+[class*="menu"],
+[class*="select"],
+[class*="sheet"],
+[role="dialog"],
+[role="menu"],
+[role="listbox"] {
+  background-color: #FFFFFF !important;
+  backdrop-filter: none !important;
+  opacity: 1 !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.dark [class*="dialog"],
+.dark [class*="popover"],
+.dark [class*="dropdown"],
+.dark [class*="menu"],
+.dark [class*="select"],
+.dark [class*="sheet"],
+.dark [role="dialog"],
+.dark [role="menu"],
+.dark [role="listbox"] {
+  background-color: hsl(var(--background)) !important;
+  backdrop-filter: none !important;
+  opacity: 1 !important;
+}

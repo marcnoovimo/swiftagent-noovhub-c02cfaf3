@@ -1,0 +1,59 @@
+
+/* Base dialog styling */
+.modal, .dialog, .popover {
+  background-color: #FFFFFF !important;
+  z-index: 99950 !important;
+  opacity: 1 !important;
+}
+
+.dark .modal, 
+.dark .dialog, 
+.dark .popover {
+  background-color: hsl(var(--background)) !important;
+}
+
+.radix-dialog-overlay {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  z-index: 99950 !important;
+}
+
+.radix-dialog-content {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  z-index: 99960 !important;
+  opacity: 1 !important;
+}
+
+.dark .radix-dialog-content {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Improved aesthetics for dialogs */
+.dialog-header, 
+.sheet-header {
+  border-bottom: 1px solid hsl(var(--border));
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.dialog-footer,
+.sheet-footer {
+  border-top: 1px solid hsl(var(--border));
+  padding-top: 16px;
+  margin-top: 16px;
+}
+
+/* Dialog title improvements */
+[class*="dialog-title"] {
+  font-weight: 600 !important;
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Ensure dialog content has a solid background */
+[data-radix-dialog-content],
+[data-radix-dialog-overlay] {
+  opacity: 1 !important;
+}
