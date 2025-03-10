@@ -1,0 +1,27 @@
+
+/* Additional Select fixes */
+[data-radix-select-content] {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Fix nested dialogs and menus */
+[data-radix-dropdown-menu-content],
+[data-radix-context-menu-content],
+[data-radix-popper-content],
+[data-radix-menubar-content],
+[data-radix-select-content],
+[data-radix-tooltip-content],
+[data-radix-hover-card-content] {
+  background-color: #FFFFFF !important;
+  color: hsl(var(--foreground)) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+}
+
+/* Ensure floating elements have solid backgrounds */
+.floating-element {
+  background-color: #FFFFFF !important;
+  backdrop-filter: none !important;
+}

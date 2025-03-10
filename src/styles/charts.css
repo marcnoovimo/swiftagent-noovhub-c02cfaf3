@@ -1,0 +1,23 @@
+
+/* Chart and visualization fixes */
+.recharts-responsive-container {
+  width: 100% !important;
+  min-height: 200px !important;
+}
+
+.recharts-tooltip-wrapper {
+  z-index: 20 !important;
+}
+
+.recharts-wrapper {
+  max-width: 100%;
+}
+
+.recharts-surface {
+  overflow: visible;
+}
+
+.recharts-legend-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+}

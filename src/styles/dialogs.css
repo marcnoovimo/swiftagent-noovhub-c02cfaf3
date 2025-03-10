@@ -1,0 +1,58 @@
+
+/* Fix for modal/popovers */
+.modal, .dialog, .popover {
+  background-color: hsl(var(--background)) !important;
+}
+
+/* Additional fixes for Radix dialogs and nested components */
+.radix-dialog-overlay {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.radix-dialog-content {
+  background-color: #FFFFFF !important;
+}
+
+/* Ensure all dialog backgrounds are solid */
+.sheet-content,
+.drawer-content,
+.dialog-content,
+.popover-content {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+}
+
+/* Specific fix for document upload dialog */
+.document-upload-dialog {
+  background-color: #FFFFFF !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Force solid backgrounds on all dialog and menu elements */
+[class*="dialog"],
+[class*="popover"],
+[class*="dropdown"],
+[class*="menu"],
+[class*="select"],
+[class*="sheet"],
+[role="dialog"],
+[role="menu"],
+[role="listbox"] {
+  background-color: #FFFFFF !important;
+  backdrop-filter: none !important;
+}
+
+.dark [class*="dialog"],
+.dark [class*="popover"],
+.dark [class*="dropdown"],
+.dark [class*="menu"],
+.dark [class*="select"],
+.dark [class*="sheet"],
+.dark [role="dialog"],
+.dark [role="menu"],
+.dark [role="listbox"] {
+  background-color: hsl(var(--background)) !important;
+  backdrop-filter: none !important;
+}

@@ -11,7 +11,11 @@
 @import './styles/components.css';
 @import './styles/animations.css';
 @import './styles/responsive.css';
-@import './styles/layout.css';
+@import './styles/layout-core.css';
+@import './styles/z-index.css';
+@import './styles/dialogs.css';
+@import './styles/dropdowns.css';
+@import './styles/charts.css';
 @import './styles/buttons.css';
 @import './styles/forms.css';
 @import './styles/tables.css';

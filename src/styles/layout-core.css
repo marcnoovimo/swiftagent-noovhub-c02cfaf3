@@ -1,0 +1,76 @@
+
+/* App layout */
+#root {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Clean menu icon fix */
+.clean-icon {
+  stroke-width: 1.5;
+  stroke: currentColor;
+}
+
+.clean-icon path {
+  vector-effect: non-scaling-stroke;
+}
+
+/* Accessibility improvements */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--primary) !important;
+  outline-offset: 2px !important;
+}
+
+.focusable:focus-visible {
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--primary) !important;
+}
+
+.focus-visible:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Other utility classes */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ul.list-none {
+  list-style: none;
+  padding: 0;
+}
+
+/* Improved contrast */
+.text-high-contrast {
+  color: #000000;
+}
+
+.dark .text-high-contrast {
+  color: #ffffff;
+}
+
+/* Form improvements */
+input:focus, 
+textarea:focus, 
+select:focus {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
