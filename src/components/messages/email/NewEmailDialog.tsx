@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { EmailContact, Email } from '../types/email';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface NewEmailDialogProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ interface NewEmailDialogProps {
 }
 
 const NewEmailDialog = ({ isOpen, onClose, onSend, contacts }: NewEmailDialogProps) => {
+  const isMobile = useIsMobile();
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [recipients, setRecipients] = useState<string[]>([]);
@@ -135,7 +137,7 @@ const NewEmailDialog = ({ isOpen, onClose, onSend, contacts }: NewEmailDialogPro
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[700px] p-0 h-[80vh] max-h-[700px] flex flex-col">
+      <DialogContent className={`p-0 flex flex-col ${isMobile ? 'h-[95vh] max-h-[95vh] max-w-[95vw] w-full' : 'sm:max-w-[700px] h-[80vh] max-h-[700px]'}`}>
         <div className="p-4 border-b border-border flex justify-between items-center">
           <h3 className="font-medium">Nouveau message</h3>
           <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8">
@@ -143,10 +145,10 @@ const NewEmailDialog = ({ isOpen, onClose, onSend, contacts }: NewEmailDialogPro
           </Button>
         </div>
         
-        <div className="p-4 border-b border-border space-y-3">
+        <div className={`p-4 border-b border-border space-y-3 ${isMobile ? 'overflow-y-auto' : ''}`}>
           <div className="relative">
             <div className="flex items-start">
-              <div className="w-16 pt-2 text-xs text-muted-foreground flex-shrink-0">À :</div>
+              <div className={`${isMobile ? 'w-10' : 'w-16'} pt-2 text-xs text-muted-foreground flex-shrink-0`}>À :</div>
               <div className="flex-1 min-w-0 relative">
                 <div className="flex flex-wrap min-h-9 border border-input rounded-md p-2 relative focus-within:ring-1 focus-within:ring-ring">
                   {renderRecipientChips('to')}
@@ -235,7 +237,7 @@ const NewEmailDialog = ({ isOpen, onClose, onSend, contacts }: NewEmailDialogPro
           )}
           
           <div className="flex items-center">
-            <div className="w-16 pt-2 text-xs text-muted-foreground">Objet :</div>
+            <div className={`${isMobile ? 'w-10' : 'w-16'} pt-2 text-xs text-muted-foreground`}>Objet :</div>
             <Input
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
@@ -273,7 +275,7 @@ const NewEmailDialog = ({ isOpen, onClose, onSend, contacts }: NewEmailDialogPro
                   />
                 </div>
               </div>
-              <ScrollArea className="flex-1">
+              <ScrollArea className="flex-1" style={{ backgroundColor: "#FFFFFF" }}>
                 <div className="p-2">
                   {filteredContacts.map((contact) => (
                     <div 
@@ -329,7 +331,7 @@ const NewEmailDialog = ({ isOpen, onClose, onSend, contacts }: NewEmailDialogPro
           </div>
         )}
         
-        <div className="p-3 border-t border-border flex justify-between items-center">
+        <div className={`p-3 border-t border-border ${isMobile ? 'flex flex-col gap-2' : 'flex justify-between items-center'}`}>
           <label className="cursor-pointer">
             <input
               type="file"
@@ -337,13 +339,17 @@ const NewEmailDialog = ({ isOpen, onClose, onSend, contacts }: NewEmailDialogPro
               onChange={handleFileChange}
               className="hidden"
             />
-            <Button type="button" variant="outline" size="sm" className="text-xs">
+            <Button type="button" variant="outline" size="sm" className={`text-xs ${isMobile ? 'w-full' : ''}`}>
               <Paperclip size={14} className="mr-1" />
               Joindre un fichier
             </Button>
           </label>
           
-          <Button onClick={handleSend} disabled={!subject || !content || recipients.length === 0}>
+          <Button 
+            onClick={handleSend} 
+            disabled={!subject || !content || recipients.length === 0}
+            className={isMobile ? 'w-full' : ''}
+          >
             <Send size={14} className="mr-1" />
             Envoyer
           </Button>

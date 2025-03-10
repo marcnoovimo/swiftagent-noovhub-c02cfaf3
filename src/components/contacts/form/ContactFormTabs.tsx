@@ -16,6 +16,7 @@ interface ContactFormTabsProps {
   setNewTag: (tag: string) => void;
   onAddTag: () => void;
   onRemoveTag: (tag: string) => void;
+  isMobile?: boolean;
 }
 
 const ContactFormTabs: React.FC<ContactFormTabsProps> = ({
@@ -27,34 +28,43 @@ const ContactFormTabs: React.FC<ContactFormTabsProps> = ({
   newTag,
   setNewTag,
   onAddTag,
-  onRemoveTag
+  onRemoveTag,
+  isMobile = false
 }) => {
   return (
     <Tabs defaultValue="personal" className="w-full">
-      <TabsList className="grid grid-cols-3 mb-6">
-        <TabsTrigger value="personal">Informations personnelles</TabsTrigger>
-        <TabsTrigger value="professional">Informations professionnelles</TabsTrigger>
-        <TabsTrigger value="additional">Informations complémentaires</TabsTrigger>
+      <TabsList className={`grid grid-cols-3 ${isMobile ? 'mb-3 text-xs w-full overflow-x-auto p-1' : 'mb-6'}`}>
+        <TabsTrigger value="personal" className={isMobile ? "text-[11px] px-1 py-1 overflow-hidden" : ""}>
+          {isMobile ? "Personnel" : "Informations personnelles"}
+        </TabsTrigger>
+        <TabsTrigger value="professional" className={isMobile ? "text-[11px] px-1 py-1 overflow-hidden" : ""}>
+          {isMobile ? "Professionnel" : "Informations professionnelles"}
+        </TabsTrigger>
+        <TabsTrigger value="additional" className={isMobile ? "text-[11px] px-1 py-1 overflow-hidden" : ""}>
+          {isMobile ? "Complémentaire" : "Informations complémentaires"}
+        </TabsTrigger>
       </TabsList>
       
-      <TabsContent value="personal" className="space-y-4">
+      <TabsContent value="personal" className={`space-y-4 ${isMobile ? 'px-0' : ''}`}>
         <ContactPersonalInfo 
           formData={formData}
           onChangeField={onChangeField}
           onGenderChange={onGenderChange}
           onDateOfBirthChange={onDateOfBirthChange}
+          isMobile={isMobile}
         />
       </TabsContent>
       
-      <TabsContent value="professional" className="space-y-4">
+      <TabsContent value="professional" className={`space-y-4 ${isMobile ? 'px-0' : ''}`}>
         <ContactProfessionalInfo 
           formData={formData}
           onChangeField={onChangeField}
           onCategoryChange={onCategoryChange}
+          isMobile={isMobile}
         />
       </TabsContent>
       
-      <TabsContent value="additional" className="space-y-4">
+      <TabsContent value="additional" className={`space-y-4 ${isMobile ? 'px-0' : ''}`}>
         <ContactAdditionalInfo 
           formData={formData}
           onChangeField={onChangeField}
@@ -62,6 +72,7 @@ const ContactFormTabs: React.FC<ContactFormTabsProps> = ({
           setNewTag={setNewTag}
           onAddTag={onAddTag}
           onRemoveTag={onRemoveTag}
+          isMobile={isMobile}
         />
       </TabsContent>
     </Tabs>

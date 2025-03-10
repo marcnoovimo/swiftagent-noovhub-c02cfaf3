@@ -10,15 +10,17 @@ interface ContactProfessionalInfoProps {
   formData: ContactFormData;
   onChangeField: (id: string, value: any) => void;
   onCategoryChange: (value: string) => void;
+  isMobile?: boolean;
 }
 
 const ContactProfessionalInfo: React.FC<ContactProfessionalInfoProps> = ({
   formData,
   onChangeField,
-  onCategoryChange
+  onCategoryChange,
+  isMobile = false
 }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className={`grid grid-cols-1 ${isMobile ? '' : 'md:grid-cols-2'} gap-4`}>
       <div className="space-y-2">
         <Label htmlFor="company" className="flex items-center gap-2">
           <Building2 size={16} /> Entreprise
@@ -70,7 +72,15 @@ const ContactProfessionalInfo: React.FC<ContactProfessionalInfoProps> = ({
           <SelectTrigger id="category" className="bg-white dark:bg-gray-950">
             <SelectValue placeholder="Sélectionnez une catégorie" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent 
+            style={{ 
+              backgroundColor: "#FFFFFF",
+              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
+              border: "1px solid hsl(var(--border))",
+              opacity: 1,
+              backdropFilter: "none"
+            }}
+          >
             <SelectItem value="client">Client</SelectItem>
             <SelectItem value="prospect">Prospect</SelectItem>
             <SelectItem value="partner">Partenaire</SelectItem>

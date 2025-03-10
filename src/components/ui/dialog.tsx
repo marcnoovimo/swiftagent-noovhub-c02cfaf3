@@ -47,7 +47,9 @@ const DialogContent = React.forwardRef<
         backdropFilter: "none",
         opacity: 1,
         borderRadius: "16px",
-        maxWidth: "90vw"
+        maxWidth: "95vw",
+        maxHeight: "95vh",
+        overflow: "auto"
       }}
       {...props}
     >

@@ -16,16 +16,18 @@ interface ContactPersonalInfoProps {
   onChangeField: (id: string, value: any) => void;
   onGenderChange: (value: string) => void;
   onDateOfBirthChange: (date: Date | undefined) => void;
+  isMobile?: boolean;
 }
 
 const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
   formData,
   onChangeField,
   onGenderChange,
-  onDateOfBirthChange
+  onDateOfBirthChange,
+  isMobile = false
 }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className={`grid grid-cols-1 ${isMobile ? '' : 'md:grid-cols-2'} gap-4`}>
       <div className="space-y-2">
         <Label htmlFor="firstName" className="flex items-center gap-2">
           <User size={16} /> Prénom
@@ -89,7 +91,17 @@ const ContactPersonalInfo: React.FC<ContactPersonalInfoProps> = ({
               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 bg-white dark:bg-gray-950 border-border" align="start">
+          <PopoverContent 
+            className="w-auto p-0 bg-white dark:bg-gray-950 border-border" 
+            align="start"
+            style={{ 
+              backgroundColor: "#FFFFFF",
+              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
+              border: "1px solid hsl(var(--border))",
+              opacity: 1,
+              backdropFilter: "none"
+            }}
+          >
             <Calendar
               mode="single"
               selected={formData.dateOfBirth}

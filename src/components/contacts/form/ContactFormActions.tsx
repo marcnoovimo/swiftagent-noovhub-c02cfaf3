@@ -1,23 +1,39 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { DialogFooter } from "@/components/ui/dialog";
+import { Check, X } from 'lucide-react';
 
 interface ContactFormActionsProps {
   onCancel: () => void;
   isEditing: boolean;
+  isMobile?: boolean;
 }
 
-const ContactFormActions: React.FC<ContactFormActionsProps> = ({ onCancel, isEditing }) => {
+const ContactFormActions: React.FC<ContactFormActionsProps> = ({ 
+  onCancel, 
+  isEditing,
+  isMobile = false
+}) => {
   return (
-    <DialogFooter className="mt-6 pt-4 border-t">
-      <Button type="button" variant="outline" onClick={onCancel} className="bg-white dark:bg-gray-950">
+    <div className={`flex ${isMobile ? 'flex-col space-y-2' : 'flex-row justify-end space-x-2'} mt-6`}>
+      <Button 
+        type="button" 
+        variant="outline" 
+        onClick={onCancel}
+        className={`${isMobile ? 'w-full' : ''}`}
+      >
+        <X className="mr-2 h-4 w-4" />
         Annuler
       </Button>
-      <Button type="submit" className="bg-noovimo-500 hover:bg-noovimo-600 text-white">
-        {isEditing ? 'Mettre à jour' : 'Enregistrer'}
+      
+      <Button 
+        type="submit"
+        className={`${isMobile ? 'w-full' : ''}`}
+      >
+        <Check className="mr-2 h-4 w-4" />
+        {isEditing ? 'Enregistrer les modifications' : 'Créer le contact'}
       </Button>
-    </DialogFooter>
+    </div>
   );
 };
 

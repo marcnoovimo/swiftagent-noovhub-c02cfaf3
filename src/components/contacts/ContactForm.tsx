@@ -6,8 +6,10 @@ import { ContactFormProps } from './form/types';
 import { useContactForm } from './form/useContactForm';
 import ContactFormTabs from './form/ContactFormTabs';
 import ContactFormActions from './form/ContactFormActions';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) => {
+  const isMobile = useIsMobile();
   const {
     formData,
     newTag,
@@ -30,15 +32,15 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[800px] bg-background max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">{contact ? 'Modifier le contact' : 'Nouveau contact'}</DialogTitle>
-          <DialogDescription>
+      <DialogContent className={`sm:max-w-[800px] max-w-[95vw] bg-background overflow-y-auto ${isMobile ? 'max-h-[90svh] p-4' : 'max-h-[90vh] p-6'}`}>
+        <DialogHeader className={`${isMobile ? 'mb-2 space-y-1' : 'mb-4 space-y-2'}`}>
+          <DialogTitle className="text-xl font-semibold text-center sm:text-left">{contact ? 'Modifier le contact' : 'Nouveau contact'}</DialogTitle>
+          <DialogDescription className="text-center sm:text-left">
             {contact ? 'Modifiez les informations du contact' : 'Ajoutez un nouveau contact à votre répertoire'}
           </DialogDescription>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+        <form onSubmit={handleSubmit} className={`space-y-4 ${isMobile ? 'mt-2' : 'mt-4'}`}>
           <ContactFormTabs 
             formData={formData}
             onChangeField={handleChange}
@@ -49,11 +51,13 @@ const ContactForm = ({ open, onOpenChange, onSave, contact }: ContactFormProps) 
             setNewTag={setNewTag}
             onAddTag={handleAddTag}
             onRemoveTag={handleRemoveTag}
+            isMobile={isMobile}
           />
           
           <ContactFormActions 
             onCancel={() => onOpenChange(false)} 
             isEditing={!!contact}
+            isMobile={isMobile}
           />
         </form>
       </DialogContent>

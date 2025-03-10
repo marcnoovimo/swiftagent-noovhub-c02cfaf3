@@ -3,6 +3,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Upload, Scan } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface DocumentUploadDialogProps {
   open: boolean;
@@ -17,10 +18,12 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
   onScanClick,
   onImportClick
 }) => {
+  const isMobile = useIsMobile();
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="sm:max-w-[425px] document-upload-dialog"
+        className={`sm:max-w-[425px] document-upload-dialog ${isMobile ? 'max-w-[95vw] p-4' : ''}`}
         style={{ 
           backgroundColor: "#FFFFFF", 
           backdropFilter: "none",
@@ -28,7 +31,8 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
           boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
           border: "1px solid hsl(var(--border))",
           borderRadius: "16px",
-          overflow: "visible" // Ajouté pour s'assurer que le contenu est visible
+          overflow: "visible", // Pour s'assurer que le contenu est visible
+          width: isMobile ? 'calc(100vw - 32px)' : 'auto'
         }}
       >
         <DialogHeader className="border-b pb-4 mb-4">
@@ -38,7 +42,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
           </DialogDescription>
         </DialogHeader>
         
-        <div className="grid grid-cols-1 gap-4 py-4">
+        <div className={`grid grid-cols-1 gap-4 py-4 ${isMobile ? 'px-0' : ''}`}>
           <Button 
             variant="outline" 
             className="w-full flex justify-start gap-3 p-4 h-auto bg-white hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm rounded-lg"
