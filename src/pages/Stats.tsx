@@ -1,4 +1,3 @@
-
 import React, { useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { 
@@ -135,12 +134,6 @@ const Stats = () => {
           <Skeleton className="h-12 w-64" />
         </div>
         <div className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[...Array(4)].map((_, i) => (
-              <Skeleton key={i} className="h-24 rounded-xl" />
-            ))}
-          </div>
-          <Skeleton className="h-[300px] rounded-xl" />
           <Skeleton className="h-[300px] rounded-xl" />
           <Skeleton className="h-[200px] rounded-xl" />
         </div>
@@ -160,36 +153,6 @@ const Stats = () => {
           <p className="text-muted-foreground text-xs sm:text-sm mt-1">
             Suivez vos performances commerciales et vos commissions
           </p>
-        </div>
-      </div>
-      
-      {/* Section d'activité du mois */}
-      <div className="mb-6">
-        <h2 className="text-lg sm:text-xl font-semibold mb-4">Activité du mois</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4">
-          {monthlyCardData.map((card, index) => (
-            <StatCard
-              key={index}
-              title={card.title}
-              value={card.value}
-              icon={card.icon}
-            />
-          ))}
-        </div>
-      </div>
-      
-      {/* Section de cumul annuel */}
-      <div className="mb-6">
-        <h2 className="text-lg sm:text-xl font-semibold mb-4">Cumul annuel</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4">
-          {yearlyCardData.map((card, index) => (
-            <StatCard
-              key={index}
-              title={card.title}
-              value={card.value}
-              icon={card.icon}
-            />
-          ))}
         </div>
       </div>
       
