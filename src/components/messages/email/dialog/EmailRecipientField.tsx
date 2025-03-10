@@ -34,7 +34,7 @@ const EmailRecipientField = ({
       return (
         <div 
           key={index} 
-          className="inline-flex items-center bg-secondary text-xs rounded-full px-2 py-1 mr-1 mb-1"
+          className="inline-flex items-center bg-gray-100 text-xs rounded-full px-2 py-1 mr-1 mb-1"
         >
           <span className="mr-1 truncate max-w-[120px] sm:max-w-[150px]">{name}</span>
           <button 

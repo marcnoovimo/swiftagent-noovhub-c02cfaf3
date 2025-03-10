@@ -1,10 +1,9 @@
+
 import React, { useState } from 'react';
 import EmailSidebar from './email/EmailSidebar';
 import EmailList from './email/EmailList';
 import EmailView from './email/EmailView';
 import ContactsDrawer from './email/ContactsDrawer';
-import { Button } from '@/components/ui/button';
-import { PlusCircle, Users } from 'lucide-react';
 import NewEmailDialog from './email/NewEmailDialog';
 import { Email, EmailContact } from './types/email';
 import { toast } from 'sonner';
@@ -18,7 +17,10 @@ const EmailClient = () => {
         email: 'commercial@noovimo.fr',
         avatar: 'https://randomuser.me/api/portraits/men/41.jpg',
       },
-      to: ['agent1@noovimo.fr'],
+      to: [{
+        name: 'Agent',
+        email: 'agent1@noovimo.fr'
+      }],
       subject: 'Mise à jour des conditions de commission',
       content: `Bonjour,\n\nNous souhaitons vous informer de la mise à jour des barèmes de commission applicable à partir du mois prochain.\n\nVous trouverez ci-joint le document détaillant les nouveaux taux.\n\nCordialement,\nLe Service Commercial`,
       timestamp: '10:23',
@@ -43,7 +45,10 @@ const EmailClient = () => {
         email: 'l.dubois@noovimo.fr',
         avatar: 'https://randomuser.me/api/portraits/men/22.jpg',
       },
-      to: ['agent1@noovimo.fr'],
+      to: [{
+        name: 'Agent',
+        email: 'agent1@noovimo.fr'
+      }],
       subject: 'Retour sur l\'estimation du bien à Rezé',
       content: `Bonjour,\n\nSuite à notre visite de la semaine dernière, j'ai finalisé l'estimation du bien à Rezé.\n\nLe rapport complet est joint à ce mail.\n\nBien cordialement,\nLaurent Dubois`,
       timestamp: 'Hier',
@@ -74,7 +79,10 @@ const EmailClient = () => {
         email: 'formation@noovimo.fr',
         avatar: 'https://randomuser.me/api/portraits/women/55.jpg',
       },
-      to: ['tous@noovimo.fr'],
+      to: [{
+        name: 'Tous',
+        email: 'tous@noovimo.fr'
+      }],
       subject: 'Nouvelle session de formation disponible',
       content: `Chers collaborateurs,\n\nUne nouvelle session de formation sur les techniques de négociation sera disponible à partir du 15 mars.\n\nInscriptions ouvertes dès maintenant sur l'intranet.\n\nL'équipe Formation`,
       timestamp: 'Mar',
@@ -90,7 +98,10 @@ const EmailClient = () => {
         email: 'juridique@noovimo.fr',
         avatar: 'https://randomuser.me/api/portraits/women/33.jpg',
       },
-      to: ['agent1@noovimo.fr'],
+      to: [{
+        name: 'Agent',
+        email: 'agent1@noovimo.fr'
+      }],
       subject: 'Validation du compromis de vente',
       content: `Bonjour,\n\nNous avons bien reçu le compromis de vente pour le bien situé au 12 avenue des Fleurs.\n\nAprès vérification, nous avons apporté quelques modifications que vous trouverez en pièce jointe.\n\nMerci de les valider dans les plus brefs délais.\n\nCordialement,\nLe Service Juridique`,
       timestamp: 'Lun',
@@ -116,7 +127,10 @@ const EmailClient = () => {
         email: 'm.blanc@notaires.fr',
         avatar: 'https://randomuser.me/api/portraits/men/76.jpg',
       },
-      to: ['agent1@noovimo.fr'],
+      to: [{
+        name: 'Agent',
+        email: 'agent1@noovimo.fr'
+      }],
       subject: 'Acte de vente - 24 rue des Lilas',
       content: `Bonjour,\n\nSuite à notre entretien téléphonique, je vous confirme que la signature de l'acte authentique est prévue pour le 28 mars à 14h00 en mon étude.\n\nMerci de bien vouloir confirmer votre présence et celle de vos clients.\n\nBien cordialement,\nMaître Blanc`,
       timestamp: '28 Fév',
@@ -140,19 +154,7 @@ const EmailClient = () => {
       avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
       status: 'client-buyer',
       lastContact: '2023-03-01',
-      notes: 'Recherche appartement 3 pièces à Nantes',
-      communicationHistory: [
-        {
-          type: 'email',
-          date: '2023-03-01',
-          summary: 'Envoi des dernières annonces correspondant à ses critères'
-        },
-        {
-          type: 'call',
-          date: '2023-02-25',
-          summary: 'Discussion sur le budget maximum (300K€)'
-        }
-      ]
+      notes: 'Recherche appartement 3 pièces à Nantes'
     },
     {
       id: '2',
@@ -164,14 +166,7 @@ const EmailClient = () => {
       avatar: 'https://randomuser.me/api/portraits/women/22.jpg',
       status: 'client-seller',
       lastContact: '2023-02-28',
-      notes: 'Vend maison 5 pièces à Rezé',
-      communicationHistory: [
-        {
-          type: 'meeting',
-          date: '2023-02-28',
-          summary: 'Signature du mandat de vente'
-        }
-      ]
+      notes: 'Vend maison 5 pièces à Rezé'
     },
     {
       id: '3',
@@ -184,8 +179,7 @@ const EmailClient = () => {
       company: 'Étude Blanc & Associés',
       role: 'Notaire',
       status: 'notary',
-      lastContact: '2023-02-28',
-      address: '15 rue de la Paix, 44000 Nantes'
+      lastContact: '2023-02-28'
     },
     {
       id: '4',
@@ -242,7 +236,7 @@ const EmailClient = () => {
   };
 
   return (
-    <div className="glass-card rounded-xl overflow-hidden min-h-[600px] grid grid-cols-1 lg:grid-cols-12 relative">
+    <div className="shadow-md rounded-xl overflow-hidden min-h-[600px] grid grid-cols-1 lg:grid-cols-12 bg-white">
       <EmailSidebar 
         activeFolder={activeFolder} 
         setActiveFolder={setActiveFolder} 
@@ -264,26 +258,6 @@ const EmailClient = () => {
         handleSendReply={handleSendReply} 
         contacts={contacts}
       />
-
-      <div className="fixed bottom-24 right-24 flex flex-col gap-2">
-        <Button
-          onClick={() => setIsContactsDrawerOpen(!isContactsDrawerOpen)}
-          className="rounded-full shadow-lg"
-          size="icon"
-          title="Contacts"
-        >
-          <Users size={20} />
-        </Button>
-        
-        <Button
-          onClick={createNewEmail}
-          className="rounded-full shadow-lg"
-          size="icon"
-          title="Nouveau message"
-        >
-          <PlusCircle size={20} />
-        </Button>
-      </div>
 
       <ContactsDrawer 
         isOpen={isContactsDrawerOpen} 

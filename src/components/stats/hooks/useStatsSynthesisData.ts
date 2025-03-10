@@ -1,12 +1,11 @@
 
 import { useState, useEffect } from 'react';
-import * as dashboardStatsService from '@/services/dashboardStatsService';
+import { SynthesisCardData } from '@/types/stats';
+import { generateSynthesisData } from '@/services/statsService';
+import { dashboardStatsService } from '@/services/dashboardStatsService';
 
-export const useStatsSynthesisData = () => {
-  const [timeFilter, setTimeFilter] = useState('thisMonth');
+export const useStatsSynthesisData = (timeFilter: string) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [statsData, setStatsData] = useState<any>(null);
-  
   const [synthesisData, setSynthesisData] = useState({
     transactions: 0,
     revenue: 0,
@@ -14,40 +13,32 @@ export const useStatsSynthesisData = () => {
     averageCommission: 0
   });
 
+  // Load data based on time filter
   useEffect(() => {
-    const fetchData = async () => {
+    const loadSynthesisData = async () => {
       setIsLoading(true);
       try {
-        // Use the correct method from the service
-        const data = await dashboardStatsService.getDashboardStats();
-        setStatsData(data);
+        // In a real app, this would use the timeFilter to fetch from API
+        const data = await generateSynthesisData(timeFilter);
+        // const stats = await dashboardStatsService.getDashboardStats();
         
-        // Calculate synthesis data
-        const transactions = data?.transactions?.count || 0;
-        const revenue = data?.revenue?.total || 0;
-        const averageTransaction = transactions > 0 ? revenue / transactions : 0;
-        const averageCommission = data?.commissions?.average || 0;
-
         setSynthesisData({
-          transactions,
-          revenue,
-          averageTransaction,
-          averageCommission
+          transactions: data.totalTransactions,
+          revenue: data.totalRevenue,
+          averageTransaction: data.averageTransactionValue,
+          averageCommission: data.averageCommission
         });
       } catch (error) {
-        console.error("Error fetching dashboard stats:", error);
+        console.error('Failed to load synthesis data:', error);
       } finally {
         setIsLoading(false);
       }
     };
-    
-    fetchData();
+
+    loadSynthesisData();
   }, [timeFilter]);
 
-  return {
-    synthesisData,
-    isLoading,
-    timeFilter,
-    setTimeFilter
-  };
+  return { synthesisData, isLoading };
 };
+
+export default useStatsSynthesisData;

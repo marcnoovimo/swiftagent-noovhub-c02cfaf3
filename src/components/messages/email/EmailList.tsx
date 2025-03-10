@@ -1,8 +1,8 @@
+
 import React, { useState } from 'react';
 import { Search, Star, Paperclip, Tag, Clock } from 'lucide-react';
 import { Email } from '../types/email';
 import { Badge } from '@/components/ui/badge';
-import '@/styles/components.css'; // Import for search-bar and other component styles
 
 interface EmailListProps {
   emails: Email[];
@@ -38,20 +38,20 @@ const EmailList = ({ emails, selectedEmail, setSelectedEmail, activeFolder }: Em
 
   return (
     <div className="lg:col-span-3 border-r border-border/50 overflow-hidden flex flex-col">
-      <div className="p-2 sm:p-3 border-b border-border/50">
-        <div className="search-bar flex items-center">
+      <div className="p-3 sm:p-4 border-b border-border/50 bg-white">
+        <div className="flex items-center rounded-md bg-gray-50 px-3 py-2">
           <Search size={16} className="text-muted-foreground mr-2" />
           <input
             type="text"
             placeholder="Rechercher..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-transparent border-none outline-none w-full placeholder:text-muted-foreground/70 text-xs sm:text-sm"
+            className="bg-transparent border-none outline-none w-full placeholder:text-muted-foreground/70 text-sm"
           />
         </div>
       </div>
       
-      <div className="overflow-y-auto flex-1">
+      <div className="overflow-y-auto flex-1 bg-white">
         {getFolderEmails(activeFolder).length === 0 ? (
           <div className="p-4 text-center text-muted-foreground">
             <p className="text-sm">Aucun email trouvé</p>
@@ -61,60 +61,64 @@ const EmailList = ({ emails, selectedEmail, setSelectedEmail, activeFolder }: Em
             <div
               key={email.id}
               onClick={() => setSelectedEmail(email)}
-              className={`border-b border-border/50 p-2 sm:p-3 cursor-pointer transition-colors ${
+              className={`border-b border-border/10 hover:bg-gray-50 transition-colors ${
                 selectedEmail?.id === email.id
-                  ? 'bg-noovimo-50 border-l-2 border-[#d72345]'
-                  : 'hover:bg-secondary/50'
+                  ? 'bg-gray-50 border-l-4 border-[#d72345]'
+                  : 'border-l-4 border-transparent'
               } ${
                 !email.isRead ? 'font-medium' : ''
               }`}
             >
-              <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center">
-                  <img
-                    src={email.from.avatar}
-                    alt={email.from.name}
-                    className="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover mr-2"
-                  />
-                  <span className="text-xs sm:text-sm truncate max-w-[100px] sm:max-w-[150px]">{email.from.name}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  {email.hasAttachments && (
-                    <Paperclip size={14} className="text-muted-foreground" />
-                  )}
-                  <button onClick={(e) => toggleStar(e, email)} className="flex items-center justify-center">
-                    {email.isStarred ? (
-                      <Star size={14} className="text-yellow-400 fill-yellow-400" />
-                    ) : (
-                      <Star size={14} className="text-muted-foreground" />
+              <div className="p-3 sm:p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center">
+                    <img
+                      src={email.from.avatar}
+                      alt={email.from.name}
+                      className="w-8 h-8 rounded-full object-cover mr-3"
+                    />
+                    <div>
+                      <span className="text-sm font-medium block">{email.from.name}</span>
+                      <span className="text-xs text-muted-foreground block">{email.timestamp}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {email.hasAttachments && (
+                      <Paperclip size={14} className="text-muted-foreground" />
                     )}
-                  </button>
-                  <span className="text-[10px] sm:text-xs text-muted-foreground">{email.timestamp}</span>
+                    <button onClick={(e) => toggleStar(e, email)} className="flex items-center justify-center">
+                      {email.isStarred ? (
+                        <Star size={16} className="text-yellow-400 fill-yellow-400" />
+                      ) : (
+                        <Star size={16} className="text-muted-foreground/50" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+                
+                <h4 className="text-sm mb-1 font-medium">{email.subject}</h4>
+                <p className="text-xs text-muted-foreground line-clamp-1 mb-2">
+                  {email.content.split('\n')[0]}
+                </p>
+                
+                <div className="flex flex-wrap items-center gap-2">
+                  {email.status === 'awaiting-reply' && (
+                    <div className="flex items-center bg-amber-50 text-amber-600 rounded-full px-2 py-0.5">
+                      <Clock size={10} className="mr-1" />
+                      <span className="text-[10px]">En attente</span>
+                    </div>
+                  )}
+                  
+                  {(email.labels && email.labels.length > 0) && (
+                    email.labels.map((label, index) => (
+                      <Badge key={index} variant="outline" className="px-2 py-0.5 text-[10px] flex items-center bg-gray-50 text-gray-600">
+                        <Tag size={10} className="mr-1" />
+                        {label}
+                      </Badge>
+                    ))
+                  )}
                 </div>
               </div>
-              
-              <h4 className="text-xs sm:text-sm truncate">{email.subject}</h4>
-              <p className="text-[10px] sm:text-xs text-muted-foreground truncate mt-1">
-                {email.content.split('\n')[0]}
-              </p>
-              
-              {(email.labels && email.labels.length > 0) && (
-                <div className="flex flex-wrap mt-1 gap-1">
-                  {email.labels.map((label, index) => (
-                    <Badge key={index} variant="outline" className="px-1 py-0 text-[8px] sm:text-[10px] flex items-center">
-                      <Tag size={10} className="mr-1" />
-                      {label}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-              
-              {email.status === 'awaiting-reply' && (
-                <div className="mt-1 flex items-center">
-                  <Clock size={10} className="text-amber-500 mr-1" />
-                  <span className="text-[8px] sm:text-[10px] text-amber-500">En attente de réponse</span>
-                </div>
-              )}
             </div>
           ))
         )}

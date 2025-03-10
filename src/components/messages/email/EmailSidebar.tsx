@@ -1,11 +1,9 @@
 
 import React from 'react';
 import { Inbox, Send, FileText, Trash, PenSquare, Archive, Star, AlertCircle, FolderPlus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { EmailFolder } from '../types/email';
-import '@/styles/buttons.css'; // Direct import of button styles
-import '@/styles/components.css'; // Import for sidebar specific styles
+import '@/styles/components.css';
 
 interface EmailSidebarProps {
   activeFolder: string;
@@ -16,10 +14,10 @@ interface EmailSidebarProps {
 
 const EmailSidebar = ({ activeFolder, setActiveFolder, className = '', onCreateEmail }: EmailSidebarProps) => {
   const folders: EmailFolder[] = [
-    { id: 'inbox', name: 'Boîte de réception', icon: 'inbox', count: 18, unread: 3, isDefault: true },
+    { id: 'inbox', name: 'Boîte de réception', icon: 'inbox', count: 18, unread: 3 },
     { id: 'sent', name: 'Messages envoyés', icon: 'send', count: 32 },
     { id: 'drafts', name: 'Brouillons', icon: 'fileText', count: 4 },
-    { id: 'urgent', name: 'Urgent', icon: 'alert', count: 3, unread: 2, color: 'red' },
+    { id: 'urgent', name: 'Urgent', icon: 'alert', count: 3, unread: 2 },
     { id: 'archived', name: 'Archives', icon: 'archive', count: 45 },
     { id: 'new-folder', name: 'Créer un dossier', icon: 'folderPlus', count: 0 },
     { id: 'trash', name: 'Corbeille', icon: 'trash', count: 12 },
@@ -45,31 +43,31 @@ const EmailSidebar = ({ activeFolder, setActiveFolder, className = '', onCreateE
   };
 
   return (
-    <div className={`lg:col-span-2 border-r border-border/50 overflow-hidden flex flex-col ${className}`}>
-      <div className="p-2 sm:p-3 border-b border-border/50">
+    <div className={`lg:col-span-2 border-r border-border/50 overflow-hidden flex flex-col bg-gray-50 ${className}`}>
+      <div className="p-3 sm:p-4 border-b border-border/50">
         <button 
           onClick={onCreateEmail}
-          className="w-full bg-[#d72345] text-white px-2 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-[#c01f3c] transition-colors flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm"
+          className="w-full bg-[#d72345] text-white px-4 py-2.5 rounded-md hover:bg-[#c01f3c] transition-colors flex items-center justify-center gap-2 font-medium"
         >
           <PenSquare size={16} />
-          <span className="truncate">Nouveau message</span>
+          <span>Nouveau message</span>
         </button>
       </div>
       
-      <div className="overflow-y-auto flex-1">
+      <div className="overflow-y-auto flex-1 py-2">
         {folders.map((folder) => (
           <div 
             key={folder.id}
             onClick={() => setActiveFolder(folder.id)}
-            className={`p-2 sm:p-3 cursor-pointer transition-colors flex items-center justify-between ${
+            className={`mx-2 mb-1 p-2 sm:p-3 cursor-pointer transition-colors flex items-center justify-between rounded-md ${
               activeFolder === folder.id 
-                ? 'bg-secondary/70 font-medium' 
-                : 'hover:bg-secondary/50'
+                ? 'bg-white shadow-sm font-medium' 
+                : 'hover:bg-white/70'
             }`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               {getIconComponent(folder.icon, activeFolder === folder.id)}
-              <span className="text-xs sm:text-sm">{folder.name}</span>
+              <span className="text-sm">{folder.name}</span>
             </div>
             
             {folder.count !== undefined && folder.count > 0 && (
@@ -79,7 +77,7 @@ const EmailSidebar = ({ activeFolder, setActiveFolder, className = '', onCreateE
                     {folder.unread}
                   </Badge>
                 ) : (
-                  <span className="text-[10px] text-muted-foreground">
+                  <span className="text-xs text-muted-foreground">
                     {folder.count}
                   </span>
                 )}
@@ -88,7 +86,7 @@ const EmailSidebar = ({ activeFolder, setActiveFolder, className = '', onCreateE
           </div>
         ))}
         
-        <div className="p-2 sm:p-3 mt-2 border-t border-border/50">
+        <div className="p-3 sm:p-4 mt-2 border-t border-border/50 mx-2">
           <div className="text-xs text-muted-foreground">
             <p>Messagerie synchronisée</p>
             <p className="text-[10px] mt-1">Dernière sync: 14:35</p>
