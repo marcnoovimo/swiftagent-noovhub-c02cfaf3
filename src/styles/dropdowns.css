@@ -3,7 +3,7 @@
 [data-radix-select-content] {
   background-color: #FFFFFF !important;
   border: 1px solid hsl(var(--border)) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
   border-radius: 10px !important;
   overflow: hidden !important;
   z-index: 50 !important;
@@ -19,7 +19,7 @@
 [data-radix-hover-card-content] {
   background-color: #FFFFFF !important;
   color: hsl(var(--foreground)) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
   border: 1px solid hsl(var(--border)) !important;
   backdrop-filter: none !important;
   border-radius: 10px !important;
@@ -46,7 +46,7 @@
   background-color: #FFFFFF !important;
   backdrop-filter: none !important;
   border-radius: 10px !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
 }
 
 /* Menu item hover states */

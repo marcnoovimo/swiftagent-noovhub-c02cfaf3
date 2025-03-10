@@ -22,12 +22,12 @@ const PopoverContent = React.forwardRef<
         className
       )}
       style={{ 
-        backgroundColor: "#FFFFFF !important",
-        boxShadow: "0 10px 30px rgba(0, 0, 0, 0.15)",
+        backgroundColor: "#FFFFFF",
+        boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
         border: "1px solid hsl(var(--border))",
-        backdropFilter: "none !important",
-        background: "#FFFFFF !important",
-        opacity: "1 !important",
+        backdropFilter: "none",
+        background: "#FFFFFF",
+        opacity: "1",
         borderRadius: "12px",
         maxWidth: "calc(100vw - 30px)"
       }}
