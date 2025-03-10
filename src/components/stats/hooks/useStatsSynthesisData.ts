@@ -18,8 +18,8 @@ export const useStatsSynthesisData = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        // Use the getDashboardStats function from the service
-        const data = await dashboardStatsService.getDashboardStats(timeFilter);
+        // Use the correct method from the service
+        const data = await dashboardStatsService.getDashboardStats();
         setStatsData(data);
         
         // Calculate synthesis data

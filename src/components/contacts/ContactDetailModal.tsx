@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { X, Mail, Phone, Briefcase, MapPin, Tag, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ContactDetailModalProps {
   contact: Contact | null;
@@ -14,6 +15,8 @@ interface ContactDetailModalProps {
 }
 
 const ContactDetailModal = ({ contact, open, onOpenChange }: ContactDetailModalProps) => {
+  const isMobile = useIsMobile();
+  
   if (!contact) return null;
 
   const formatDate = (dateString?: string) => {
@@ -61,7 +64,7 @@ const ContactDetailModal = ({ contact, open, onOpenChange }: ContactDetailModalP
                 <Mail className="h-4 w-4 text-muted-foreground" />
                 <div>
                   <p className="text-sm font-medium">Email</p>
-                  <p>{contact.email}</p>
+                  <p className="break-all">{contact.email}</p>
                 </div>
               </div>
             )}
@@ -71,7 +74,7 @@ const ContactDetailModal = ({ contact, open, onOpenChange }: ContactDetailModalP
                 <Mail className="h-4 w-4 text-muted-foreground" />
                 <div>
                   <p className="text-sm font-medium">Email professionnel</p>
-                  <p>{contact.emailPro}</p>
+                  <p className="break-all">{contact.emailPro}</p>
                 </div>
               </div>
             )}
@@ -139,16 +142,42 @@ const ContactDetailModal = ({ contact, open, onOpenChange }: ContactDetailModalP
                 <p>{formatDate(contact.createdAt)}</p>
               </div>
             </div>
-
-            {contact.notes && (
-              <div className="mt-4">
-                <p className="text-sm font-medium mb-1">Notes</p>
-                <div className="bg-muted p-3 rounded-md">
-                  {contact.notes}
-                </div>
-              </div>
-            )}
           </div>
+
+          {/* Action buttons */}
+          <div className="grid grid-cols-2 gap-2 pt-4">
+            <Button
+              variant="destructive"
+              size={isMobile ? "sm" : "default"}
+              asChild
+              className="w-full"
+            >
+              <a href={`tel:${contact.phone || contact.mobile}`}>
+                <Phone className="h-3.5 w-3.5 mr-1.5" />
+                Appeler
+              </a>
+            </Button>
+            <Button
+              variant="outline"
+              size={isMobile ? "sm" : "default"}
+              asChild
+              className="w-full"
+            >
+              <a href={`mailto:${contact.email || contact.emailPro}`}>
+                <Mail className="h-3.5 w-3.5 mr-1.5" />
+                Message
+              </a>
+            </Button>
+          </div>
+
+          {contact.notes && (
+            <div className="mt-4">
+              <p className="text-sm font-medium mb-1">Notes</p>
+              <div className="bg-muted p-3 rounded-md">
+                {contact.notes}
+              </div>
+            </div>
+          )}
 
           {contact.communicationHistory && contact.communicationHistory.length > 0 && (
             <div className="mt-6">
