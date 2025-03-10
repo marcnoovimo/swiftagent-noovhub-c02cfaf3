@@ -62,27 +62,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* CSS overlay to ensure all dialogs and menus have proper backgrounds */}
       <style dangerouslySetInnerHTML={{
         __html: `
+        /* Global fix for all dialog and menu backgrounds */
         [role="dialog"] > div,
-        [data-radix-popper-content-wrapper] > div {
-          background-color: hsl(var(--background)) !important;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-          border: 1px solid hsl(var(--border)) !important;
-          backdrop-filter: none !important;
-        }
-        
+        [data-radix-popper-content-wrapper] > div,
+        [data-radix-dropdown-menu-content],
+        [data-radix-select-content],
         .radix-dialog-content,
         .dialog-content,
         .popover-content,
-        .dropdown-content {
-          background-color: hsl(var(--background)) !important;
-          border: 1px solid hsl(var(--border)) !important;
-          backdrop-filter: none !important;
-        }
-
-        /* Fix for all menus */
-        [data-radix-menu-content],
-        [data-radix-dropdown-menu-content],
-        [data-radix-select-content] {
+        .dropdown-content,
+        .document-upload-dialog {
           background-color: hsl(var(--background)) !important;
           border: 1px solid hsl(var(--border)) !important;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
@@ -92,6 +81,27 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         /* Force high z-index for all dialogs and dropdown contents */
         [data-radix-portal] {
           z-index: 9999 !important;
+        }
+        
+        /* Fix for all Radix-based components */
+        [data-radix-menu-content],
+        [data-radix-dropdown-menu-content],
+        [data-radix-select-content],
+        [data-radix-popover-content] {
+          background-color: hsl(var(--background)) !important;
+          border: 1px solid hsl(var(--border)) !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+          backdrop-filter: none !important;
+        }
+        
+        /* Ensure all dialogs have solid backgrounds */
+        .radix-dialog-content,
+        .MuiDialog-paper,
+        .MuiPopover-paper,
+        .MuiMenu-paper {
+          background-color: hsl(var(--background)) !important;
+          border: 1px solid hsl(var(--border)) !important;
+          backdrop-filter: none !important;
         }
       `}} />
     </div>
